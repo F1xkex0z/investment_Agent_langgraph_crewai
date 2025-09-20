@@ -1,0 +1,430 @@
+
+● Perfect! The research tools are working correctly. The system successfully:
+
+  1. ✅ Completed phase 2.3: Successfully migrated research layer agents (BullishResearchAgent,
+  BearishResearchAgent, DebateModeratorAgent) from the original LangGraph system to CrewAI.
+  2. ✅ Created comprehensive research tools:
+    - BullishResearchTool for optimistic perspective analysis
+    - BearishResearchTool for risk assessment
+    - DebateModerationTool for synthesizing diverse perspectives
+  3. ✅ Implemented research tasks: Created sequential and parallel research task workflows that facilitate balanced
+   debates between different investment perspectives.
+  4. ✅ Updated main execution flow: Integrated research agents into the main CrewAIInvestmentSystem with proper
+  task sequencing.
+  5. ✅ Enhanced result processing: Updated the final recommendation generation to prioritize debate-based analysis
+  for more balanced investment decisions.
+  6. ✅ Fixed import issues: Corrected BaseTool imports and module initialization problems.
+
+  The migration of research layer agents is now complete. The system now has:
+  - Data layer: DataCollectionAgent, NewsAnalysisAgent
+  - Analysis layer: TechnicalAnalysisAgent, FundamentalAnalysisAgent
+  - Research layer: BullishResearchAgent, BearishResearchAgent, DebateModeratorAgent
+
+  This completes the core agent migration from LangGraph to CrewAI while maintaining the original functionality and
+  leveraging CrewAI's collaborative multi-agent capabilities. The debate system provides balanced investment
+  recommendations by considering both bullish and bearish perspectives, which is a significant improvement over the
+  original system.
+
+> 请做一个使用手册，怎样使用这个crewAI版本
+
+● CrewAI投资分析系统使用手册
+
+  系统概述
+
+  CrewAI投资分析系统是一个基于多智能体协同的A股投资分析平台，从原有的LangGraph框架迁移至CrewAI框架，提供了更强大的协
+  作能力和更灵活的工作流程。
+
+  核心特性
+
+  - 多层级智能体架构：数据收集、分析研究、辩论决策三层智能体
+  - 并行处理能力：支持多任务并行执行，提高分析效率
+  - 辩论式分析：独特的多空双方辩论机制，确保投资决策的全面性
+  - 状态管理：完整的投资状态跟踪和管理
+  - 向后兼容：保持与原有系统的API兼容性
+
+  系统架构
+
+  1. 智能体层级结构
+
+  ┌─────────────────────────────────────────────────────────────┐
+  │                    CrewAI投资分析系统                         │
+  ├─────────────────────────────────────────────────────────────┤
+  │  数据收集层                    │  分析层                    │
+  │  ┌─────────────┐              │  ┌─────────────┐            │
+  │  │数据收集Agent│              │  │技术分析Agent│            │
+  │  └─────────────┘              │  └─────────────┘            │
+  │  ┌─────────────┐              │  ┌─────────────┐            │
+  │  │新闻分析Agent│              │  │基本面分析Agent│           │
+  │  └─────────────┘              │  └─────────────┘            │
+  ├─────────────────────────────────────────────────────────────┤
+  │  研究辩论层                    │  决策层                    │
+  │  ┌─────────────┐              │  ┌─────────────┐            │
+  │  │看多研究Agent│              │  │辩论协调Agent│            │
+  │  └─────────────┘              │  └─────────────┘            │
+  │  ┌─────────────┤              │                           │
+  │  │看空研究Agent│              │  最终投资决策              │
+  │  └─────────────┘              │                           │
+  └─────────────────────────────────────────────────────────────┘
+
+  2. 智能体功能说明
+
+  数据收集层
+
+  - DataCollectionAgent：收集市场数据、财务指标、历史价格数据
+  - NewsAnalysisAgent：分析新闻情感、市场舆情、重要事件
+
+  分析层
+
+  - TechnicalAnalysisAgent：技术指标分析、趋势识别、交易信号生成
+  - FundamentalAnalysisAgent：基本面分析、财务健康评估、价值分析
+
+  研究辩论层
+
+  - BullishResearchAgent：从看多角度分析，识别增长机会和积极因素
+  - BearishResearchAgent：从看空角度分析，识别风险因素和威胁
+  - DebateModeratorAgent：协调辩论，综合多方观点，形成平衡结论
+
+  快速开始
+
+  1. 环境配置
+
+  # 安装依赖
+  pip install -e .
+
+  # 配置API密钥
+  export GEMINI_API_KEY="your_gemini_api_key"
+  # 或
+  export OPENAI_COMPATIBLE_API_KEY="your_openai_api_key"
+
+  2. 基本使用
+
+  简单分析调用
+
+  from src.crewai.main import run_investment_crew
+
+  # 执行投资分析
+  result = run_investment_crew(
+      ticker="000001",  # 股票代码
+      show_reasoning=True,  # 显示推理过程
+      num_of_news=5,  # 新闻分析数量
+      initial_capital=100000.0  # 初始资金
+  )
+
+  print(f"投资建议: {result['final_recommendation']['action']}")
+  print(f"置信度: {result['final_recommendation']['confidence']:.1%}")
+
+  向后兼容调用
+
+  from src.crewai.main import run_hedge_fund
+
+  # 使用原有API格式
+  result = run_hedge_fund(
+      run_id="analysis-001",
+      ticker="000001",
+      start_date="2024-01-01",
+      end_date="2024-12-01",
+      portfolio={"cash": 100000.0, "stock": 0},
+      show_reasoning=True,
+      num_of_news=5
+  )
+
+  3. 高级配置
+
+  自定义配置
+
+  from src.crewai.config.state import InvestmentConfig
+  from src.crewai.main import CrewAIInvestmentSystem
+
+  # 创建自定义配置
+  config = InvestmentConfig(
+      show_reasoning=True,
+      num_of_news=10,
+      initial_capital=500000.0,
+      initial_position=100,
+      max_analysis_workers=4
+  )
+
+  # 创建系统实例
+  system = CrewAIInvestmentSystem(config)
+
+  # 执行分析
+  result = system.run_analysis(
+      ticker="000001",
+      start_date="2024-01-01",
+      end_date="2024-12-01"
+  )
+
+  状态管理
+
+  from src.crewai.config.state import InvestmentState, PortfolioState
+
+  # 创建投资组合状态
+  portfolio = PortfolioState(
+      cash=100000.0,
+      stock_position=0
+  )
+
+  # 创建分析状态
+  state = InvestmentState(
+      ticker="000001",
+      run_id="analysis-001",
+      start_date="2024-01-01",
+      end_date="2024-12-01",
+      config=config,
+      portfolio=portfolio
+  )
+
+  输出结果说明
+
+  1. 结果结构
+
+  {
+    "success": true,
+    "ticker": "000001",
+    "run_id": "uuid-string",
+    "timestamp": "2024-01-01T00:00:00",
+    "analysis_period": {
+      "start_date": "2024-01-01",
+      "end_date": "2024-12-01"
+    },
+    "portfolio": {
+      "cash": 100000.0,
+      "stock_position": 0
+    },
+    "data_collection": {
+      // 数据收集结果
+    },
+    "news_analysis": {
+      // 新闻分析结果
+    },
+    "technical_analysis": {
+      "signal": "bullish",
+      "confidence": 0.75,
+      "indicators": {
+        "rsi": 45.2,
+        "macd": 0.5,
+        "bollinger_bands": "upper"
+      }
+    },
+    "fundamental_analysis": {
+      "signal": "neutral",
+      "confidence": 0.60,
+      "metrics": {
+        "pe_ratio": 15.2,
+        "pb_ratio": 2.1,
+        "roe": 0.12
+      }
+    },
+    "bullish_research": {
+      "perspective": "bullish",
+      "confidence": 0.70,
+      "thesis_points": [
+        "技术指标显示强劲上涨动力",
+        "基本面稳健支持增长"
+      ]
+    },
+    "bearish_research": {
+      "perspective": "bearish",
+      "confidence": 0.45,
+      "thesis_points": [
+        "估值偏高存在回调风险",
+        "行业竞争加剧"
+      ]
+    },
+    "debate_analysis": {
+      "final_signal": "bullish",
+      "confidence": 0.65,
+      "bull_confidence": 0.70,
+      "bear_confidence": 0.45,
+      "reasoning": "看多论据更具说服力"
+    },
+    "final_recommendation": {
+      "action": "buy",
+      "confidence": 0.65,
+      "max_investment": 20000.0,
+      "suggested_investment": 13000.0,
+      "reasoning": "基于多空辩论分析，建议买入",
+      "debate_based": true
+    }
+  }
+
+  2. 投资建议说明
+
+  - action: 买入(buy)/卖出(sell)/持有(hold)
+  - confidence: 置信度 (0.0-1.0)
+  - max_investment: 最大建议投资金额
+  - suggested_investment: 建议投资金额
+  - debate_based: 是否基于辩论分析
+  - position_size_guidance: 仓位大小指导
+  - risk_level: 风险等级
+  - time_horizon: 投资时间 horizon
+
+  测试验证
+
+  1. 运行测试套件
+
+  # 运行完整测试
+  python test_crewai.py
+
+  # 测试结果示例
+  🧪 CrewAI Investment System Test Suite
+  ==================================================
+  ✅ PASS Basic Functionality
+  ✅ PASS State Management
+  ✅ PASS Analysis Function
+  ✅ PASS Research Agents
+  ✅ PASS Backward Compatibility
+  📊 Overall: 5/5 tests passed
+  🎉 All tests passed! CrewAI migration is working correctly.
+
+  2. 单独测试组件
+
+  # 测试研究工具
+  from src.crewai.tools.research_tools import BullishResearchTool
+  import json
+
+  tool = BullishResearchTool()
+  result = tool._run(json.dumps(sample_data))
+  print(result)
+
+  性能优化
+
+  1. 并行处理配置
+
+  # 配置并行处理
+  config = InvestmentConfig(
+      max_analysis_workers=4,  # 最大并行工作线程
+      enable_parallel_execution=True,  # 启用并行执行
+      cache_results=True  # 启用结果缓存
+  )
+
+  2. 资源管理
+
+  # 监控系统资源
+  import psutil
+  import threading
+
+  def monitor_system():
+      while True:
+          cpu_percent = psutil.cpu_percent()
+          memory_percent = psutil.virtual_memory().percent
+          print(f"CPU: {cpu_percent}%, Memory: {memory_percent}%")
+          time.sleep(5)
+
+  # 启动监控线程
+  monitor_thread = threading.Thread(target=monitor_system)
+  monitor_thread.daemon = True
+  monitor_thread.start()
+
+  故障排除
+
+  1. 常见问题
+
+  API密钥配置错误
+
+  # 检查API密钥
+  echo $GEMINI_API_KEY
+  # 或
+  echo $OPENAI_COMPATIBLE_API_KEY
+
+  模块导入错误
+
+  # 检查Python路径
+  import sys
+  print(sys.path)
+
+  # 确保在项目根目录
+  import os
+  os.chdir('/path/to/A_Share_investment_Agent-main')
+
+  依赖包版本冲突
+
+  # 检查CrewAI版本
+  pip show crewai crewai-tools
+
+  # 如需升级
+  pip install --upgrade crewai crewai-tools
+
+  2. 日志调试
+
+  import logging
+
+  # 启用详细日志
+  logging.basicConfig(level=logging.DEBUG)
+
+  # 查看CrewAI日志
+  logger = logging.getLogger('crewai')
+  logger.setLevel(logging.DEBUG)
+
+  扩展开发
+
+  1. 添加新的分析Agent
+
+  from src.crewai.agents.base import AnalysisAgent
+  from src.crewai.tools.base_tool import BaseTool
+
+  class CustomAnalysisAgent(AnalysisAgent):
+      def __init__(self, tools=None):
+          super().__init__(
+              role="Custom Analysis Expert",
+              goal="Perform custom analysis",
+              backstory="Expert in custom analysis techniques",
+              agent_type="custom_analysis",
+              tools=tools or []
+          )
+
+  2. 自定义工具开发
+
+  from crewai.tools import BaseTool
+
+  class CustomAnalysisTool(BaseTool):
+      name: str = "custom_analysis_tool"
+      description: str = "Perform custom analysis operations"
+
+      def _run(self, input_data: str) -> str:
+          # 实现自定义分析逻辑
+          return json.dumps({"result": "custom_analysis_result"})
+
+  3. 配置扩展
+
+  from src.crewai.config.settings import CrewAISettings
+
+  # 自定义配置
+  settings = CrewAISettings(
+      analysis_config={
+          "custom_analysis": {
+              "max_iterations": 50,
+              "timeout": 300
+          }
+      }
+  )
+
+  最佳实践
+
+  1. 投资分析建议
+
+  1. 多元化分析: 结合技术面、基本面、消息面多维度分析
+  2. 风险管理: 严格控制单笔投资不超过总资金的20%
+  3. 定期复盘: 定期评估投资决策的准确性
+  4. 市场情绪: 关注辩论分析中的市场情绪指标
+
+  2. 系统使用建议
+
+  1. 数据质量: 确保输入数据的准确性和完整性
+  2. 参数调优: 根据市场环境调整分析参数
+  3. 结果验证: 结合人工判断验证系统建议
+  4. 持续学习: 根据市场反馈优化系统配置
+
+  3. 性能优化建议
+
+  1. 并行处理: 充分利用多核CPU进行并行分析
+  2. 结果缓存: 对重复分析请求进行缓存
+  3. 资源监控: 监控系统资源使用情况
+  4. 批量处理: 对多个股票进行批量分析
+
+  总结
+
+  CrewAI投资分析系统通过引入多智能体协作和辩论机制，在保持原有功能的基础上，提供了更全面、更平衡的投资分析。系统的模
+  块化设计和向后兼容性确保了平滑迁移和持续扩展的能力。
+
+  通过合理配置和使用，该系统能够有效辅助投资决策，提高分析效率和决策质量。
