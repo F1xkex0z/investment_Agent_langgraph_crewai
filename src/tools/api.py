@@ -1,6 +1,7 @@
 from typing import Dict, Any, List
 import pandas as pd
 import akshare as ak
+import requests
 from datetime import datetime, timedelta
 import json
 import numpy as np
@@ -8,6 +9,11 @@ from src.utils.logging_config import setup_logger
 
 # 设置日志记录
 logger = setup_logger('api')
+
+# 设置请求头
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+}
 
 
 def get_financial_metrics(symbol: str) -> Dict[str, Any]:
@@ -234,6 +240,57 @@ def get_financial_statements(symbol: str) -> Dict[str, Any]:
                 "capital_expenditure": abs(float(latest_cash_flow.get("购建固定资产、无形资产和其他长期资产支付的现金", 0))),
                 "free_cash_flow": float(latest_cash_flow.get("经营活动产生的现金流量净额", 0)) - abs(float(latest_cash_flow.get("购建固定资产、无形资产和其他长期资产支付的现金", 0)))
             }
+
+            # 检查折旧数据是否为0，并尝试从其他字段获取
+            if current_item['depreciation_and_amortization'] == 0:
+                # 尝试从其他可能的字段获取折旧数据
+                depreciation_alternatives = [
+                    "固定资产折旧、油气资产折耗、生产性生物资产折旧",
+                    "固定资产折旧",
+                    "折旧与摊销",
+                    "非现金支出",
+                    "无形资产摊销"
+                ]
+                for alt in depreciation_alternatives:
+                    if alt in latest_cash_flow and not pd.isna(latest_cash_flow[alt]):
+                        try:
+                            dep_value = float(latest_cash_flow[alt])
+                            if dep_value > 0:
+                                current_item['depreciation_and_amortization'] = dep_value
+                                break
+                        except (ValueError, TypeError):
+                            continue
+                if current_item['depreciation_and_amortization'] == 0:
+                    logger.warning(f"{symbol}的折旧数据为0，已尝试从其他字段获取")
+            
+            # 检查资本支出数据是否为0，并尝试从其他字段获取
+            if current_item['capital_expenditure'] == 0:
+                # 尝试从其他可能的字段获取资本支出数据
+                capex_alternatives = [
+                    "购建固定资产、无形资产和其他长期资产支付的现金",
+                    "购建固定资产、无形资产和其他长期资产所支付的现金",
+                    "资本支出",
+                    "投资活动现金流出小计"
+                ]
+                for alt in capex_alternatives:
+                    if alt in latest_cash_flow and not pd.isna(latest_cash_flow[alt]):
+                        try:
+                            capex_value = abs(float(latest_cash_flow[alt]))
+                            if capex_value > 0:
+                                current_item['capital_expenditure'] = capex_value
+                                break
+                        except (ValueError, TypeError):
+                            continue
+                if current_item['capital_expenditure'] == 0:
+                    logger.warning(f"{symbol}的资本支出数据为0，已尝试从其他字段获取")
+            
+            # 确保自由现金流计算的准确性
+            if current_item['free_cash_flow'] == 0 and float(latest_cash_flow.get("经营活动产生的现金流量净额", 0)) > 0:
+                # 如果经营现金流为正但自由现金流为0，可能是资本支出数据缺失
+                # 使用简化的自由现金流计算方法
+                current_item['free_cash_flow'] = float(latest_cash_flow.get("经营活动产生的现金流量净额", 0)) * 0.8  # 假设80%的经营现金流可用于自由现金流
+                logger.debug(f"{symbol}的自由现金流重新计算为: {current_item['free_cash_flow']}")
+            
             line_items.append(current_item)
             logger.info("✓ Latest period data processed successfully")
 
@@ -282,11 +339,77 @@ def get_financial_statements(symbol: str) -> Dict[str, Any]:
 def get_market_data(symbol: str) -> Dict[str, Any]:
     """获取市场数据"""
     try:
-        # 获取实时行情
-        realtime_data = ak.stock_zh_a_spot_em()
-        stock_data = realtime_data[realtime_data['代码'] == symbol].iloc[0]
-
-        return {
+        logger.info(f"开始获取股票 {symbol} 的市场数据")
+        
+        # 获取实时行情 - 添加重试机制
+        max_retries = 3
+        retry_count = 0
+        realtime_data = None
+        
+        while retry_count < max_retries:
+            try:
+                logger.debug(f"调用ak.stock_zh_a_spot_em()获取A股实时行情数据 (尝试 {retry_count + 1}/{max_retries})")
+                # 设置超时参数为10秒
+                import requests
+                old_timeout = requests.get.__defaults__[1] if requests.get.__defaults__ else None
+                requests.get.__defaults__ = (None, 10)  # 设置全局超时为10秒
+                
+                try:
+                    realtime_data = ak.stock_zh_a_spot_em()
+                    break  # 成功获取数据后跳出循环
+                finally:
+                    # 恢复原来的超时设置
+                    if old_timeout is not None:
+                        requests.get.__defaults__ = (None, old_timeout)
+                    else:
+                        requests.get.__defaults__ = (None, )
+                        
+            except requests.exceptions.ConnectionError as conn_err:
+                retry_count += 1
+                logger.warning(f"连接错误: {conn_err}, 将在1秒后重试 ({retry_count}/{max_retries})")
+                if retry_count >= max_retries:
+                    logger.error(f"达到最大重试次数，无法获取市场数据")
+                    raise
+                # 等待1秒后重试
+                import time
+                time.sleep(1)
+            except Exception as e:
+                logger.error(f"获取市场数据时发生其他错误: {e}")
+                raise
+                
+        if realtime_data is None:
+            logger.error("重试后仍未获取到市场数据")
+            return {}
+        
+        # 验证获取的数据
+        if realtime_data is None:
+            logger.error("获取A股实时行情数据返回None")
+            return {}
+        
+        if realtime_data.empty:
+            logger.error("获取A股实时行情数据返回空DataFrame")
+            return {}
+        
+        logger.debug(f"成功获取A股实时行情数据，共 {len(realtime_data)} 条记录")
+        logger.debug(f"数据列名: {list(realtime_data.columns)}")
+        
+        # 筛选特定股票
+        logger.debug(f"筛选股票代码为 {symbol} 的数据")
+        filtered_data = realtime_data[realtime_data['代码'] == symbol]
+        
+        if filtered_data.empty:
+            logger.error(f"未找到股票代码为 {symbol} 的数据")
+            # 打印前10条记录的代码，帮助调试
+            if len(realtime_data) > 0:
+                sample_codes = realtime_data['代码'].head(10).tolist()
+                logger.debug(f"样本股票代码: {sample_codes}")
+            return {}
+        
+        stock_data = filtered_data.iloc[0]
+        logger.debug(f"成功获取股票 {symbol} 的数据，股票名称: {stock_data.get('名称', '未知')}")
+        
+        # 提取所需数据并转换为浮点数
+        result = {
             "market_cap": float(stock_data.get("总市值", 0)),
             "volume": float(stock_data.get("成交量", 0)),
             # A股没有平均成交量，暂用当日成交量
@@ -294,9 +417,31 @@ def get_market_data(symbol: str) -> Dict[str, Any]:
             "fifty_two_week_high": float(stock_data.get("52周最高", 0)),
             "fifty_two_week_low": float(stock_data.get("52周最低", 0))
         }
+        
+        logger.info(f"成功获取股票 {symbol} 的市场数据")
+        logger.debug(f"市场数据结果: {result}")
+        
+        return result
 
+    except IndexError as e:
+        logger.error(f"索引错误 - 可能是因为筛选后的数据为空: {e}")
+        logger.debug(f"尝试获取索引0时出错，筛选后的数据量: {len(filtered_data) if 'filtered_data' in locals() else '未知'}")
+        return {}
+    except KeyError as e:
+        logger.error(f"键错误 - 可能是数据结构发生变化: {e}")
+        if 'realtime_data' in locals() and not realtime_data.empty:
+            logger.debug(f"当前数据的列名: {list(realtime_data.columns)}")
+        return {}
+    except ValueError as e:
+        logger.error(f"值错误 - 可能是数据类型转换失败: {e}")
+        if 'stock_data' in locals():
+            logger.debug(f"导致错误的数据: {stock_data}")
+        return {}
     except Exception as e:
-        logger.error(f"Error getting market data: {e}")
+        logger.error(f"获取市场数据时发生未知错误: {e}")
+        # 记录异常的详细信息，包括堆栈跟踪
+        import traceback
+        logger.debug(f"异常详情: {traceback.format_exc()}")
         return {}
 
 

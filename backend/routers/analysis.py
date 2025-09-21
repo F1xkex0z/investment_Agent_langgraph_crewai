@@ -7,7 +7,7 @@
 from fastapi import APIRouter
 import uuid
 import logging
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from typing import Dict
 
 from ..models.api_models import (
@@ -80,7 +80,7 @@ async def start_stock_analysis(request: StockAnalysisRequest):
         ticker=request.ticker,
         status="running",
         message="分析任务已启动",
-        submitted_at=datetime.now(UTC)
+        submitted_at=datetime.now(timezone.utc)
     )
 
     # 使用ApiResponse包装返回

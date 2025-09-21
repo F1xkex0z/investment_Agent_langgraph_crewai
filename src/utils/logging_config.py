@@ -1,15 +1,21 @@
-import os
 import time
+import os
 import logging
 from typing import Optional
 
 
-def setup_logger(name: str, log_dir: Optional[str] = None) -> logging.Logger:
+SUCCESS_ICON = "✅"
+ERROR_ICON = "❌"
+WAIT_ICON = "🔄"
+
+
+def setup_logger(name: str, log_dir: Optional[str] = None, log_file: Optional[str] = None) -> logging.Logger:
     """设置统一的日志配置
 
     Args:
         name: logger的名称
         log_dir: 日志文件目录，如果为None则使用默认的logs目录
+        log_file: 日志文件名，如果为None则使用name作为文件名
 
     Returns:
         配置好的logger实例
@@ -28,7 +34,7 @@ def setup_logger(name: str, log_dir: Optional[str] = None) -> logging.Logger:
 
     # 创建控制台处理器
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)  # 控制台只显示INFO及以上级别
+    console_handler.setLevel(logging.DEBUG)  # 控制台显示DEBUG级别及以上
 
     # 创建格式化器
     formatter = logging.Formatter(
@@ -42,8 +48,10 @@ def setup_logger(name: str, log_dir: Optional[str] = None) -> logging.Logger:
         log_dir = os.path.join(os.path.dirname(os.path.dirname(
             os.path.dirname(os.path.abspath(__file__)))), 'logs')
     os.makedirs(log_dir, exist_ok=True)
-    log_file = os.path.join(log_dir, f"{name}.log")
-    file_handler = logging.FileHandler(log_file, encoding='utf-8')
+    if log_file is None:
+        log_file = f"{name}.log"
+    log_file_path = os.path.join(log_dir, log_file)
+    file_handler = logging.FileHandler(log_file_path, encoding='utf-8')
     file_handler.setLevel(logging.DEBUG)  # 文件记录DEBUG级别及以上的日志
     file_handler.setFormatter(formatter)
 
@@ -55,6 +63,3 @@ def setup_logger(name: str, log_dir: Optional[str] = None) -> logging.Logger:
 
 
 # 预定义的图标
-SUCCESS_ICON = "✓"
-ERROR_ICON = "✗"
-WAIT_ICON = "🔄"

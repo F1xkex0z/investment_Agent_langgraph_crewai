@@ -6,7 +6,7 @@
 
 import logging
 from typing import Dict, Any
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 
 from ..models.api_models import StockAnalysisRequest
 from ..utils.context_managers import workflow_run
@@ -38,8 +38,8 @@ def execute_stock_analysis(request: StockAnalysisRequest, run_id: str) -> Dict[s
         workflow_log = AgentExecutionLog(
             agent_name="workflow_manager",
             run_id=run_id,
-            timestamp_start=datetime.now(UTC),
-            timestamp_end=datetime.now(UTC),  # 初始化为相同值，稍后更新
+            timestamp_start=datetime.now(timezone.utc),
+            timestamp_end=datetime.now(timezone.utc),  # 初始化为相同值，稍后更新
             input_state={"request": request.dict()},
             output_state=None  # 稍后更新
         )

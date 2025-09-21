@@ -6,6 +6,10 @@ import time
 import pandas as pd
 from urllib.parse import urlparse
 from src.tools.openrouter_config import get_chat_completion, logger as api_logger
+from src.utils.logging_config import setup_logger
+
+# 设置模块专用的日志记录器
+logger = setup_logger('news_crawler')
 
 # 导入新的搜索模块
 try:
@@ -387,39 +391,49 @@ def get_news_sentiment(news_list: list, num_of_news: int = 5) -> float:
     Returns:
         float: 情感得分，范围[-1, 1]，-1最消极，1最积极
     """
+    logger.debug(f"开始分析新闻情感，输入新闻数量: {len(news_list)}，计划分析新闻数量: {num_of_news}")
+    
     if not news_list:
+        logger.debug("新闻列表为空，返回中性分数0.0")
         return 0.0
 
-    # # 获取项目根目录
-    # project_root = os.path.dirname(os.path.dirname(
-    #     os.path.dirname(os.path.abspath(__file__))))
-
-    # 检查是否有缓存的情感分析结果
     # 检查是否有缓存的情感分析结果
     cache_file = "src/data/sentiment_cache.json"
+    logger.debug(f"情感分析缓存文件路径: {cache_file}")
     os.makedirs(os.path.dirname(cache_file), exist_ok=True)
 
     # 生成新闻内容的唯一标识
-    news_key = "|".join([
-        f"{news['title']}|{news['content'][:100]}|{news['publish_time']}"
-        for news in news_list[:num_of_news]
-    ])
+    logger.debug(f"生成新闻内容唯一标识，使用前{min(num_of_news, len(news_list))}条新闻")
+    try:
+        news_key = "|".join([
+            f"{news['title']}|{news['content'][:100]}|{news.get('publish_time', 'Unknown')}"
+            for news in news_list[:num_of_news]
+        ])
+        logger.debug(f"成功生成新闻标识，长度: {len(news_key)}")
+    except Exception as e:
+        logger.error(f"生成新闻标识失败: {e}")
+        # 使用一个随机标识作为备选
+        import hashlib
+        import time
+        news_key = hashlib.md5((str(time.time()) + str(news_list)).encode()).hexdigest()
+        logger.debug(f"使用备选标识: {news_key}")
 
     # 检查缓存
     if os.path.exists(cache_file):
-        print("发现情感分析缓存文件")
+        logger.debug("发现情感分析缓存文件")
         try:
             with open(cache_file, 'r', encoding='utf-8') as f:
                 cache = json.load(f)
+                logger.debug(f"缓存文件包含 {len(cache)} 条记录")
                 if news_key in cache:
-                    print("使用缓存的情感分析结果")
+                    logger.debug(f"找到匹配的缓存结果，直接返回")
                     return cache[news_key]
-                print("未找到匹配的情感分析缓存")
+                logger.debug("未找到匹配的情感分析缓存")
         except Exception as e:
-            print(f"读取情感分析缓存出错: {e}")
+            logger.error(f"读取情感分析缓存出错: {e}")
             cache = {}
     else:
-        print("未找到情感分析缓存文件，将创建新文件")
+        logger.debug("未找到情感分析缓存文件")
         cache = {}
 
     # 准备系统消息
@@ -451,13 +465,21 @@ def get_news_sentiment(news_list: list, num_of_news: int = 5) -> float:
     }
 
     # 准备新闻内容
-    news_content = "\n\n".join([
-        f"标题：{news['title']}\n"
-        f"来源：{news['source']}\n"
-        f"时间：{news['publish_time']}\n"
-        f"内容：{news['content']}"
-        for news in news_list[:num_of_news]  # 使用指定数量的新闻
-    ])
+    logger.debug("准备新闻内容用于情感分析")
+    try:
+        news_content = "\n\n".join([
+            f"标题：{news.get('title', 'No Title')}\n"
+            f"来源：{news.get('source', 'Unknown')}\n"
+            f"时间：{news.get('publish_time', 'Unknown')}\n"
+            f"内容：{news.get('content', '')[:200]}..."  # 只显示前200个字符，避免日志过长
+            for news in news_list[:num_of_news]  # 使用指定数量的新闻
+        ])
+        logger.debug(f"成功准备新闻内容，处理了 {min(num_of_news, len(news_list))} 条新闻")
+    except Exception as e:
+        logger.error(f"准备新闻内容失败: {e}")
+        # 使用简化的新闻内容作为备选
+        news_content = "\n\n".join([f"{news.get('title', 'No Title')}" for news in news_list[:num_of_news]])
+        logger.debug(f"使用简化的新闻内容: {news_content[:100]}...")
 
     user_message = {
         "role": "user",
@@ -466,32 +488,42 @@ def get_news_sentiment(news_list: list, num_of_news: int = 5) -> float:
 
     try:
         # 获取LLM分析结果
+        logger.debug("开始调用LLM进行情感分析")
         result = get_chat_completion([system_message, user_message])
+        
         if result is None:
-            print("Error: PI error occurred, LLM returned None")
+            logger.error("LLM调用失败: 返回None")
             return 0.0
+        
+        logger.debug(f"成功获取LLM结果: {result[:100]}...")
 
         # 提取数字结果
         try:
             sentiment_score = float(result.strip())
+            logger.debug(f"成功解析情感得分: {sentiment_score}")
         except ValueError as e:
-            print(f"Error parsing sentiment score: {e}")
-            print(f"Raw result: {result}")
+            logger.error(f"解析情感得分失败: {e}")
+            logger.debug(f"原始LLM结果: {result}")
             return 0.0
 
         # 确保分数在-1到1之间
         sentiment_score = max(-1.0, min(1.0, sentiment_score))
+        logger.debug(f"规范化后的情感得分: {sentiment_score}")
 
         # 缓存结果
         cache[news_key] = sentiment_score
+        logger.debug("准备缓存情感分析结果")
         try:
             with open(cache_file, 'w', encoding='utf-8') as f:
                 json.dump(cache, f, ensure_ascii=False, indent=2)
+            logger.debug(f"成功将结果缓存到文件: {cache_file}")
         except Exception as e:
-            print(f"Error writing cache: {e}")
+            logger.error(f"写入缓存失败: {e}")
 
         return sentiment_score
 
     except Exception as e:
-        print(f"Error analyzing news sentiment: {e}")
+        logger.error(f"情感分析过程中发生异常: {e}")
+        import traceback
+        logger.debug(f"异常详细信息: {traceback.format_exc()}")
         return 0.0  # 出错时返回中性分数

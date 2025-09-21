@@ -8,6 +8,13 @@ from typing import Dict, Any, Optional, List
 from datetime import datetime
 from dataclasses import dataclass, field
 import json
+import time
+
+# Import logging
+from src.utils.logging_config import setup_logger, setup_detailed_logger
+
+logger = setup_logger('crewai_state')
+detailed_logger = setup_detailed_logger('crewai_state')
 
 
 @dataclass
@@ -112,9 +119,13 @@ class InvestmentState:
 
     def update_analysis_result(self, agent_name: str, result: Any):
         """Update analysis result from a specific agent"""
+        detailed_logger.info(f"Updating analysis result for agent: {agent_name}")
+        detailed_logger.debug(f"Updating analysis result for ticker: {self.ticker}, run_id: {self.run_id}")
+        detailed_logger.debug(f"Result type: {type(result)}")
+        
         self.analysis_results[agent_name] = result
         self.updated_at = datetime.now()
-
+        
         # Add to task history
         self.task_history.append({
             "timestamp": datetime.now().isoformat(),
@@ -122,6 +133,9 @@ class InvestmentState:
             "type": "analysis",
             "result_summary": str(result)[:200] if result else None
         })
+        
+        detailed_logger.debug(f"Analysis result updated. Total analysis results: {len(self.analysis_results)}")
+        detailed_logger.debug(f"Task history updated. Total tasks: {len(self.task_history)}")
 
     def update_research_finding(self, researcher_type: str, finding: Any):
         """Update research finding from bull/bear researchers"""
@@ -247,6 +261,10 @@ class InvestmentState:
 
     def set_task_output(self, task_name: str, output: Any):
         """Set output for a specific task (for CrewAI compatibility)"""
+        detailed_logger.info(f"Setting task output for task: {task_name}")
+        detailed_logger.debug(f"Setting task output for ticker: {self.ticker}, run_id: {self.run_id}")
+        detailed_logger.debug(f"Output type: {type(output)}")
+        
         # Determine task type based on name
         if 'research' in task_name.lower():
             self.update_research_finding(task_name, output)
@@ -256,3 +274,5 @@ class InvestmentState:
             self.set_final_decision(output)
         else:
             self.update_analysis_result(task_name, output)
+            
+        detailed_logger.debug(f"Task output set successfully for task: {task_name}")

@@ -1,8 +1,9 @@
-from langchain_core.messages import HumanMessage
 from src.utils.logging_config import setup_logger
 from src.agents.state import AgentState, show_agent_reasoning, show_workflow_status
 from src.utils.api_utils import agent_endpoint, log_llm_interaction
 import json
+import numpy as np
+from langchain_core.messages import HumanMessage
 
 # 初始化 logger
 logger = setup_logger('valuation_agent')
@@ -11,13 +12,26 @@ logger = setup_logger('valuation_agent')
 @agent_endpoint("valuation", "估值分析师，使用DCF和所有者收益法评估公司内在价值")
 def valuation_agent(state: AgentState):
     """Responsible for valuation analysis"""
+    logger.info("估值分析师Agent开始执行")
     show_workflow_status("Valuation Agent")
     show_reasoning = state["metadata"]["show_reasoning"]
+    logger.debug(f"推理显示设置: {show_reasoning}")
+    
     data = state["data"]
-    metrics = data["financial_metrics"][0]
-    current_financial_line_item = data["financial_line_items"][0]
-    previous_financial_line_item = data["financial_line_items"][1]
-    market_cap = data["market_cap"]
+    logger.debug(f"接收到的数据: 股票代码={data.get('ticker')}, 市场数据存在={str(bool(data.get('market_data')))}")
+    
+    # Safely access financial metrics with default values
+    metrics = data["financial_metrics"][0] if data.get("financial_metrics") and len(data["financial_metrics"]) > 0 else {}
+    logger.debug(f"获取到的财务指标数量: {len(metrics)}")
+    
+    # Safely access financial line items with default values
+    current_financial_line_item = data["financial_line_items"][0] if data.get("financial_line_items") and len(data["financial_line_items"]) > 0 else {}
+    previous_financial_line_item = data["financial_line_items"][1] if data.get("financial_line_items") and len(data["financial_line_items"]) > 1 else current_financial_line_item
+    logger.debug(f"当前财务报表数据项数: {len(current_financial_line_item)}, 上年数据项数: {len(previous_financial_line_item)}")
+    
+    # Safely access market_cap with a default value
+    market_cap = data.get("market_cap", 0)
+    logger.info(f"市值信息: {market_cap:,.2f}")
 
     reasoning = {}
 
@@ -25,31 +39,64 @@ def valuation_agent(state: AgentState):
     working_capital_change = (current_financial_line_item.get(
         'working_capital') or 0) - (previous_financial_line_item.get('working_capital') or 0)
 
+    # Get earnings growth with a default value if missing
+    earnings_growth = metrics.get("earnings_growth", 0.05)  # Default to 5% growth rate
+
     # Owner Earnings Valuation (Buffett Method)
     owner_earnings_value = calculate_owner_earnings_value(
-        net_income=current_financial_line_item.get('net_income'),
+        net_income=current_financial_line_item.get('net_income', 0),
         depreciation=current_financial_line_item.get(
-            'depreciation_and_amortization'),
-        capex=current_financial_line_item.get('capital_expenditure'),
+            'depreciation_and_amortization', 0),
+        capex=current_financial_line_item.get('capital_expenditure', 0),
         working_capital_change=working_capital_change,
-        growth_rate=metrics["earnings_growth"],
+        growth_rate=earnings_growth,
         required_return=0.15,
         margin_of_safety=0.25
     )
 
     # DCF Valuation
     dcf_value = calculate_intrinsic_value(
-        free_cash_flow=current_financial_line_item.get('free_cash_flow'),
-        growth_rate=metrics["earnings_growth"],
+        free_cash_flow=current_financial_line_item.get('free_cash_flow', 0),
+        growth_rate=earnings_growth,
         discount_rate=0.10,
         terminal_growth_rate=0.03,
         num_years=5,
     )
 
     # Calculate combined valuation gap (average of both methods)
-    dcf_gap = (dcf_value - market_cap) / market_cap
-    owner_earnings_gap = (owner_earnings_value - market_cap) / market_cap
-    valuation_gap = (dcf_gap + owner_earnings_gap) / 2
+    # Handle division by zero by setting reasonable default values
+    # 计算估值差距并处理极端情况
+    if market_cap == 0:
+        # 如果市值为0，避免除以0错误
+        dcf_gap = 0.0
+        owner_earnings_gap = 0.0
+        valuation_gap = 0.0
+        logger.warning("市值为0，无法计算估值差距，使用默认值")
+    else:
+        # 计算DCF估值差距并处理可能的NaN值
+        if np.isnan(dcf_value):
+            dcf_gap = 0.0
+            logger.warning("DCF价值为NaN，使用默认估值差距")
+        else:
+            dcf_gap = (dcf_value - market_cap) / market_cap
+            # 限制估值差距范围，避免极端值
+            dcf_gap = max(min(dcf_gap, 2.0), -1.0)  # 限制在-100%到200%之间
+        
+        # 计算所有者收益估值差距并处理可能的NaN值
+        if np.isnan(owner_earnings_value):
+            owner_earnings_gap = 0.0
+            logger.warning("所有者收益价值为NaN，使用默认估值差距")
+        else:
+            owner_earnings_gap = (owner_earnings_value - market_cap) / market_cap
+            # 限制估值差距范围，避免极端值
+            owner_earnings_gap = max(min(owner_earnings_gap, 2.0), -1.0)  # 限制在-100%到200%之间
+        
+        # 计算综合估值差距
+        valuation_gap = (dcf_gap + owner_earnings_gap) / 2
+        # 再次检查是否为NaN
+        if np.isnan(valuation_gap):
+            valuation_gap = 0.0
+            logger.warning("综合估值差距为NaN，使用默认值")
 
     if valuation_gap > 0.10:  # Changed from 0.15 to 0.10 (10% undervalued)
         signal = 'bullish'
@@ -68,9 +115,18 @@ def valuation_agent(state: AgentState):
         "details": f"Owner Earnings Value: ${owner_earnings_value:,.2f}, Market Cap: ${market_cap:,.2f}, Gap: {owner_earnings_gap:.1%}"
     }
 
+    # 计算置信度并确保不会出现NaN
+    confidence_value = abs(valuation_gap)
+    if np.isnan(confidence_value):
+        confidence_value = 0.0
+        logger.warning("置信度计算为NaN，使用默认值")
+    
+    # 限制置信度范围在0%到100%之间
+    confidence_value = min(confidence_value, 1.0)
+
     message_content = {
         "signal": signal,
-        "confidence": f"{abs(valuation_gap):.0%}",
+        "confidence": f"{confidence_value:.0%}",
         "reasoning": reasoning
     }
 
@@ -85,8 +141,8 @@ def valuation_agent(state: AgentState):
         state["metadata"]["agent_reasoning"] = message_content
 
     show_workflow_status("Valuation Agent", "completed")
-    # logger.info(
-    # f"--- DEBUG: valuation_agent RETURN messages: {[msg.name for msg in [message]]} ---")
+    logger.info(f"估值分析完成: 信号={signal}, 置信度={confidence_value:.0%}, 估值差距={valuation_gap:.1%}")
+    logger.debug(f"DCF价值=${dcf_value:,.2f}, 所有者收益价值=${owner_earnings_value:,.2f}")
     return {
         "messages": [message],
         "data": {
@@ -109,6 +165,7 @@ def calculate_owner_earnings_value(
 
 
 ) -> float:
+    logger.debug(f"开始计算所有者收益价值: 净利润={net_income:,.2f}, 折旧={depreciation:,.2f}, 资本支出={capex:,.2f}")
     """
     使用改进的所有者收益法计算公司价值。
 
@@ -138,11 +195,13 @@ def calculate_owner_earnings_value(
             working_capital_change
         )
 
-        if owner_earnings <= 0:
+        # 处理异常情况
+        if owner_earnings <= 0 or required_return <= 0:
+            logger.warning(f"所有者收益或要求回报率为负值或零: 所有者收益={owner_earnings:,.2f}, 要求回报率={required_return:,.2f}")
             return 0
 
         # 调整增长率，确保合理性
-        growth_rate = min(max(growth_rate, 0), 0.25)  # 限制在0-25%之间
+        growth_rate = min(max(growth_rate, -0.2), 0.25)  # 限制在-20%到25%之间
 
         # 计算预测期收益现值
         future_values = []
@@ -153,8 +212,12 @@ def calculate_owner_earnings_value(
             discounted_value = future_value / (1 + required_return) ** year
             future_values.append(discounted_value)
 
-        # 计算永续价值
-        terminal_growth = min(growth_rate * 0.4, 0.03)  # 永续增长率取增长率的40%或3%的较小值
+        # 计算永续价值，确保分母不为零
+        terminal_growth = min(max(growth_rate * 0.4, 0.01), 0.03)  # 永续增长率控制在1%-3%之间
+        if required_return <= terminal_growth:
+            logger.warning(f"要求回报率小于或等于永续增长率，无法计算永续价值: 要求回报率={required_return:,.2f}, 永续增长率={terminal_growth:,.2f}")
+            return sum(future_values)  # 只返回预测期现值
+
         terminal_value = (
             future_values[-1] * (1 + terminal_growth)) / (required_return - terminal_growth)
         terminal_value_discounted = terminal_value / \
@@ -167,7 +230,7 @@ def calculate_owner_earnings_value(
         return max(value_with_safety_margin, 0)  # 确保不返回负值
 
     except Exception as e:
-        print(f"所有者收益计算错误: {e}")
+        logger.error(f"所有者收益计算错误: {e}")
         return 0
 
 
@@ -191,15 +254,29 @@ def calculate_intrinsic_value(
     Returns:
         float: 计算得到的内在价值
     """
+    logger.debug(f"开始计算DCF价值: 自由现金流={free_cash_flow:,.2f}, 增长率={growth_rate:.2%}")
     try:
-        if not isinstance(free_cash_flow, (int, float)) or free_cash_flow <= 0:
+        # 数据类型和有效性检查
+        if not isinstance(free_cash_flow, (int, float)):
+            logger.warning(f"自由现金流不是有效数值: {free_cash_flow}")
+            return 0
+        
+        # 如果自由现金流为0或负数，尝试使用其他替代方法
+        if free_cash_flow <= 0:
+            logger.warning(f"自由现金流为负值或零: {free_cash_flow:,.2f}")
+            # 可以考虑使用净利润的一部分作为替代
             return 0
 
         # 调整增长率，确保合理性
-        growth_rate = min(max(growth_rate, 0), 0.25)  # 限制在0-25%之间
+        growth_rate = min(max(growth_rate, -0.2), 0.25)  # 限制在-20%到25%之间
 
         # 调整永续增长率，不能超过经济平均增长
-        terminal_growth_rate = min(growth_rate * 0.4, 0.03)  # 取增长率的40%或3%的较小值
+        terminal_growth_rate = min(max(growth_rate * 0.4, 0.01), 0.03)  # 取增长率的40%或3%的较小值
+        
+        # 确保折现率有效
+        if discount_rate <= 0 or discount_rate <= terminal_growth_rate:
+            logger.warning(f"折现率无效或小于等于永续增长率: 折现率={discount_rate:,.2f}, 永续增长率={terminal_growth_rate:,.2f}")
+            discount_rate = max(0.05, terminal_growth_rate + 0.02)  # 设置最低折现率
 
         # 计算预测期现金流现值
         present_values = []
@@ -217,11 +294,12 @@ def calculate_intrinsic_value(
 
         # 总价值
         total_value = sum(present_values) + terminal_present_value
+        logger.debug(f"DCF价值计算结果: 预测期现值总和={sum(present_values):,.2f}, 永续价值现值={terminal_present_value:,.2f}, 总价值={total_value:,.2f}")
 
         return max(total_value, 0)  # 确保不返回负值
 
     except Exception as e:
-        print(f"DCF计算错误: {e}")
+        logger.error(f"DCF计算错误: {e}")
         return 0
 
 
@@ -241,4 +319,7 @@ def calculate_working_capital_change(
     Returns:
         float: Change in working capital (current - previous)
     """
-    return current_working_capital - previous_working_capital
+    logger.debug(f"计算营运资金变化: 当前期={current_working_capital:,.2f}, 上期={previous_working_capital:,.2f}")
+    change = current_working_capital - previous_working_capital
+    logger.debug(f"营运资金变化结果: {change:,.2f}")
+    return change

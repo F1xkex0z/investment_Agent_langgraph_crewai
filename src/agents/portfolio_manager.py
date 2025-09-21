@@ -14,7 +14,6 @@ logger = setup_logger('portfolio_management_agent')
 
 # Helper function to get the latest message by agent name
 
-
 def get_latest_message_by_name(messages: list, name: str):
     for msg in reversed(messages):
         if msg.name == name:
@@ -33,11 +32,12 @@ def portfolio_management_agent(state: AgentState):
     logger.info(f"\n--- DEBUG: {agent_name} START ---")
 
     # Log raw incoming messages
-    # logger.info(
-    # f"--- DEBUG: {agent_name} RAW INCOMING messages: {[msg.name for msg in state['messages']]} ---")
-    # for i, msg in enumerate(state['messages']):
-    #     logger.info(
-    #         f"  DEBUG RAW MSG {i}: name='{msg.name}', content_preview='{str(msg.content)[:100]}...'")
+    logger.info(
+    f"--- DEBUG: {agent_name} RAW INCOMING messages: {[msg.name for msg in state['messages']]} ---")
+    for i, msg in enumerate(state['messages']):
+        logger.debug(
+            f"  DEBUG RAW MSG {i}: name='{msg.name}', content_preview='{str(msg.content)[:100]}...'"
+        )
 
     # Clean and unique messages by agent name, taking the latest if duplicates exist
     # This is crucial because this agent is a sink for multiple paths.
@@ -47,14 +47,16 @@ def portfolio_management_agent(state: AgentState):
         unique_incoming_messages[msg.name] = msg
 
     cleaned_messages_for_processing = list(unique_incoming_messages.values())
-    # logger.info(
-    # f"--- DEBUG: {agent_name} CLEANED messages for processing: {[msg.name for msg in cleaned_messages_for_processing]} ---")
+    logger.info(
+    f"--- DEBUG: {agent_name} CLEANED messages for processing: {[msg.name for msg in cleaned_messages_for_processing]} ---")
 
     show_workflow_status(f"{agent_name}: --- Executing Portfolio Manager ---")
     show_reasoning_flag = state["metadata"]["show_reasoning"]
     portfolio = state["data"]["portfolio"]
+    logger.info(f"当前投资组合状态: 现金={portfolio['cash']:.2f}, 当前持仓={portfolio['stock']} 股")
 
     # Get messages from other agents using the cleaned list
+    logger.info("开始收集各代理的分析结果...")
     technical_message = get_latest_message_by_name(
         cleaned_messages_for_processing, "technical_analyst_agent")
     fundamentals_message = get_latest_message_by_name(
@@ -81,6 +83,8 @@ def portfolio_management_agent(state: AgentState):
         {"signal": "error", "details": "Risk message missing"})
     tool_based_macro_content = tool_based_macro_message.content if tool_based_macro_message else json.dumps(
         {"signal": "error", "details": "Tool-based Macro message missing"})
+    
+    logger.debug("成功获取所有代理消息，开始准备LLM调用...")
 
     # Market-wide news summary from macro_news_agent (already correctly fetched from state["data"])
     market_wide_news_summary_content = state["data"].get(
@@ -167,7 +171,8 @@ def portfolio_management_agent(state: AgentState):
         agent_name, f"Preparing LLM. User msg includes: TA, FA, Sent, Val, Risk, GeneralMacro, MarketNews.")
 
     llm_interaction_messages = [system_message, user_message]
-    llm_response_content = get_chat_completion(llm_interaction_messages)
+    logger.info("开始调用LLM进行最终决策...")
+    llm_response_content = get_chat_completion(llm_interaction_messages, max_tokens=14096)  # 设置为较大值，接近模型的最大上下文窗口
 
     current_metadata = state["metadata"]
     current_metadata["current_agent_name"] = agent_name
@@ -177,6 +182,7 @@ def portfolio_management_agent(state: AgentState):
     log_llm_interaction(state)(get_llm_result_for_logging_wrapper)()
 
     if llm_response_content is None:
+        logger.error("LLM调用失败，使用默认保守决策")
         show_agent_reasoning(
             agent_name, "LLM call failed. Using default conservative decision.")
         # Ensure the dummy response matches the expected structure for agent_signals
@@ -202,6 +208,8 @@ def portfolio_management_agent(state: AgentState):
             ],
             "reasoning": "LLM API error. Defaulting to conservative hold based on risk management."
         })
+    else:
+        logger.info("LLM调用成功，获取到决策结果")
 
     final_decision_message = HumanMessage(
         content=llm_response_content,
@@ -212,16 +220,80 @@ def portfolio_management_agent(state: AgentState):
         show_agent_reasoning(
             agent_name, f"Final LLM decision JSON: {llm_response_content}")
 
+    # 增强的JSON解析错误处理
+    def safe_parse_json(json_str, default=None):
+        if default is None:
+            default = {
+                "action": "hold",
+                "quantity": 0,
+                "confidence": 0.5,
+                "agent_signals": [
+                    {"agent_name": "technical_analysis", "signal": "neutral", "confidence": 0.0},
+                    {"agent_name": "fundamental_analysis", "signal": "neutral", "confidence": 0.0},
+                    {"agent_name": "sentiment_analysis", "signal": "neutral", "confidence": 0.0},
+                    {"agent_name": "valuation_analysis", "signal": "neutral", "confidence": 0.0},
+                    {"agent_name": "risk_management", "signal": "hold", "confidence": 1.0},
+                    {"agent_name": "macro_analyst_agent", "signal": "neutral", "confidence": 0.0},
+                    {"agent_name": "macro_news_agent", "signal": "unavailable", "confidence": 0.0}
+                ],
+                "reasoning": "无法解析LLM响应，使用默认保守决策"
+            }
+        
+        try:
+            # 尝试基本解析
+            return json.loads(json_str)
+        except json.JSONDecodeError as e:
+            logger.error(f"解析LLM决策JSON失败: {str(e)}")
+            
+            # 尝试修复截断的JSON
+            try:
+                # 检查是否是由于响应被截断导致的错误
+                if "confidenc..." in json_str or json_str.endswith('...'):
+                    logger.warning("检测到被截断的响应，尝试修复...")
+                    # 修复常见的截断模式
+                    if "confidenc..." in json_str:
+                        fixed_str = json_str.replace("confidenc...", '"confidence": 0.0}')
+                    else:
+                        # 简单地添加足够的关闭括号来形成有效的JSON
+                        missing_brackets = 0
+                        open_brackets = json_str.count('{') + json_str.count('[')
+                        close_brackets = json_str.count('}') + json_str.count(']')
+                        missing_brackets = open_brackets - close_brackets
+                        
+                        if missing_brackets > 0:
+                            # 生成需要添加的关闭括号
+                            closing_brackets = []
+                            for c in json_str[::-1]:
+                                if c in '{[' and len(closing_brackets) < missing_brackets:
+                                    closing_brackets.append('}' if c == '{' else ']')
+                            fixed_str = json_str + ''.join(closing_brackets)
+                        else:
+                            fixed_str = json_str
+                    
+                    # 尝试解析修复后的JSON
+                    return json.loads(fixed_str)
+                
+            except Exception as fix_e:
+                logger.error(f"尝试修复JSON失败: {str(fix_e)}")
+            
+            # 记录原始响应片段以便调试
+            logger.debug(f"原始响应片段: {json_str[:500] if len(json_str) > 500 else json_str}")
+            
+            # 返回默认值
+            return default
+
     agent_decision_details_value = {}
     try:
-        decision_json = json.loads(llm_response_content)
+        decision_json = safe_parse_json(llm_response_content)
         agent_decision_details_value = {
             "action": decision_json.get("action"),
             "quantity": decision_json.get("quantity"),
             "confidence": decision_json.get("confidence"),
             "reasoning_snippet": decision_json.get("reasoning", "")[:150] + "..."
         }
-    except json.JSONDecodeError:
+        logger.info(f"最终决策: 行动={decision_json.get('action')}, 数量={decision_json.get('quantity')}, 置信度={decision_json.get('confidence')}")
+    except Exception as e:
+        logger.error(f"处理决策结果时发生错误: {str(e)}")
         agent_decision_details_value = {
             "error": "Failed to parse LLM decision JSON from portfolio manager",
             "raw_response_snippet": llm_response_content[:200] + "..."
@@ -244,8 +316,8 @@ def portfolio_management_agent(state: AgentState):
     # But this ^ is prone to the duplication we are trying to solve if not careful.
     # The most robust is that portfolio_manager provides its clear output, and the graph handles accumulation if needed for further steps (none in this case as it's END).
 
-    # logger.info(
-    # f"--- DEBUG: {agent_name} RETURN messages: {[msg.name for msg in final_messages_output]} ---")
+    logger.info(
+    f"--- DEBUG: {agent_name} RETURN messages: {[msg.name for msg in final_messages_output]} ---")
 
     return {
         "messages": final_messages_output,

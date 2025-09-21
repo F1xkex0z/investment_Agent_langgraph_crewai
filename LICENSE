@@ -45,3 +45,7 @@ The non-commercial clause added to the GPL v3 is a custom restriction, and users
 
 ## 联系方式 / Contact
 如有许可证相关问题或需要商业使用授权，请联系：moonbridge24@gmail.com
+
+
+crewai = "^0.28.0"
+crewai-tools = "^0.2.0"

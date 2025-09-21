@@ -57,16 +57,20 @@ log_storage = get_log_storage()
 set_global_log_storage(log_storage)
 sys.stdout = OutputLogger()
 logger = setup_logger('main_workflow')
+logger.info("日志系统初始化完成")
+logger.debug("设置全局日志存储和输出重定向完成")
 
 # --- Run the Hedge Fund Workflow ---
 
 
 def run_hedge_fund(run_id: str, ticker: str, start_date: str, end_date: str, portfolio: dict, show_reasoning: bool = False, num_of_news: int = 5, show_summary: bool = False):
     print(f"--- Starting Workflow Run ID: {run_id} ---")
+    logger.info(f"--- 开始工作流执行，运行ID: {run_id} ---")
     try:
         from backend.state import api_state
         api_state.current_run_id = run_id
         print(f"--- API State updated with Run ID: {run_id} ---")
+        logger.debug(f"API状态已更新，运行ID: {run_id}")
     except Exception as e:
         print(f"Note: Could not update API state: {str(e)}")
 
@@ -85,12 +89,15 @@ def run_hedge_fund(run_id: str, ticker: str, start_date: str, end_date: str, por
             "show_summary": show_summary,
         }
     }
+    logger.debug(f"初始化状态创建完成，股票代码: {ticker}, 日期范围: {start_date} 至 {end_date}, 新闻数量: {num_of_news}")
 
     try:
         from backend.utils.context_managers import workflow_run
         with workflow_run(run_id):
+            logger.info(f"工作流图开始执行(带上下文管理器), 入口点: market_data_agent")
             final_state = app.invoke(initial_state)
             print(f"--- Finished Workflow Run ID: {run_id} ---")
+            logger.info(f"--- 工作流执行完成，运行ID: {run_id} ---")
 
             if HAS_SUMMARY_REPORT and show_summary:
                 store_final_state(final_state)
@@ -114,36 +121,55 @@ def run_hedge_fund(run_id: str, ticker: str, start_date: str, end_date: str, por
             api_state.complete_run(run_id, "completed")
         except Exception:
             pass
+    logger.debug(f"工作流返回最终消息，消息类型: {type(final_state['messages'][-1])}")
     return final_state["messages"][-1].content
 
 
 # --- Define the Workflow Graph ---
+logger.info("开始创建投资分析状态图")
 workflow = StateGraph(AgentState)
+logger.debug("状态图初始化完成")
 
 # Add nodes
+logger.debug("开始添加工作流节点")
 workflow.add_node("market_data_agent", market_data_agent)
+logger.debug("添加节点: market_data_agent")
 workflow.add_node("technical_analyst_agent", technical_analyst_agent)
+logger.debug("添加节点: technical_analyst_agent")
 workflow.add_node("fundamentals_agent", fundamentals_agent)
+logger.debug("添加节点: fundamentals_agent")
 workflow.add_node("sentiment_agent", sentiment_agent)
+logger.debug("添加节点: sentiment_agent")
 workflow.add_node("valuation_agent", valuation_agent)
+logger.debug("添加节点: valuation_agent")
 workflow.add_node("macro_news_agent", macro_news_agent)  # 新闻 agent
+logger.debug("添加节点: macro_news_agent")
 workflow.add_node("researcher_bull_agent", researcher_bull_agent)
+logger.debug("添加节点: researcher_bull_agent")
 workflow.add_node("researcher_bear_agent", researcher_bear_agent)
+logger.debug("添加节点: researcher_bear_agent")
 workflow.add_node("debate_room_agent", debate_room_agent)
+logger.debug("添加节点: debate_room_agent")
 workflow.add_node("risk_management_agent", risk_management_agent)
+logger.debug("添加节点: risk_management_agent")
 workflow.add_node("macro_analyst_agent", macro_analyst_agent)
+logger.debug("添加节点: macro_analyst_agent")
 workflow.add_node("portfolio_management_agent", portfolio_management_agent)
+logger.debug("所有工作流节点添加完成")
 
 # Set entry point
 workflow.set_entry_point("market_data_agent")
+logger.info("设置工作流入口点: market_data_agent")
 
 # Edges from market_data_agent to the five parallel agents
+logger.debug("开始添加工作流边连接")
 workflow.add_edge("market_data_agent", "technical_analyst_agent")
 workflow.add_edge("market_data_agent", "fundamentals_agent")
 workflow.add_edge("market_data_agent", "sentiment_agent")
 workflow.add_edge("market_data_agent", "valuation_agent")
 # macro_news_agent 也从 market_data_agent 并行出来
 workflow.add_edge("market_data_agent", "macro_news_agent")
+logger.debug("添加从market_data_agent到五个并行agent的连接完成")
 
 # Main analysis path (technical, fundamentals, sentiment, valuation -> researchers -> ... -> macro_analyst)
 workflow.add_edge("technical_analyst_agent", "researcher_bull_agent")
@@ -168,17 +194,21 @@ workflow.add_edge("risk_management_agent", "macro_analyst_agent")
 # LangGraph will wait for both parent nodes to complete before running portfolio_management_agent.
 workflow.add_edge("macro_analyst_agent", "portfolio_management_agent")
 workflow.add_edge("macro_news_agent", "portfolio_management_agent")
+logger.debug("添加到portfolio_management_agent的汇聚连接完成")
 
 # Final node
 workflow.add_edge("portfolio_management_agent", END)
+logger.debug("添加到结束节点的连接完成")
 
 app = workflow.compile()
+logger.info("工作流图编译完成")
 
 # --- FastAPI Background Task ---
 
 
 def run_fastapi():
     print("--- Starting FastAPI server in background (port 8000) ---")
+    logger.info("--- 在后台启动FastAPI服务器 (端口8000) ---")
     uvicorn.run(fastapi_app, host="0.0.0.0", port=8000, log_config=None)
 
 

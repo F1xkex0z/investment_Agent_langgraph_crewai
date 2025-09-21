@@ -1,6 +1,8 @@
 from typing import Annotated, Any, Dict, Sequence, TypedDict
 
 import operator
+from typing import Dict, Any, Sequence
+from typing_extensions import TypedDict, Annotated
 from langchain_core.messages import BaseMessage
 import json
 from src.utils.logging_config import setup_logger
@@ -8,12 +10,10 @@ from src.utils.logging_config import setup_logger
 # 设置日志记录
 logger = setup_logger('agent_state')
 
-
 def merge_dicts(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, Any]:
     return {**a, **b}
 
 # Define agent state
-
 
 class AgentState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], operator.add]

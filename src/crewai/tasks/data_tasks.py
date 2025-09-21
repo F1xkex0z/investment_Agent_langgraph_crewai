@@ -7,16 +7,24 @@ This module defines tasks for data collection and preparation.
 from typing import Dict, Any, Optional
 from crewai import Task
 from datetime import datetime
+import time
 
 from ..config.state import InvestmentState
 from ..agents.data_agents import DataCollectionAgent, NewsAnalysisAgent
 
+# Import logging
+from src.utils.logging_config import setup_logger, setup_detailed_logger
+
+logger = setup_logger('crewai_data_tasks')
+detailed_logger = setup_detailed_logger('crewai_data_tasks')
 
 class DataCollectionTasks:
     """Factory class for creating data collection tasks"""
 
     def __init__(self, state: InvestmentState):
         self.state = state
+        detailed_logger.info(f"Initializing DataCollectionTasks for ticker: {state.ticker}")
+        detailed_logger.debug(f"State run_id: {state.run_id}")
 
     def create_market_data_collection_task(self, agent: DataCollectionAgent) -> Task:
         """
@@ -28,7 +36,10 @@ class DataCollectionTasks:
         Returns:
             CrewAI Task instance
         """
-        return Task(
+        detailed_logger.info("Creating market data collection task")
+        detailed_logger.debug(f"Creating task for ticker: {self.state.ticker}")
+        
+        task = Task(
             description=agent.create_task_description(self.state),
             expected_output=f"""
             A comprehensive data package for {self.state.ticker} including:
@@ -45,6 +56,9 @@ class DataCollectionTasks:
             human_input=False,
             output_json=False
         )
+        
+        detailed_logger.debug("Market data collection task created successfully")
+        return task
 
     def create_news_analysis_task(self, agent: NewsAnalysisAgent) -> Task:
         """
@@ -56,7 +70,10 @@ class DataCollectionTasks:
         Returns:
             CrewAI Task instance
         """
-        return Task(
+        detailed_logger.info("Creating news analysis task")
+        detailed_logger.debug(f"Creating task for ticker: {self.state.ticker}")
+        
+        task = Task(
             description=agent.create_task_description(self.state),
             expected_output=f"""
             A curated collection of news articles for {self.state.ticker} including:
@@ -72,6 +89,9 @@ class DataCollectionTasks:
             human_input=False,
             output_json=False
         )
+        
+        detailed_logger.debug("News analysis task created successfully")
+        return task
 
     def create_parallel_data_collection_task(self, market_agent: DataCollectionAgent, news_agent: NewsAnalysisAgent) -> Task:
         """
@@ -178,9 +198,14 @@ def process_market_data_result(task_result: Any, state: InvestmentState) -> Dict
     Returns:
         Processed result dictionary
     """
+    detailed_logger.info("Processing market data result")
+    detailed_logger.debug(f"Processing result for ticker: {state.ticker}, run_id: {state.run_id}")
+    detailed_logger.debug(f"Task result type: {type(task_result)}")
+    
     try:
         if isinstance(task_result, str):
             import json
+            detailed_logger.debug("Parsing task result as JSON")
             result = json.loads(task_result)
         else:
             result = task_result
@@ -189,7 +214,9 @@ def process_market_data_result(task_result: Any, state: InvestmentState) -> Dict
         if isinstance(result, dict):
             state.data_cache['market_data_collection'] = result
             state.update_analysis_result('market_data_collection', result)
+            detailed_logger.debug("Updated state with market data collection result")
 
+        detailed_logger.info("Market data result processed successfully")
         return {
             "success": True,
             "data": result,
@@ -205,6 +232,8 @@ def process_market_data_result(task_result: Any, state: InvestmentState) -> Dict
             "ticker": state.ticker
         }
         state.update_analysis_result('market_data_collection', error_result)
+        logger.error(f"Failed to process market data result: {str(e)}")
+        detailed_logger.error(f"Failed to process market data result", exc_info=True)
         return error_result
 
 

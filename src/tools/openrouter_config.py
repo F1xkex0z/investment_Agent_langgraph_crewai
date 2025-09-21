@@ -92,7 +92,7 @@ def generate_content_with_retry(model, contents, config=None):
 
 
 def get_chat_completion(messages, model=None, max_retries=3, initial_retry_delay=1,
-                        client_type="auto", api_key=None, base_url=None):
+                        client_type="auto", api_key=None, base_url=None, max_tokens=14096):
     """
     获取聊天完成结果，包含重试逻辑
 
@@ -104,6 +104,7 @@ def get_chat_completion(messages, model=None, max_retries=3, initial_retry_delay
         client_type: 客户端类型 ("auto", "gemini", "openai_compatible")
         api_key: API 密钥（可选，仅用于 OpenAI Compatible API）
         base_url: API 基础 URL（可选，仅用于 OpenAI Compatible API）
+        max_tokens: 最大生成的token数量（可选）
 
     Returns:
         str: 模型回答内容或 None（如果出错）
@@ -121,7 +122,8 @@ def get_chat_completion(messages, model=None, max_retries=3, initial_retry_delay
         return client.get_completion(
             messages=messages,
             max_retries=max_retries,
-            initial_retry_delay=initial_retry_delay
+            initial_retry_delay=initial_retry_delay,
+            max_tokens=max_tokens
         )
     except Exception as e:
         logger.error(f"{ERROR_ICON} get_chat_completion 发生错误: {str(e)}")

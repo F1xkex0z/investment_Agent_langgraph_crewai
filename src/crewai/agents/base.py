@@ -46,6 +46,10 @@ class BaseInvestmentAgent(Agent, ABC):
             agent_type: Type of agent for configuration lookup
             **kwargs: Additional CrewAI Agent parameters
         """
+        self.init_start_time = time.time()
+        detailed_logger.info(f"Initializing {agent_type} agent")
+        detailed_logger.debug(f"Agent initialization parameters - Role: {role}, Agent Type: {agent_type}")
+        
         # Get LLM configuration
         if llm_config is None:
             llm_config = get_default_llm_config()
@@ -55,6 +59,7 @@ class BaseInvestmentAgent(Agent, ABC):
         agent_config = settings.get_analysis_config(agent_type)
 
         # Initialize CrewAI Agent
+        detailed_logger.debug("Initializing CrewAI Agent with parameters")
         super().__init__(
             role=role,
             goal=goal,
@@ -69,6 +74,11 @@ class BaseInvestmentAgent(Agent, ABC):
 
         self.agent_type = agent_type
         self.logger = setup_logger(f'crewai_agent_{agent_type}')
+        self.detailed_logger = setup_detailed_logger(f'crewai_agent_{agent_type}')
+        
+        init_end_time = time.time()
+        self.detailed_logger.info(f"{agent_type} agent initialization completed in {init_end_time - self.init_start_time:.2f} seconds")
+        self.detailed_logger.debug(f"Agent configuration - Max Iter: {self.max_iter}, Max RPM: {self.max_rpm}, Allow Delegation: {self.allow_delegation}")
 
     def preprocess_state(self, state: InvestmentState) -> Dict[str, Any]:
         """
@@ -81,6 +91,9 @@ class BaseInvestmentAgent(Agent, ABC):
         Returns:
             Processed context dictionary for the agent
         """
+        self.detailed_logger.info(f"Preprocessing state for {self.agent_type} agent")
+        self.detailed_logger.debug(f"Preprocessing state for ticker: {state.ticker}, run_id: {state.run_id}")
+        
         context = {
             "ticker": state.ticker,
             "portfolio": state.portfolio.to_dict(),
@@ -93,7 +106,9 @@ class BaseInvestmentAgent(Agent, ABC):
         # Add agent-specific data
         if self.agent_type in state.data_cache:
             context["agent_data"] = state.data_cache[self.agent_type]
+            self.detailed_logger.debug(f"Added agent-specific data for {self.agent_type}")
 
+        self.detailed_logger.debug(f"Preprocessing completed. Context keys: {list(context.keys())}")
         return context
 
     def postprocess_output(self, output: Any, state: InvestmentState) -> Any:
@@ -108,8 +123,15 @@ class BaseInvestmentAgent(Agent, ABC):
         Returns:
             Processed output
         """
+        self.detailed_logger.info(f"Postprocessing output for {self.agent_type} agent")
+        self.detailed_logger.debug(f"Postprocessing output for ticker: {state.ticker}, run_id: {state.run_id}")
+        self.detailed_logger.debug(f"Output type: {type(output)}")
+        
         # Update state with analysis result
         state.update_analysis_result(self.agent_type, output)
+        self.detailed_logger.debug(f"State updated with analysis result for {self.agent_type}")
+        
+        self.detailed_logger.info(f"Postprocessing completed for {self.agent_type} agent")
         return output
 
     def create_task_description(self, state: InvestmentState) -> str:
@@ -123,8 +145,13 @@ class BaseInvestmentAgent(Agent, ABC):
         Returns:
             Task description string
         """
+        self.detailed_logger.info(f"Creating task description for {self.agent_type} agent")
+        self.detailed_logger.debug(f"Creating task description for ticker: {state.ticker}")
+        
         context = self.preprocess_state(state)
-        return f"""
+        self.detailed_logger.debug(f"Preprocessed context for task description")
+        
+        description = f"""
         Analyze investment opportunity for {state.ticker} based on the following context:
 
         Context: {context}
@@ -133,6 +160,9 @@ class BaseInvestmentAgent(Agent, ABC):
 
         Provide your analysis as {self.role}.
         """
+        
+        self.detailed_logger.debug(f"Task description created. Length: {len(description)} characters")
+        return description
 
 
 class DataAgent(BaseInvestmentAgent):

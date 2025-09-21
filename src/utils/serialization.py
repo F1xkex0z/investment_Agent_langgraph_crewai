@@ -4,7 +4,7 @@
 
 import json
 from typing import Any, Dict
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 
 
 def serialize_agent_state(state: Dict) -> Dict:
@@ -27,7 +27,7 @@ def serialize_agent_state(state: Dict) -> Dict:
         return {
             "error": f"无法序列化状态: {str(e)}",
             "serialization_error": True,
-            "timestamp": datetime.now(UTC).isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
 
 

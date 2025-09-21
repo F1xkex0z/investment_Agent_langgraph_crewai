@@ -10,6 +10,7 @@ from src.utils.api_utils import agent_endpoint, log_llm_interaction
 import json
 import pandas as pd
 import numpy as np
+import math
 
 from src.tools.api import prices_to_df
 
@@ -33,72 +34,101 @@ def technical_analyst_agent(state: AgentState):
     show_reasoning = state["metadata"]["show_reasoning"]
     data = state["data"]
     prices = data["prices"]
+    
+    # 记录输入数据信息
+    logger.debug(f"接收到的价格数据时间范围: {prices[0]['date']} 到 {prices[-1]['date']}")
+    logger.debug(f"价格数据点数: {len(prices)} 个")
+    if len(prices) > 0:
+        logger.debug(f"最新价格: {prices[-1]['close']}，最高价: {max(p['high'] for p in prices[-30:])}，最低价: {min(p['low'] for p in prices[-30:])}")
+    
     prices_df = prices_to_df(prices)
+    logger.info("价格数据已转换为DataFrame格式")
 
     # Initialize confidence variable
     confidence = 0.0
 
     # Calculate indicators
+    logger.info("开始计算技术指标...")
     # 1. MACD (Moving Average Convergence Divergence)
     macd_line, signal_line = calculate_macd(prices_df)
+    logger.debug(f"MACD指标计算完成: MACD线={macd_line.iloc[-1]:.4f}, 信号线={signal_line.iloc[-1]:.4f}")
 
     # 2. RSI (Relative Strength Index)
     rsi = calculate_rsi(prices_df)
+    logger.debug(f"RSI指标计算完成: {rsi.iloc[-1]:.2f}")
 
     # 3. Bollinger Bands (Bollinger Bands)
     upper_band, lower_band = calculate_bollinger_bands(prices_df)
+    logger.debug(f"布林带计算完成: 上轨={upper_band.iloc[-1]:.4f}, 下轨={lower_band.iloc[-1]:.4f}")
 
     # 4. OBV (On-Balance Volume)
     obv = calculate_obv(prices_df)
+    logger.debug(f"OBV指标计算完成: {obv.iloc[-1]:.2f}")
 
     # Generate individual signals
     signals = []
+    logger.info("开始生成单个指标信号...")
 
     # MACD signal
     if macd_line.iloc[-2] < signal_line.iloc[-2] and macd_line.iloc[-1] > signal_line.iloc[-1]:
         signals.append('bullish')
+        logger.debug("MACD信号: 金叉，看多")
     elif macd_line.iloc[-2] > signal_line.iloc[-2] and macd_line.iloc[-1] < signal_line.iloc[-1]:
         signals.append('bearish')
+        logger.debug("MACD信号: 死叉，看空")
     else:
         signals.append('neutral')
+        logger.debug("MACD信号: 无交叉，中性")
 
     # RSI signal
     if rsi.iloc[-1] < 30:
         signals.append('bullish')
+        logger.debug(f"RSI信号: {rsi.iloc[-1]:.2f}，超卖，看多")
     elif rsi.iloc[-1] > 70:
         signals.append('bearish')
+        logger.debug(f"RSI信号: {rsi.iloc[-1]:.2f}，超买，看空")
     else:
         signals.append('neutral')
+        logger.debug(f"RSI信号: {rsi.iloc[-1]:.2f}，中性区域，中性")
 
     # Bollinger Bands signal
     current_price = prices_df['close'].iloc[-1]
     if current_price < lower_band.iloc[-1]:
         signals.append('bullish')
+        logger.debug(f"布林带信号: 价格({current_price:.4f})低于下轨({lower_band.iloc[-1]:.4f})，超卖，看多")
     elif current_price > upper_band.iloc[-1]:
         signals.append('bearish')
+        logger.debug(f"布林带信号: 价格({current_price:.4f})高于上轨({upper_band.iloc[-1]:.4f})，超买，看空")
     else:
         signals.append('neutral')
+        logger.debug(f"布林带信号: 价格在布林带内，中性")
 
     # OBV signal
     obv_slope = obv.diff().iloc[-5:].mean()
     if obv_slope > 0:
         signals.append('bullish')
+        logger.debug(f"OBV信号: OBV斜率为正({obv_slope:.2f})，看多")
     elif obv_slope < 0:
         signals.append('bearish')
+        logger.debug(f"OBV信号: OBV斜率为负({obv_slope:.2f})，看空")
     else:
         signals.append('neutral')
+        logger.debug(f"OBV信号: OBV斜率接近零，中性")
 
     # Calculate price drop
-    price_drop = (prices_df['close'].iloc[-1] -
+    price_drop = (prices_df['close'].iloc[-1] - 
                   prices_df['close'].iloc[-5]) / prices_df['close'].iloc[-5]
+    logger.debug(f"近5日价格变动: {price_drop:.2%}")
 
     # Add price drop signal
     if price_drop < -0.05 and rsi.iloc[-1] < 40:  # 5% drop and RSI below 40
         signals.append('bullish')
         confidence += 0.2  # Increase confidence for oversold conditions
+        logger.debug(f"价格下跌信号: 价格下跌超过5%({price_drop:.2%})且RSI低于40({rsi.iloc[-1]:.2f})，超卖，看多")
     elif price_drop < -0.03 and rsi.iloc[-1] < 45:  # 3% drop and RSI below 45
         signals.append('bullish')
         confidence += 0.1
+        logger.debug(f"价格下跌信号: 价格下跌超过3%({price_drop:.2%})且RSI低于45({rsi.iloc[-1]:.2f})，轻度超卖，看多")
 
     # Add reasoning collection
     reasoning = {
@@ -134,6 +164,9 @@ def technical_analyst_agent(state: AgentState):
     # Calculate confidence level based on the proportion of indicators agreeing
     total_signals = len(signals)
     confidence = max(bullish_signals, bearish_signals) / total_signals
+    
+    logger.info(f"简单信号汇总: 看多={bullish_signals}, 看空={bearish_signals}, 中性={total_signals-bullish_signals-bearish_signals}")
+    logger.info(f"简单信号分析结果: 信号={overall_signal}, 置信度={confidence:.2f}")
 
     # Generate the message content
     message_content = {
@@ -148,21 +181,32 @@ def technical_analyst_agent(state: AgentState):
     }
 
     # 1. Trend Following Strategy
+    logger.info("开始执行趋势跟踪策略...")
     trend_signals = calculate_trend_signals(prices_df)
+    logger.debug(f"趋势跟踪策略结果: 信号={trend_signals['signal']}, 置信度={trend_signals['confidence']:.2f}")
 
     # 2. Mean Reversion Strategy
+    logger.info("开始执行均值回归策略...")
     mean_reversion_signals = calculate_mean_reversion_signals(prices_df)
+    logger.debug(f"均值回归策略结果: 信号={mean_reversion_signals['signal']}, 置信度={mean_reversion_signals['confidence']:.2f}")
 
     # 3. Momentum Strategy
+    logger.info("开始执行动量策略...")
     momentum_signals = calculate_momentum_signals(prices_df)
+    logger.debug(f"动量策略结果: 信号={momentum_signals['signal']}, 置信度={momentum_signals['confidence']:.2f}")
 
     # 4. Volatility Strategy
+    logger.info("开始执行波动率策略...")
     volatility_signals = calculate_volatility_signals(prices_df)
+    logger.debug(f"波动率策略结果: 信号={volatility_signals['signal']}, 置信度={volatility_signals['confidence']:.2f}")
 
     # 5. Statistical Arbitrage Signals
+    logger.info("开始计算统计套利信号...")
     stat_arb_signals = calculate_stat_arb_signals(prices_df)
+    logger.debug(f"统计套利信号结果: 信号={stat_arb_signals['signal']}, 置信度={stat_arb_signals['confidence']:.2f}")
 
     # Combine all signals using a weighted ensemble approach
+    logger.info("开始组合所有策略信号...")
     strategy_weights = {
         'trend': 0.30,
         'mean_reversion': 0.25,  # Increased weight for mean reversion
@@ -170,6 +214,7 @@ def technical_analyst_agent(state: AgentState):
         'volatility': 0.15,
         'stat_arb': 0.05
     }
+    logger.debug(f"策略权重设置: {strategy_weights}")
 
     combined_signal = weighted_signal_combination({
         'trend': trend_signals,
@@ -178,6 +223,8 @@ def technical_analyst_agent(state: AgentState):
         'volatility': volatility_signals,
         'stat_arb': stat_arb_signals
     }, strategy_weights)
+    
+    logger.info(f"组合信号结果: 信号={combined_signal['signal']}, 最终置信度={combined_signal['confidence']:.2f}")
 
     # Generate detailed analysis report
     analysis_report = {

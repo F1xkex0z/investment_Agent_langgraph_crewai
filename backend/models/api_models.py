@@ -6,7 +6,7 @@ API数据模型
 
 from pydantic import BaseModel, Field
 from typing import Dict, List, Any, Optional, TypeVar, Generic
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 
 # 类型定义
 T = TypeVar('T')
@@ -17,7 +17,7 @@ class ApiResponse(BaseModel, Generic[T]):
     success: bool = True
     message: str = "操作成功"
     data: Optional[T] = None
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class AgentInfo(BaseModel):

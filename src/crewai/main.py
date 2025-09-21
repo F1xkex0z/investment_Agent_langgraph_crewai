@@ -6,6 +6,7 @@ This module provides the main entry point for the CrewAI-based investment system
 
 import uuid
 import json
+import time
 from datetime import datetime, timedelta
 from typing import Dict, Any, Optional
 
@@ -21,9 +22,10 @@ from .tasks.data_tasks import create_parallel_data_tasks
 from .tasks.analysis_tasks import create_parallel_analysis_tasks
 from .tasks.research_tasks import create_sequential_research_tasks
 
-from src.utils.logging_config import setup_logger
+from src.utils.logging_config import setup_logger, setup_detailed_logger
 
 logger = setup_logger('crewai_main')
+detailed_logger = setup_detailed_logger('crewai_main')
 
 
 class CrewAIInvestmentSystem:
@@ -37,6 +39,12 @@ class CrewAIInvestmentSystem:
         self.llm_config = get_default_llm_config()
         self.crew_config = get_crew_config()
         self.logger = setup_logger('crewai_system')
+        self.detailed_logger = setup_detailed_logger('crewai_system')
+        
+        self.logger.info("Initializing CrewAI Investment System")
+        self.detailed_logger.debug(f"System config: {self.config.to_dict()}")
+        self.detailed_logger.debug(f"LLM config: {self.llm_config}")
+        self.detailed_logger.debug(f"Crew config: {self.crew_config}")
 
     def run_analysis(
         self,
@@ -57,8 +65,14 @@ class CrewAIInvestmentSystem:
         Returns:
             Analysis results dictionary
         """
+        start_time = time.time()
+        self.logger.info(f"Starting CrewAI analysis for {ticker}")
+        self.detailed_logger.debug(f"Analysis parameters - Ticker: {ticker}, Start: {start_date}, End: {end_date}")
+        self.detailed_logger.debug(f"Portfolio: {portfolio}")
+        
         # Generate unique run ID
         run_id = str(uuid.uuid4())
+        self.detailed_logger.info(f"Generated run ID: {run_id}")
 
         # Set default dates
         current_date = datetime.now()
@@ -68,6 +82,8 @@ class CrewAIInvestmentSystem:
         if not start_date:
             start_date_obj = yesterday - timedelta(days=365)
             start_date = start_date_obj.strftime('%Y-%m-%d')
+
+        self.detailed_logger.debug(f"Final dates - Start: {start_date}, End: {end_date}")
 
         # Initialize portfolio
         if portfolio is None:
@@ -89,33 +105,60 @@ class CrewAIInvestmentSystem:
         )
 
         self.logger.info(f"Starting CrewAI analysis for {ticker} (Run ID: {run_id})")
+        self.detailed_logger.debug(f"Investment state created: {investment_state.to_dict()}")
 
         try:
             # Create agents
+            self.detailed_logger.info("Creating agents...")
+            agents_start_time = time.time()
             agents = self._create_agents()
+            agents_end_time = time.time()
+            self.detailed_logger.info(f"Agents created successfully in {agents_end_time - agents_start_time:.2f} seconds")
+            self.detailed_logger.debug(f"Created agents: {list(agents.keys())}")
 
             # Create tasks
+            self.detailed_logger.info("Creating tasks...")
+            tasks_start_time = time.time()
             tasks = self._create_tasks(investment_state, agents)
+            tasks_end_time = time.time()
+            self.detailed_logger.info(f"Tasks created successfully in {tasks_end_time - tasks_start_time:.2f} seconds")
+            self.detailed_logger.debug(f"Created {len(tasks)} tasks")
 
             # Create and run crew
+            self.detailed_logger.info("Creating and running crew...")
+            crew_start_time = time.time()
             crew = Crew(
                 agents=list(agents.values()),
                 tasks=tasks,
                 verbose=True,
                 process=Process.sequential  # Start with sequential for simplicity
             )
+            self.detailed_logger.debug(f"Crew configuration: {crew.__dict__}")
 
             # Execute analysis
+            self.detailed_logger.info("Executing crew analysis...")
+            execution_start_time = time.time()
             result = crew.kickoff()
+            execution_end_time = time.time()
+            self.detailed_logger.info(f"Crew execution completed in {execution_end_time - execution_start_time:.2f} seconds")
+            self.detailed_logger.debug(f"Crew result type: {type(result)}")
 
             # Process results
+            self.detailed_logger.info("Processing results...")
+            processing_start_time = time.time()
             final_result = self._process_results(result, investment_state)
+            processing_end_time = time.time()
+            self.detailed_logger.info(f"Results processed in {processing_end_time - processing_start_time:.2f} seconds")
 
-            self.logger.info(f"Analysis completed successfully for {ticker}")
+            end_time = time.time()
+            self.logger.info(f"Analysis completed successfully for {ticker} in {end_time - start_time:.2f} seconds")
+            self.detailed_logger.info(f"Complete analysis execution time: {end_time - start_time:.2f} seconds")
+            
             return final_result
 
         except Exception as e:
             self.logger.error(f"Analysis failed for {ticker}: {str(e)}")
+            self.detailed_logger.error(f"Analysis failed for {ticker}", exc_info=True)
             return {
                 "success": False,
                 "error": str(e),
@@ -126,44 +169,58 @@ class CrewAIInvestmentSystem:
 
     def _create_agents(self) -> Dict[str, Any]:
         """Create all required agents"""
+        self.detailed_logger.info("Starting agent creation process")
         agents = {}
 
         # Data collection agents
+        self.detailed_logger.debug("Creating data collection agents")
         agents['data_collection'] = DataCollectionAgent()
         agents['news_analysis'] = NewsAnalysisAgent()
 
         # Analysis agents
+        self.detailed_logger.debug("Creating analysis agents")
         agents['technical_analysis'] = TechnicalAnalysisAgent()
         agents['fundamental_analysis'] = FundamentalAnalysisAgent()
 
         # Research agents
+        self.detailed_logger.debug("Creating research agents")
         agents['bullish_research'] = BullishResearchAgent()
         agents['bearish_research'] = BearishResearchAgent()
         agents['debate_moderator'] = DebateModeratorAgent()
 
+        self.detailed_logger.info(f"Agent creation completed. Total agents created: {len(agents)}")
+        self.detailed_logger.debug(f"Agent types: {list(agents.keys())}")
+        
         return agents
 
     def _create_tasks(self, state: InvestmentState, agents: Dict[str, Any]) -> list:
         """Create all required tasks"""
+        self.detailed_logger.info("Starting task creation process")
+        self.detailed_logger.debug(f"Creating tasks for state: {state.ticker} with run_id: {state.run_id}")
         tasks = []
 
         # Data collection tasks (parallel)
+        self.detailed_logger.debug("Creating data collection tasks")
         data_tasks = create_parallel_data_tasks(
             state,
             agents['data_collection'],
             agents['news_analysis']
         )
         tasks.extend(data_tasks)
+        self.detailed_logger.debug(f"Created {len(data_tasks)} data collection tasks")
 
         # Analysis tasks (parallel)
+        self.detailed_logger.debug("Creating analysis tasks")
         analysis_tasks = create_parallel_analysis_tasks(
             state,
             agents['technical_analysis'],
             agents['fundamental_analysis']
         )
         tasks.extend(analysis_tasks)
+        self.detailed_logger.debug(f"Created {len(analysis_tasks)} analysis tasks")
 
         # Research tasks (sequential with debate)
+        self.detailed_logger.debug("Creating research tasks")
         research_tasks = create_sequential_research_tasks(
             state,
             agents['bullish_research'],
@@ -171,13 +228,20 @@ class CrewAIInvestmentSystem:
             agents['debate_moderator']
         )
         tasks.extend(research_tasks)
+        self.detailed_logger.debug(f"Created {len(research_tasks)} research tasks")
 
+        self.detailed_logger.info(f"Task creation completed. Total tasks created: {len(tasks)}")
         return tasks
 
     def _process_results(self, crew_result: Any, state: InvestmentState) -> Dict[str, Any]:
         """Process crew execution results"""
+        self.detailed_logger.info("Starting results processing")
+        self.detailed_logger.debug(f"Processing results for ticker: {state.ticker}, run_id: {state.run_id}")
+        self.detailed_logger.debug(f"Crew result type: {type(crew_result)}")
+        
         try:
             # Create comprehensive result
+            self.detailed_logger.debug("Building comprehensive result structure")
             result = {
                 "success": True,
                 "ticker": state.ticker,
@@ -199,10 +263,20 @@ class CrewAIInvestmentSystem:
                 "crew_output": str(crew_result)  # Raw crew output for debugging
             }
 
+            self.detailed_logger.debug("Result structure built successfully")
+            self.detailed_logger.debug(f"Data cache keys: {list(state.data_cache.keys())}")
+            
+            # Log key components of the result
+            self.detailed_logger.debug(f"Portfolio status: {result['portfolio']}")
+            self.detailed_logger.debug(f"Final recommendation action: {result['final_recommendation'].get('action', 'N/A')}")
+            self.detailed_logger.debug(f"Final recommendation confidence: {result['final_recommendation'].get('confidence', 'N/A')}")
+            
+            self.detailed_logger.info("Results processing completed successfully")
             return result
 
         except Exception as e:
             self.logger.error(f"Failed to process results: {str(e)}")
+            self.detailed_logger.error(f"Failed to process results", exc_info=True)
             return {
                 "success": False,
                 "error": f"Result processing failed: {str(e)}",
@@ -213,12 +287,19 @@ class CrewAIInvestmentSystem:
 
     def _generate_final_recommendation(self, state: InvestmentState) -> Dict[str, Any]:
         """Generate final investment recommendation based on all analyses including debate results"""
+        self.detailed_logger.info("Generating final investment recommendation")
+        self.detailed_logger.debug(f"Generating recommendation for ticker: {state.ticker}")
+        
         try:
             # Prioritize debate results if available
+            self.detailed_logger.debug("Checking for debate results in state data cache")
             debate_result = state.data_cache.get('debate_result', {})
             final_signal = state.data_cache.get('final_signal', {})
+            
+            self.detailed_logger.debug(f"Debate result present: {bool(debate_result)}, Final signal present: {bool(final_signal)}")
 
             if final_signal and debate_result:
+                self.detailed_logger.info("Using debate-based recommendation")
                 # Use debate analysis as primary source
                 signal = final_signal.get('signal', 'neutral')
                 confidence = final_signal.get('confidence', 0.5)
@@ -231,6 +312,8 @@ class CrewAIInvestmentSystem:
                 # Calculate position size based on confidence and portfolio
                 max_investment = state.portfolio.cash * 0.2  # Max 20% in single position
                 suggested_investment = max_investment * confidence
+                
+                self.detailed_logger.debug(f"Debate-based recommendation - Action: {action}, Confidence: {confidence}")
 
                 return {
                     "action": action,
@@ -249,6 +332,7 @@ class CrewAIInvestmentSystem:
                 }
 
             # Fallback to original logic if debate results not available
+            self.detailed_logger.info("Using fallback recommendation logic")
             technical_signal = state.data_cache.get('technical_signal', {})
             fundamental_signal = state.data_cache.get('fundamental_signal', {})
 
@@ -265,6 +349,7 @@ class CrewAIInvestmentSystem:
                 confidences.append(fundamental_signal.get('confidence', 0.5))
 
             if not signals:
+                self.detailed_logger.warning("No signals available for recommendation")
                 return {
                     "action": "hold",
                     "confidence": 0.5,
@@ -276,6 +361,8 @@ class CrewAIInvestmentSystem:
             bullish_count = signals.count('bullish')
             bearish_count = signals.count('bearish')
             total_signals = len(signals)
+            
+            self.detailed_logger.debug(f"Signal counts - Bullish: {bullish_count}, Bearish: {bearish_count}, Total: {total_signals}")
 
             if bullish_count > bearish_count:
                 action = "buy"
@@ -290,6 +377,8 @@ class CrewAIInvestmentSystem:
             # Calculate position size based on confidence and portfolio
             max_investment = state.portfolio.cash * 0.2  # Max 20% in single position
             suggested_investment = max_investment * confidence
+            
+            self.detailed_logger.debug(f"Fallback recommendation - Action: {action}, Confidence: {confidence}")
 
             return {
                 "action": action,
@@ -307,6 +396,7 @@ class CrewAIInvestmentSystem:
 
         except Exception as e:
             self.logger.error(f"Failed to generate recommendation: {str(e)}")
+            self.detailed_logger.error(f"Failed to generate recommendation", exc_info=True)
             return {
                 "action": "hold",
                 "confidence": 0.5,
