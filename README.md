@@ -1,846 +1,865 @@
-<div align="center">
+# CrewAI A-Share Investment Analysis System
 
-# 🤖 AI 投资系统 🧠
+基于CrewAI框架的A股智能投资分析系统，使用多智能体协作进行投资决策。
 
-<img src="https://img.shields.io/badge/AI投资-决策辅助-4A90E2?style=for-the-badge">
-<img src="https://img.shields.io/badge/Python-Poetry-blue.svg?style=for-the-badge&logo=python&logoColor=white">
-<img src="https://img.shields.io/badge/LLM-Gemini%20%7C%20OpenAI%20Compatible-brightgreen?style=for-the-badge&logo=openai&logoColor=white">
-<img src="https://img.shields.io/badge/License-Dual%20(MIT%20%26%20GPLv3%2BNonCommercial)-lightgrey.svg?style=for-the-badge&logo=git&logoColor=white">
+![CrewAI Architecture](docs/architecture.png)
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=10,20,30,40&height=200&section=header&text=AI%20投资系统&fontSize=90&fontAlignY=35&desc=探索基于多智能体与LLM的自动化投资决策&descAlignY=60&animation=fadeIn" />
+## 🌟 系统概述
 
-</div>
+本系统是一个先进的AI驱动的投资分析平台，通过12个专业智能体的协作，为A股投资提供全方位的分析支持。系统结合了最新的LLM技术、多智能体协作机制和深度学习算法，为投资者提供专业、客观、及时的投资建议。
 
-**⚠️ 免责声明：本项目仅用于教育和研究目的，不构成任何投资、实际交易建议。投资有风险，决策需谨慎。
-再次强调，该系统不涉及任何投资建议，不涉及任何股票推荐，仅用于对于 AI 技术和股市结合感兴趣的朋友。
-对 Agent 技术和股市感兴趣者来，
-升官发财请往他处。
-不再回复任何有关系统给出信息有无用的问题，此系统不构成任何投资建议。**
+介绍参考文章： https://linux.do/t/topic/978220
 
-<div align="center">
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
-</div>
+### 🎯 核心特性
 
-## 项目概述
+- **🤖 多智能体协作**: 12个专业AI智能体协同工作，各司其职
+- **📊 多维分析**: 覆盖技术分析、基本面分析、情绪分析、估值分析等多个维度
+- **🧠 LLM增强**: 集成先进的语言模型，提供智能辩论和推理能力
+- **🔒 风险管理**: 全流程风险控制和投资组合管理
+- **⚡ 高效执行**: 优化的CrewAI框架，支持并行处理和智能调度
+- **📈 实时数据**: 接入真实的A股市场数据，包括股价、财务、新闻等
+- **🛡️ 安全可靠**: 完善的错误处理、日志记录和监控机制
 
-这是一个基于人工智能的投资系统概念验证项目。项目目标是探索如何使用 AI 来辅助投资决策，通过多 Agent 协同工作，结合大型语言模型 (LLM) 的分析能力，提供多角度的市场解读和投资建议。
+## 🏗️ 系统架构
 
-### 核心理念：多智能体协同与 LLM 增强决策
+### 智能体工作流程
 
-系统通过模拟不同角色的研究员（多头、空头）和分析师，进行信息收集、分析、辩论，最终形成投资决策。最新的“辩论室智能增强”机制引入 LLM 作为独立第三方，进一步提升决策的客观性和全面性。
-
-<div align="center">
-<table>
-  <tr>
-    <td align="center"><img src="https://img.icons8.com/fluency/48/null/people-working-together.png" width="30px"/><br><b>多智能体协同</b></td>
-    <td align="center"><img src="https://img.icons8.com/?size=100&id=M1bt3ZHCANRW&format=png&color=000000" width="30px"/><br><b>LLM 深度分析</b></td>
-    <td align="center"><img src="https://img.icons8.com/fluency/48/null/scales.png" width="30px"/><br><b>辩论室机制</b></td>
-    <td align="center"><img src="https://img.icons8.com/fluency/48/null/data-configuration.png" width="30px"/><br><b>模块化架构</b></td>
-  </tr>
-  <tr>
-    <td>在多分析师基础上，引入多空研究员，从不同视角分析市场</td>
-    <td>引入大型语言模型进行客观评估和洞察生成</td>
-    <td>通过多方辩论达成更全面的决策</td>
-    <td>各 Agent 独立运作，易于扩展和维护</td>
-  </tr>
-</table>
-</div>
-
-<div align="center">
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
-</div>
-
-## 系统架构
-
-![System Architecture V2](src/data/img/structure_v4.png)
-
-新版本的架构做出了以下改进：
-
-1.  引入了多头研究员(Researcher Bull)和空头研究员(Researcher Bear)，让系统能够从不同角度分析市场
-2.  增加了辩论室(Debate Room)环节，通过多空双方的辩论来达成更全面的决策
-3.  优化了数据流向，使决策过程更加系统化和完整
-
-另外，优化了终端输出，减少了不必要的详细数据显示，使输出更加清晰易读。
-
-## 最新功能：
-
-### 2025.06.22 新闻搜索功能升级
-
-我们对新闻获取系统进行了重大升级，显著提升了新闻数据的质量和获取效率：
-
-1.  **智能搜索引擎**：集成了先进的搜索功能，能够更精准地获取相关财经新闻
-2.  **多源新闻整合**：支持从多个主流财经网站获取新闻，包括新浪财经、网易财经、东方财富等
-3.  **智能缓存系统**：
-    - **增量缓存**：当请求更多新闻时，系统会智能地利用已有缓存，只获取差额部分
-    - **去重机制**：基于新闻标题自动去重，避免重复内容
-    - **时效性管理**：自动检查缓存有效性，确保数据时效性
-    - **缓存统计**：详细记录缓存使用情况，包括原缓存数量、新获取数量等
-4.  **优化的查询策略**：
-    - 针对 A 股市场特点优化搜索关键词
-    - 支持时间范围限制，可获取特定日期前的新闻
-    - 智能过滤无关内容，提高新闻质量
-
-### 2025.04.27 宏观分析师
-
-### 2025.03.27 辩论室智能增强
-
-我们最新升级了辩论室(Debate Room)模块的决策机制：
-
-1.  **LLM 第三方分析**：引入大型语言模型作为独立的第三方分析师，对多空观点进行客观评估
-2.  **混合置信度计算**：将传统的多空置信度差异与 LLM 评分进行加权融合，形成更全面的决策依据
-3.  **增强的辩论机制**：系统现在能够自动汇总所有研究员的观点，生成结构化分析，并整合进最终决策
-
-这一改进使决策过程更加平衡客观，特别适合在市场信息复杂、多方观点存在分歧的情况下提供更可靠的投资建议。未来我们将持续优化这一机制，进一步提升决策质量。
-
-<div align="center">
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
-</div>
-
-## 🛠️ 安装与设置 (Setup)
-
-首先，克隆本仓库到您的本地：
-
-```bash
-git clone [https://github.com/24mlight/A_Share_investment_Agent.git](https://github.com/24mlight/A_Share_investment_Agent.git)
-cd A_Share_investment_Agent
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        CrewAI Investment System                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  📥 Entry Point                                                          │
+│  ┌─────────────┐                                                          │
+│  │  Main App   │                                                          │
+│  │  (run.py)   │                                                          │
+│  └─────────────┘                                                          │
+│           │                                                                 │
+│           ▼                                                                 │
+│  ┌─────────────────────────┐                                            │
+│  │   CrewAI System        │                                            │
+│  │   (Orchestrator)       │                                            │
+│  └─────────────────────────┘                                            │
+│           │                                                                 │
+│    ┌──────┴───────┐                                                        │
+│    │              │                                                        │
+│    ▼              ▼                                                        │
+│ ┌─────────┐   ┌─────────────┐                                              │
+│ │Data     │   │Task         │                                              │
+│ │Manager  │   │Manager      │                                              │
+│ └─────────┘   └─────────────┘                                              │
+│    │              │                                                        │
+│    ▼              ▼                                                        │
+│ ┌─────────────────────────────────────────────────────────┐              │
+│ │                 AGENTS LAYER                           │              │
+│ │                                                         │              │
+│ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐         │              │
+│ │ │Market Data │ │Technical    │ │Fundamentals │         │              │
+│ │ │Agent       │ │Analyst      │ │Analyst      │         │              │
+│ │ │(数据收集)   │ │(技术分析)    │ │(基本面分析)   │         │              │
+│ │ └─────────────┘ └─────────────┘ └─────────────┘         │              │
+│ │                                                         │              │
+│ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐         │              │
+│ │ │Sentiment   │ │Valuation    │ │Macro        │         │              │
+│ │ │Analyst     │ │Analyst      │ │Analyst      │         │              │
+│ │ │(情绪分析)   │ │(估值分析)    │ │(宏观分析)    │         │              │
+│ │ └─────────────┘ └─────────────┘ └─────────────┘         │              │
+│ │                                                         │              │
+│ │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐         │              │
+│ │ │Bull        │ │Bear         │ │Debate       │         │              │
+│ │ │Researcher   │ │Researcher   │ │Room         │         │              │
+│ │ │(看多研究)   │ │(看空研究)   │ │(辩论室)      │         │              │
+│ │ └─────────────┘ └─────────────┘ └─────────────┘         │              │
+│ │                                                         │              │
+│ │ ┌─────────────┐ ┌─────────────┐                         │              │
+│ │ │Risk        │ │Portfolio    │                         │              │
+│ │ │Manager     │ │Manager      │                         │              │
+│ │ │(风险管理)   │ │(投资组合)    │                         │              │
+│ │ └─────────────┘ └─────────────┘                         │              │
+│ └─────────────────────────────────────────────────────────┘              │
+│           │                                                                 │
+│           ▼                                                                 │
+│  ┌─────────────────────────┐                                            │
+│  │   Results & Reports    │                                            │
+│  │   (结果输出与报告)       │                                            │
+│  └─────────────────────────┘                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 1. 安装 Poetry
+### 智能体详细介绍
 
-Poetry 是一个用于 Python 依赖管理和打包的工具。
+#### 1. 市场数据智能体 (Market Data Agent)
+- **职责**: 收集和处理股价历史、财务指标、市场新闻等数据
+- **数据源**: akshare、东方财富、财经新闻API
+- **输出**: 标准化的市场数据包
 
-**Windows (PowerShell):**
+#### 2. 技术分析师 (Technical Analyst)
+- **职责**: 分析价格趋势、技术指标、图表形态
+- **分析方法**: 移动平均线、RSI、MACD、布林带等技术指标
+- **输出**: 技术面分析报告和交易信号
 
-```powershell
-(Invoke-WebRequest -Uri [https://install.python-poetry.org](https://install.python-poetry.org) -UseBasicParsing).Content | py -
-```
+#### 3. 基本面分析师 (Fundamentals Analyst)
+- **职责**: 评估公司财务健康状况和经营业绩
+- **分析指标**: ROE、净利润率、营收增长、负债率等
+- **输出**: 基本面评级和财务分析报告
 
-**Unix/macOS:**
+#### 4. 情绪分析师 (Sentiment Analyst)
+- **职责**: 分析市场情绪、新闻情感、投资者情绪
+- **技术**: 使用LLM进行深度文本情感分析
+- **输出**: 市场情绪评分和情感趋势分析
+
+#### 5. 估值分析师 (Valuation Analyst)
+- **职责**: 进行公司估值和内在价值分析
+- **方法**: DCF、可比公司分析、多重估值法
+- **输出**: 估值结果和投资建议
+
+#### 6. 看多研究员 (Bull Researcher)
+- **职责**: 提供积极的市场观点和投资理由
+- **方法**: 基础面分析、市场趋势、行业发展
+- **输出**: 看多投资论点和支持证据
+
+#### 7. 看空研究员 (Bear Researcher)
+- **职责**: 提供谨慎的市场观点和风险提示
+- **方法**: 风险识别、竞争分析、估值泡沫
+- **输出**: 看空投资论点和风险警示
+
+#### 8. 辩论室 (Debate Room)
+- **职责**: 协调多空辩论，LLM作为第三方评估
+- **方法**: 结构化辩论、证据权衡、逻辑推理
+- **输出**: 辩论结果和综合评估意见
+
+#### 9. 风险管理师 (Risk Manager)
+- **职责**: 评估投资风险并设置风控参数
+- **方法**: VaR计算、压力测试、相关性分析
+- **输出**: 风险评估报告和仓位建议
+
+#### 10. 宏观分析师 (Macro Analyst)
+- **职责**: 分析宏观经济环境和政策影响
+- **方法**: 经济指标分析、政策解读、周期判断
+- **输出**: 宏观环境评估和行业配置建议
+
+#### 11. 投资组合经理 (Portfolio Manager)
+- **职责**: 做出最终投资决策和组合配置
+- **方法**: 多因子模型、风险收益优化、资产配置
+- **输出**: 最终投资建议和操作方案
+
+## 🚀 快速开始
+
+### 运行方法：
+langgraph版本：
+ poetry run python src/main.py --ticker 301155 --show-reasoning
+
+crewAI版本：
+E:\investment_Agent_langgraph_crewai-main>  python -m crewai_system.src.main --ticker 002594  --show-reasoning
+
+### 1. 环境要求
+
+- Python 3.8+
+- Poetry 或 pip
+- 充足的内存 (建议8GB+)
+- 稳定的网络连接 (访问A股数据API)
+
+### 2. 安装步骤
+
+#### 使用Poetry (推荐)
 
 ```bash
-curl -sSL [https://install.python-poetry.org](https://install.python-poetry.org) | python3 -
-```
+# 克隆项目
+git clone <repository-url>
+cd crewai_system
 
-### 2. 安装项目依赖
-
-使用 Poetry 安装项目所需的依赖包：
-
-```bash
-poetry lock --no-update
-```
-
-```bash
+# 安装依赖
 poetry install
+
+# 激活虚拟环境
+poetry shell
+
+# 配置环境变量
+cp .env.example .env
+# 编辑 .env 文件，填入你的API密钥
 ```
 
-### 3. 配置环境变量
-
-环境变量用于存储 API 密钥等敏感信息。
-
-首先，复制示例环境变量文件：
+#### 使用pip
 
 ```bash
-# Create .env file for your API keys
+# 克隆项目
+git clone <repository-url>
+cd crewai_system
+
+# 安装依赖
+pip install -r requirements.txt
+
+# 配置环境变量
 cp .env.example .env
+# 编辑 .env 文件，填入你的API密钥
 ```
 
-然后，您可以获取您的 Gemini API 密钥：[Google AI Studio](https://aistudio.google.com/)
+### 3. 环境配置
 
-您可以通过以下两种方式设置环境变量:
-
-**a. 直接修改 `.env` 文件 (推荐)**
-打开项目根目录下的 `.env` 文件, 填入您的 API key:
+编辑 `.env` 文件：
 
 ```env
-# Gemini API 配置
-GEMINI_API_KEY=your-gemini-api-key
+# ==================== LLM配置 ====================
+# Google Gemini API配置 (推荐)
+GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-1.5-flash
 
-# OpenAI Compatible API 配置（可选）
-OPENAI_COMPATIBLE_API_KEY=your-openai-compatible-api-key
-OPENAI_COMPATIBLE_BASE_URL=https://your-api-endpoint.com/v1
-OPENAI_COMPATIBLE_MODEL=your-model-name
+# OpenAI兼容API配置 (可选)
+OPENAI_COMPATIBLE_API_KEY=your_openai_api_key_here
+OPENAI_COMPATIBLE_BASE_URL=https://api.openai.com/v1
+OPENAI_COMPATIBLE_MODEL=gpt-4-turbo-preview
+
+# ==================== 系统配置 ====================
+LOG_LEVEL=INFO
+MAX_WORKERS=4
+CACHE_ENABLED=true
+CACHE_TTL=3600
+
+# ==================== 数据源配置 ====================
+AKSHARE_TIMEOUT=30
+AKSHARE_RETRY_COUNT=3
+
+# ==================== API服务配置 ====================
+API_HOST=0.0.0.0
+API_PORT=8001
+API_RELOAD=true
+
+# ==================== 安全配置 ====================
+SECRET_KEY=your-secret-key-change-in-production
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
-**注意:** 系统会优先使用 OpenAI Compatible API（如果配置了），否则会使用 Gemini API。
+### 4. 基本使用
 
-**b. 通过命令行设置**
-
-**Unix/macOS:**
+#### 命令行分析模式
 
 ```bash
-# Gemini API 配置
-export GEMINI_API_KEY='your-gemini-api-key'
-export GEMINI_MODEL='gemini-1.5-flash'
+# 基础分析
+python -m crewai_system.src.main --ticker 000002
 
-# OpenAI Compatible API 配置（可选）
-export OPENAI_COMPATIBLE_API_KEY='your-openai-compatible-api-key'
-export OPENAI_COMPATIBLE_BASE_URL='https://your-api-endpoint.com/v1'
-export OPENAI_COMPATIBLE_MODEL='your-model-name'
+# 显示详细推理过程
+python -m crewai_system.src.main --ticker 000002 --show-reasoning
+
+# 自定义分析参数
+python -m crewai_system.src.main --ticker 000002 \
+  --start-date 2024-01-01 \
+  --end-date 2024-12-31 \
+  --num-of-news 20
+
+# 自定义投资组合
+python -m crewai_system.src.main --ticker 000002 \
+  --initial-capital 1000000 \
+  --initial-position 1000
 ```
 
-**Windows PowerShell:**
-
-```powershell
-# Gemini API 配置
-$env:GEMINI_API_KEY='your-gemini-api-key'
-$env:GEMINI_MODEL='gemini-1.5-flash'
-
-# OpenAI Compatible API 配置（可选）
-$env:OPENAI_COMPATIBLE_API_KEY='your-openai-compatible-api-key'
-$env:OPENAI_COMPATIBLE_BASE_URL='https://your-api-endpoint.com/v1'
-$env:OPENAI_COMPATIBLE_MODEL='your-model-name'
-```
-
-<div align="center">
-<img src="[https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)" width="100%">
-</div>
-
-## 🚀 使用指南 (Usage)
-
-⚠️ **注意**: 目前回测系统还在测试中。
-
-系统支持多种运行方式：
-
-### 1. 命令行分析模式
-
-这是直接与系统交互进行股票分析的主要方式。
-
-**基本运行 (只显示关键决策信息):**
+#### 回测模式
 
 ```bash
-poetry run python src/main.py --ticker 000000 #修改成你想要测试的股票代码
+# 基础回测
+python -m crewai_system.src.backtester --ticker 301157 \
+  --start-date 2024-12-11 \
+  --end-date 2025-01-07
+
+# 自定义回测参数
+python -m crewai_system.src.backtester --ticker 301157 \
+  --start-date 2024-12-11 \
+  --end-date 2025-01-07 \
+  --num-of-news 20 \
+  --initial-capital 1000000
 ```
 
-例如，分析股票代码为 `301155` 的情况：
+#### API服务模式
 
 ```bash
-poetry run python src/main.py --ticker 301155
+# 启动后端API服务
+python -m crewai_system.src.run_with_backend
+
+# 立即分析模式
+python -m crewai_system.src.run_with_backend --ticker 002848 --show-reasoning
 ```
 
-**显示详细推理过程 (查看每个智能体的分析过程):**
+#### 系统管理
 
 ```bash
-poetry run python src/main.py --ticker 000000 --show-reasoning #修改成你想要测试的股票代码
+# 查看系统状态
+python -m crewai_system.src.main --status
+
+# 清理系统缓存
+python -m crewai_system.src.main --cleanup
+
+# 测试数据连接
+python -c "from crewai_system.src.tools.data_sources import test_data_sources; test_data_sources()"
 ```
 
-例如:
+## 📊 API文档
 
-```bash
-poetry run python src/main.py --ticker 301155 --show-reasoning
-```
+### REST API端点
 
-**回测功能**
+启动后端服务后，可通过以下端点访问系统功能：
 
-```bash
-poetry run python src/backtester.py --ticker 301157 --start-date 2024-12-11 --end-date 2025-01-07 --num-of-news 20
-```
+#### 1. 系统状态API
+- `GET /api/health` - 系统健康检查
+- `GET /api/status` - 系统状态信息
+- `GET /api/config` - 系统配置信息
 
-回测功能支持以下参数：
+#### 2. 智能体API
+- `GET /api/agents` - 获取所有智能体列表
+- `GET /api/agents/{agent_id}` - 获取特定智能体信息
+- `GET /api/agents/{agent_id}/status` - 获取智能体状态
+- `POST /api/agents/{agent_id}/execute` - 执行智能体任务
 
-- `ticker`: 股票代码
-- `start-date`: 回测开始日期（`YYYY-MM-DD`）
-- `end-date`: 回测结束日期（`YYYY-MM-DD`）
-- `initial-capital`: 初始资金（可选，默认为 `100,000`）
-- `num-of-news`: 情绪分析使用的新闻数量（可选，默认为 `5`，最大为 `100`）
+#### 3. 分析API
+- `POST /api/analyze` - 执行投资分析
+- `GET /api/analyze/{run_id}` - 获取分析结果
+- `GET /api/analyze/{run_id}/status` - 获取分析状态
 
-#### 参数说明
+#### 4. 数据API
+- `GET /api/data/market/{ticker}` - 获取市场数据
+- `GET /api/data/financial/{ticker}` - 获取财务数据
+- `GET /api/data/news/{ticker}` - 获取新闻数据
 
-- `--ticker`: 股票代码（必需）
-- `--show-reasoning`: 显示分析推理过程（可选，默认为 `false`）
-- `--initial-capital`: 初始现金金额（可选，默认为 `100,000`）
-- `--num-of-news`: 情绪分析使用的新闻数量（可选，默认为 `5`，最大为 `100`）
-- `--start-date`: 开始日期，格式 `YYYY-MM-DD`（可选）
-- `--end-date`: 结束日期，格式 `YYYY-MM-DD`（可选）
+#### 5. 历史记录API
+- `GET /api/runs` - 获取运行历史
+- `GET /api/runs/{run_id}` - 获取特定运行结果
+- `DELETE /api/runs/{run_id}` - 删除运行记录
 
-### 2. 后端 API 服务模式
+### Swagger UI
 
-此模式会启动一个 FastAPI 后端服务，允许通过 API 与系统交互，适合希望基于此后端开发自定义前端界面的用户。
+启动后端服务后，访问 `http://localhost:8001/docs` 查看交互式API文档。
 
-```bash
-# 启动API服务
-poetry run python run_with_backend.py
-```
+## 🛠️ 开发指南
 
-启动后，可以通过浏览器访问 `http://localhost:8000/docs` 使用交互式 API 界面 (Swagger UI)。
-
-**常用 API 端点包括：**
-
-- **开始新的分析**: `POST /analysis/start` (请求体中提供股票代码、初始资金等)
-- **查看当前工作流状态**: `GET /api/workflow/status` (获取当前运行 ID 和活跃 Agent 状态)
-- **列出历史运行**: `GET /runs/` (获取已完成运行列表)
-- **查看特定运行的流程图**: `GET /runs/{run_id}/flow`
-- **查看特定 Agent 的详细执行日志**: `GET /runs/{run_id}/agents/{agent_name}`
-- **查看 LLM 交互日志**: `GET /logs/` (具体路径可能需根据实现确认)
-
-**API 服务模式的优势：**
-
-- 分析任务在后台异步执行。
-- 所有结果均可通过 API 查询。
-- 无需为每次分析重启程序。
-- 可作为开发自定义前端的基础。
-
-详细的后端 API 文档请参阅：[查看详细的后端 API 文档](./backend/README.md)
-
-### 参数说明 (命令行模式)
-
-- `--ticker`: 股票代码 (必需)
-- `--show-reasoning`: 显示分析推理过程 (可选, 默认为 `false`)
-- `--initial-capital`: 初始现金金额 (可选, 默认为 `100,000`)
-- `--num-of-news`: 情绪分析使用的新闻数量 (可选, 默认为 `5`)
-
-### 命令行模式输出说明
-
-系统会输出以下信息：
-
-1.  基本面分析结果
-2.  估值分析结果
-3.  技术分析结果
-4.  情绪分析结果
-5.  风险管理评估
-6.  最终交易决策
-
-如果使用了`--show-reasoning`参数，还会显示每个智能体的详细分析过程。
-
-**示例输出 (Example Output):**
+### 项目结构
 
 ```
-正在获取 301157 的历史行情数据...
-开始日期：2024-12-11
-结束日期：2024-12-11
-成功获取历史行情数据，共 242 条记录
-
-警告：以下指标存在NaN值：
-- momentum_1m: 20条
-- momentum_3m: 60条
-- momentum_6m: 120条
-...（这些警告是正常的，是由于某些技术指标需要更长的历史数据才能计算）
-
-正在获取 301157 的财务指标数据...
-获取实时行情...
-成功获取实时行情数据
-
-获取新浪财务指标...
-成功获取新浪财务指标数据，共 3 条记录
-最新数据日期：2024-09-30 00:00:00
-
-获取利润表数据...
-成功获取利润表数据
-
-构建指标数据...
-成功构建指标数据
-
-Final Result:
-{
-  "action": "buy",
-  "quantity": 12500,
-  "confidence": 0.42,
-  "agent_signals": [
-    {
-      "agent": "Technical Analysis",
-      "signal": "bullish",
-      "confidence": 0.6
-    },
-    {
-      "agent": "Fundamental Analysis",
-      "signal": "neutral",
-      "confidence": 0.5
-    },
-    {
-      "agent": "Sentiment Analysis",
-      "signal": "neutral",
-      "confidence": 0.8
-    },
-    {
-      "agent": "Valuation Analysis",
-      "signal": "bearish",
-      "confidence": 0.99
-    },
-    {
-      "agent": "Risk Management",
-      "signal": "buy",
-      "confidence": 1.0
-    }
-  ],
-  "reasoning": "Risk Management allows a buy action with a maximum quantity of 12500..."
-}
-```
-
-### 日志文件说明
-
-系统会在 `logs/` 目录下生成以下类型的日志文件：
-
-1.  **回测日志**
-
-    - 文件名格式：`backtest_{股票代码}_{当前日期}_{回测开始日期}_{回测结束日期}.log`
-    - 示例：`backtest_301157_20250107_20241201_20241230.log`
-    - 包含：每个交易日的分析结果、交易决策和投资组合状态
-
-2.  **API 调用日志**
-    - 文件名格式：`api_calls_{当前日期}.log`
-    - 示例：`api_calls_20250107.log`
-    - 包含：所有 API 调用的详细信息和响应
-
-所有日期格式均为 YYYY-MM-DD。如果使用了 `--show-reasoning` 参数，详细的分析过程也会记录在日志文件中。
-
-<div align="center">
-<img src="[https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)" width="100%">
-</div>
-
-## 📂 项目结构 (Project Structure)
-
-```
-A_Share_investment_Agent/
-├── backend/                     # 后端 API 和服务
-│   ├── dependencies.py          # 依赖注入 (如 LogStorage)
-│   ├── main.py                  # FastAPI 应用实例
-│   ├── models/                  # API 请求/响应模型 (Pydantic)
-│   │   ├── analysis.py          # /analysis/ 相关路由
-│   │   ├── api_runs.py          # /api/runs/ 相关路由 (基于 api_state)
-│   │   ├── logs.py              # /logs/ 相关路由
-│   │   ├── runs.py              # /runs/ 相关路由 (基于 BaseLogStorage)
-│   │   └── workflow.py          # /api/workflow/ 相关路由
-│   ├── schemas.py               # 内部数据结构/日志模型 (Pydantic)
-│   ├── services/                # 业务逻辑服务
-│   │   └── analysis.py          # 股票分析服务
-│   ├── state.py                 # 内存状态管理 (api_state)
-│   ├── storage/                 # 日志存储实现
-│   │   ├── base.py              # BaseLogStorage 接口定义
-│   │   └── memory.py            # InMemoryLogStorage 实现
-│   └── utils/                   # 后端工具函数
-│       ├── api_utils.py         # API 相关工具
-│       └── context_managers.py  # 上下文管理器 (如 workflow_run)
-├── src/                         # Agent 核心逻辑和工具
-│   ├── agents/                  # Agent 定义和工作流
+crewai_system/
+├── src/
+│   ├── agents/                    # 智能体定义
 │   │   ├── __init__.py
-│   │   ├── debate_room.py
-│   │   ├── fundamentals.py
-│   │   ├── macro_analyst.py       # 宏观分析师Agent
-│   │   ├── market_data.py
-│   │   ├── portfolio_manager.py
-│   │   ├── researcher_bear.py
-│   │   ├── researcher_bull.py
-│   │   ├── risk_manager.py
-│   │   ├── sentiment.py
-│   │   ├── state.py
-│   │   ├── technicals.py
-│   │   └── valuation.py
-│   ├── data/                   # 数据存储目录 (本地缓存等)
-│   │   ├── img/                # 项目图片
-│   │   ├── sentiment_cache.json  # 情感分析结果缓存
-│   │   ├── macro_analysis_cache.json  # 宏观分析结果缓存
-│   │   └── stock_news/         # 股票新闻数据
-│   ├── tools/                  # 工具和功能模块 (LLM, 数据获取)
+│   │   ├── base_agent.py          # 基础智能体类
+│   │   ├── market_data_agent.py   # 市场数据智能体
+│   │   ├── technical_analyst.py   # 技术分析师
+│   │   ├── fundamentals_analyst.py # 基本面分析师
+│   │   ├── sentiment_analyst.py   # 情绪分析师
+│   │   ├── valuation_analyst.py    # 估值分析师
+│   │   ├── researcher_bull.py     # 看多研究员
+│   │   ├── researcher_bear.py     # 看空研究员
+│   │   ├── debate_room.py         # 辩论室
+│   │   ├── risk_manager.py        # 风险管理师
+│   │   ├── macro_analyst.py       # 宏观分析师
+│   │   └── portfolio_manager.py   # 投资组合经理
+│   │
+│   ├── tools/                     # 工具和接口
 │   │   ├── __init__.py
-│   │   ├── api.py
-│   │   ├── data_analyzer.py
-│   │   ├── news_crawler.py
-│   │   └── openrouter_config.py
-│   ├── utils/                  # 通用工具函数 (日志, LLM客户端, 序列化)
+│   │   ├── data_sources.py        # 数据源接口
+│   │   ├── market_data_tools.py   # 市场数据工具
+│   │   ├── financial_tools.py     # 财务分析工具
+│   │   └── news_tools.py          # 新闻分析工具
+│   │
+│   ├── utils/                     # 工具类
 │   │   ├── __init__.py
-│   │   ├── api_utils.py        # Agent 共享的API工具 (逐步迁移至 backend)
-│   │   ├── llm_clients.py
-│   │   ├── llm_interaction_logger.py
-│   │   ├── logging_config.py
-│   │   ├── output_logger.py
-│   │   ├── serialization.py
-│   │   ├── structured_terminal.py  # 结构化终端输出
-│   │   └── summary_report.py    # 汇总报告生成
-│   ├── backtester.py          # 回测系统 (可能需要检查状态)
-│   └── main.py                # Agent 工作流定义和命令行入口
-├── logs/                      # 日志文件目录 (主要由 OutputLogger 生成)
-├── .env                       # 环境变量配置
-├── .env.example              # 环境变量示例
-├── poetry.lock               # Poetry依赖锁定文件
-├── pyproject.toml            # Poetry项目配置
-├── run_with_backend.py       # 启动后端并可选执行分析的脚本
-└── README.md                 # 项目文档
+│   │   ├── logging_config.py      # 日志配置
+│   │   ├── shared_context.py      # 共享上下文
+│   │   ├── data_processing.py     # 数据处理
+│   │   ├── llm_clients.py         # LLM客户端
+│   │   ├── llm_config.py          # LLM配置
+│   │   └── api_utils.py           # API工具
+│   │
+│   ├── backend/                   # 后端API服务
+│   │   ├── __init__.py
+│   │   ├── main.py                # FastAPI主程序
+│   │   ├── routers/               # API路由
+│   │   ├── schemas/               # 数据模型
+│   │   └── storage/               # 数据存储
+│   │
+│   └── logs/                      # 日志文件
+│
+├── config.py                      # 系统配置
+├── requirements.txt               # 依赖列表
+├── pyproject.toml                 # Poetry配置
+├── .env.example                   # 环境变量模板
+├── run.py                         # 启动脚本
+└── README.md                      # 项目文档
 ```
 
-<div align="center">
-<img src="[https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)" width="100%">
-</div>
+### 添加新智能体
 
-## 🤝 贡献指南 (Contributing)
+#### 1. 创建智能体类
 
-我们欢迎各种形式的贡献！
+```python
+# src/agents/custom_agent.py
+from typing import Any, Dict, List
+from .base_agent import BaseAgent
+from crewai import Tool
 
-1.  Fork 本仓库
-2.  创建您的特性分支 (`git checkout -b feature/AmazingFeature`)
-3.  提交您的更改 (`git commit -m 'Add some AmazingFeature'`)
-4.  推送到分支 (`git push origin feature/AmazingFeature`)
-5.  创建 Pull Request
+class CustomAgent(BaseAgent):
+    """自定义智能体示例"""
 
-<div align="center">
-<img src="[https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)" width="100%">
-</div>
+    def __init__(self):
+        super().__init__(
+            role="自定义分析师",
+            goal="执行特定的分析任务",
+            backstory="""你是一位专业的分析师，专注于特定领域的分析。
+            你具有深厚的专业知识和丰富的实战经验。""",
+            agent_name="CustomAnalyst"
+        )
 
-## ☕️ 支持
+        # 添加工具
+        self.tools = [
+            Tool(
+                name="custom_analysis_tool",
+                func=self.custom_analysis,
+                description="执行自定义分析任务"
+            )
+        ]
 
-如果这个项目对你有帮助，欢迎请我喝杯咖啡 ❤️
+    def process_task(self, task_context: Dict[str, Any]) -> Dict[str, Any]:
+        """处理任务"""
+        self.log_execution_start("执行自定义分析")
 
-<div align="center">
-  <img src="src/data/img/ali.png" alt="支付宝收款码" width="250"/>
-</div>
+        try:
+            # 验证输入
+            required_fields = ["ticker", "data"]
+            if not self.validate_input(task_context, required_fields):
+                raise ValueError(f"缺少必需字段: {required_fields}")
 
+            # 执行分析
+            result = self.custom_analysis(task_context)
 
-## 📖 项目详细说明
+            # 格式化输出
+            return self.format_agent_output(
+                content=result,
+                signal=result.get("signal", "neutral"),
+                confidence=result.get("confidence", 50),
+                reasoning=result.get("reasoning", ""),
+                metadata={
+                    "ticker": task_context["ticker"],
+                    "analysis_type": "custom",
+                    "timestamp": datetime.now().isoformat()
+                }
+            )
 
-### 架构设计
+        except Exception as e:
+            self.log_execution_error(e, "自定义分析失败")
+            raise
 
-本项目是一个基于多个 agent 的 AI 投资系统，采用模块化设计，每个 agent 都有其专门的职责。系统的架构如下：
+    def custom_analysis(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """自定义分析逻辑"""
+        # 实现具体的分析逻辑
+        return {
+            "signal": "bullish",
+            "confidence": 75,
+            "reasoning": "基于自定义分析得出的投资建议",
+            "details": {}
+        }
+```
+
+#### 2. 注册智能体到系统
+
+```python
+# 在系统初始化代码中
+from src.agents.custom_agent import CustomAgent
+
+# 创建智能体实例
+custom_agent = CustomAgent()
+
+# 添加到智能体列表
+agents = [
+    market_data_agent,
+    technical_analyst,
+    fundamentals_analyst,
+    # ... 其他智能体
+    custom_agent,  # 添加自定义智能体
+]
+```
+
+### 添加新工具
+
+```python
+# src/tools/custom_tools.py
+from crewai import Tool
+from typing import Any, Dict
+
+def custom_analysis_function(data: Dict[str, Any]) -> Dict[str, Any]:
+    """自定义分析工具函数"""
+    # 实现工具逻辑
+    return {
+        "result": "分析结果",
+        "confidence": 0.85
+    }
+
+# 创建工具
+custom_tool = Tool(
+    name="custom_analysis",
+    func=custom_analysis_function,
+    description="执行自定义分析任务"
+)
+```
+
+### 共享上下文使用
+
+```python
+from src.utils.shared_context import get_global_context, ContextManager
+
+# 获取全局上下文
+context = get_global_context()
+
+# 设置数据
+context.set("market_data", data, source_agent="market_data_agent")
+
+# 获取数据
+market_data = context.get("market_data")
+
+# 使用上下文管理器
+with ContextManager(context, "sentiment_analyst") as ctx:
+    # 设置分析结果
+    ctx.set("sentiment_score", 0.75)
+
+    # 获取其他智能体的数据
+    market_data = ctx.get("market_data")
+
+    # 执行分析
+    result = analyze_sentiment(market_data)
+
+    # 设置最终结果
+    ctx.set("sentiment_result", result)
+```
+
+## 🔧 配置详解
+
+### LLM配置
+
+系统支持多种LLM提供商：
+
+#### 1. Google Gemini (推荐)
+```env
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-1.5-flash  # 或 gemini-1.5-pro
+```
+
+#### 2. OpenAI兼容API
+```env
+OPENAI_COMPATIBLE_API_KEY=your_api_key
+OPENAI_COMPATIBLE_BASE_URL=https://api.openai.com/v1
+OPENAI_COMPATIBLE_MODEL=gpt-4-turbo-preview
+```
+
+#### 3. 本地模型
+```env
+OPENAI_COMPATIBLE_BASE_URL=http://localhost:8000/v1
+OPENAI_COMPATIBLE_MODEL=llama2-7b-chat
+```
+
+### 数据源配置
+
+#### akshare配置
+```env
+AKSHARE_TIMEOUT=30          # 超时时间(秒)
+AKSHARE_RETRY_COUNT=3       # 重试次数
+```
+
+#### 缓存配置
+```env
+CACHE_ENABLED=true         # 启用缓存
+CACHE_TTL=3600            # 缓存有效期(秒)
+```
+
+### 系统性能配置
+
+```env
+MAX_WORKERS=4              # 最大工作线程数
+LOG_LEVEL=INFO            # 日志级别
+API_PORT=8001             # API服务端口
+```
+
+## 📈 性能优化
+
+### 缓存策略
+
+系统采用多级缓存机制：
+
+```python
+# 查看缓存统计
+from src.tools.data_sources import get_data_adapter
+adapter = get_data_adapter()
+stats = adapter.get_cache_stats()
+print(f"缓存命中率: {stats['hit_rate']:.2%}")
+print(f"缓存大小: {stats['cache_size']}")
+```
+
+### 并发处理
+
+```python
+# 配置并发处理
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+# 创建线程池
+executor = ThreadPoolExecutor(max_workers=4)
+
+# 并发执行多个任务
+async def concurrent_analysis(tickers):
+    tasks = [analyze_ticker(ticker) for ticker in tickers]
+    return await asyncio.gather(*tasks)
+```
+
+### 内存管理
+
+```python
+# 清理内存
+import gc
+gc.collect()
+
+# 清理缓存
+adapter.clear_cache()
+```
+
+## 🚨 监控和日志
+
+### 日志配置
+
+系统提供详细的日志记录：
+
+```python
+import logging
+from src.utils.logging_config import get_logger
+
+# 获取日志器
+logger = get_logger('sentiment_analyst')
+
+# 记录日志
+logger.info("开始情绪分析")
+logger.debug(f"分析参数: {params}")
+logger.error("分析失败", exc_info=True)
+```
+
+### 日志文件结构
 
 ```
-Market Data Analyst → [Technical/Fundamentals/Sentiment/Valuation Analyst & Researcher Bull/Bear & Debate Room] → Risk Manager → Portfolio Manager → Trading Decision
+logs/
+├── investment_system.log     # 主系统日志
+├── debug.log                  # 调试日志
+├── data.log                   # 数据访问日志
+└── api.log                    # API调用日志
 ```
 
-_(架构图已在前面展示)_
+### 性能监控
+
+```python
+# 查看系统性能
+from src.utils.shared_context import get_global_context
+context = get_global_context()
+
+# 获取执行统计
+execution_stats = context.get_execution_stats()
+print(f"总执行时间: {execution_stats['total_time']:.2f}秒")
+print(f"智能体执行时间: {execution_stats['agent_times']}")
+```
+
+## 🐛 故障排除
+
+### 常见问题
+
+#### 1. API密钥错误
+```
+错误: 未找到 GEMINI_API_KEY 环境变量
+解决: 检查 .env 文件中的 API 密钥配置
+```
+
+#### 2. 数据源连接失败
+```
+错误: akshare连接超时
+解决:
+1. 检查网络连接
+2. 增加AKSHARE_TIMEOUT值
+3. 使用VPN访问
+```
+
+#### 3. 内存不足
+```
+错误: MemoryError
+解决:
+1. 减少MAX_WORKERS数量
+2. 清理缓存: python run.py --cleanup
+3. 增加系统内存
+```
+
+#### 4. LLM调用失败
+```
+错误: Gemini API调用失败
+解决:
+1. 检查API密钥是否有效
+2. 确认网络连接正常
+3. 检查API配额是否用完
+```
+
+### 调试模式
+
+```bash
+# 启用详细日志
+LOG_LEVEL=DEBUG python -m crewai_system.src.main --ticker 000002
+
+# 显示推理过程
+python -m crewai_system.src.main --ticker 000002 --show-reasoning
+
+# 测试单个智能体
+python -c "
+from src.agents.sentiment_analyst import SentimentAnalyst
+agent = SentimentAnalyst()
+result = agent.process_task({'ticker': '000002', 'news_data': []})
+print(result)
+"
+```
+
+### 性能诊断
+
+```bash
+# 查看系统资源使用
+python -c "
+import psutil
+print(f'CPU使用率: {psutil.cpu_percent()}%')
+print(f'内存使用: {psutil.virtual_memory().percent}%')
+print(f'磁盘使用: {psutil.disk_usage('/').percent}%')
+"
+
+# 查看网络连接
+python -c "
+import socket
+socket.gethostbyname('api.akshare.xyz')
+"
+```
+
+## 📚 API参考
+
+### 核心类
+
+#### CrewAIInvestmentSystem
+主系统类，负责协调所有智能体的执行。
+
+```python
+from src.main import CrewAIInvestmentSystem
+
+system = CrewAIInvestmentSystem()
+result = system.analyze_ticker("000002")
+```
+
+#### BaseAgent
+所有智能体的基类。
 
-#### Agent 角色和职责
+```python
+from src.agents.base_agent import BaseAgent
 
-1.  **Market Data Analyst**
+class MyAgent(BaseAgent):
+    def process_task(self, task_context):
+        # 实现逻辑
+        return result
+```
 
-    - 作为系统的入口点
-    - 负责收集和预处理所有必要的市场数据
-    - 通过 akshare API 获取 A 股市场数据
-    - 数据来源：东方财富、新浪财经等
+#### DataSourceAdapter
+数据源适配器，提供统一的数据访问接口。
 
-2.  **Technical Analyst**
+```python
+from src.tools.data_sources import get_data_adapter
 
-    - 分析价格趋势、成交量、动量等技术指标
-    - 生成基于技术分析的交易信号
-    - 关注短期市场走势和交易机会
+adapter = get_data_adapter()
+market_data = adapter.get_price_history("000002")
+financial_data = adapter.get_financial_metrics("000002")
+```
 
-3.  **Fundamentals Analyst**
+### 工具函数
 
-    - 分析公司财务指标和经营状况
-    - 评估公司的长期发展潜力
-    - 生成基于基本面的交易信号
+```python
+# 获取全局上下文
+from src.utils.shared_context import get_global_context
+context = get_global_context()
 
-4.  **Sentiment Analyst**
+# 获取数据处理器
+from src.utils.data_processing import get_data_processor
+processor = get_data_processor()
 
-    - 分析市场新闻和舆论数据
-    - 评估市场情绪和投资者行为
-    - 生成基于情绪的交易信号
-
-5.  **Valuation Analyst**
-
-    - 进行公司估值分析
-    - 评估股票的内在价值
-    - 生成基于估值的交易信号
-
-6.  **Researcher Bull / Researcher Bear** (新增)
-
-    - 分别从多头和空头角度进行深入研究和分析，提供对立观点。
-
-7.  **Debate Room** (新增与增强)
-
-    - 多空研究员在此陈述观点并进行辩论。
-    - 引入 LLM 作为第三方分析师，对辩论内容和观点进行客观评估。
-    - 综合各方观点和 LLM 评分，形成更全面的决策依据。
-
-8.  **Risk Manager**
-
-    - 整合所有 agent 的交易信号和辩论结果
-    - 评估潜在风险
-    - 设定交易限制和风险控制参数
-    - 生成风险管理信号
-
-9.  **Portfolio Manager**
-    - 作为最终决策者
-    - 综合考虑所有信号、辩论结果和风险因素
-    - 做出最终的交易决策（买入/卖出/持有）
-    - 确保决策符合风险管理要求
-
-### 数据流和处理
-
-#### 数据类型
-
-1.  **市场数据 (Market Data)**
-
-    ```python
-    {
-       "market_cap": float,        # 总市值
-       "volume": float,            # 成交量
-       "average_volume": float,    # 平均成交量
-       "fifty_two_week_high": float,  # 52周最高价
-       "fifty_two_week_low": float    # 52周最低价
-    }
-    ```
-
-2.  **财务指标数据 (Financial Metrics)**
-
-    ```python
-    {
-       # 市场数据
-       "market_cap": float,          # 总市值
-       "float_market_cap": float,    # 流通市值
-
-       # 盈利数据
-       "revenue": float,             # 营业总收入
-       "net_income": float,          # 净利润
-       "return_on_equity": float,    # 净资产收益率
-       "net_margin": float,          # 销售净利率
-       "operating_margin": float,    # 营业利润率
-
-       # 增长指标
-       "revenue_growth": float,      # 主营业务收入增长率
-       "earnings_growth": float,     # 净利润增长率
-       "book_value_growth": float,   # 净资产增长率
-
-       # 财务健康指标
-       "current_ratio": float,       # 流动比率
-       "debt_to_equity": float,      # 资产负债率
-       "free_cash_flow_per_share": float,  # 每股经营性现金流
-       "earnings_per_share": float,  # 每股收益
-
-       # 估值比率
-       "pe_ratio": float,           # 市盈率（动态）
-       "price_to_book": float,      # 市净率
-       "price_to_sales": float      # 市销率
-    }
-    ```
-
-3.  **财务报表数据 (Financial Statements)**
-
-    ```python
-    {
-       "net_income": float,          # 净利润
-       "operating_revenue": float,    # 营业总收入
-       "operating_profit": float,     # 营业利润
-       "working_capital": float,      # 营运资金
-       "depreciation_and_amortization": float,  # 折旧和摊销
-       "capital_expenditure": float,  # 资本支出
-       "free_cash_flow": float       # 自由现金流
-    }
-    ```
-
-4.  **交易信号 (Trading Signals)**
-    ```python
-    {
-       "action": str,               # "buy", "sell", "hold"
-       "quantity": int,             # 交易数量
-       "confidence": float,         # 置信度 (0-1) (可能是混合置信度)
-       "agent_signals": [           # 各个 agent 的信号
-           {
-               "agent": str,        # agent 名称
-               "signal": str,       # "bullish", "bearish", "neutral"
-               "confidence": float  # 置信度 (0-1)
-           }
-       ],
-       "reasoning": str            # 决策理由 (可能包含辩论摘要和LLM评估)
-    }
-    ```
-
-#### 数据流转过程
-
-1.  **数据采集阶段**
-
-    - Market Data Agent 通过 akshare API 获取实时市场数据：
-      - 股票实时行情 (`stock_zh_a_spot_em`)
-      - 历史行情数据 (`stock_zh_a_hist`)
-      - 财务指标数据 (`stock_financial_analysis_indicator`)
-      - 财务报表数据 (`stock_financial_report_sina`)
-    - 新闻数据通过新浪财经 API 获取
-    - 所有数据经过标准化处理和格式化
-
-2.  **分析阶段**
-
-    - Technical Analyst：计算技术指标，分析价格模式，生成技术分析评分和建议。
-    - Fundamentals Analyst：分析财务报表，评估基本面，生成基本面分析评分。
-    - Sentiment Analyst：分析市场新闻，使用 AI 模型评估情感，生成市场情绪评分。
-    - Valuation Analyst：计算估值指标，进行 DCF 估值，评估内在价值。
-    - Researcher Bull/Bear：从各自立场出发，进行深入分析，准备辩论材料。
-
-3.  **辩论与评估阶段 (Debate Room)**
-
-    - 多空研究员提交观点。
-    - 系统汇总观点，可能由 LLM 辅助生成结构化分析。
-    - LLM 作为第三方对观点进行客观评估，给出评分。
-    - 计算混合置信度。
-
-4.  **风险评估阶段**
-    Risk Manager 综合考虑多个维度：
-
-    - 市场风险评估（波动率、Beta 等）
-    - 头寸规模限制计算
-    - 止损止盈水平设定
-    - 投资组合风险控制
-    - 整合来自辩论室的增强信号。
-
-5.  **决策阶段**
-    Portfolio Manager 基于以下因素做出决策：
-
-    - 各 Agent 的信号强度和置信度。
-    - 辩论室的综合结论和混合置信度。
-    - 当前市场状况和风险水平。
-    - 投资组合状态和现金水平。
-    - 交易成本和流动性考虑。
-
-6.  **数据存储和缓存**
-
-    - 情绪分析结果缓存在 `data/sentiment_cache.json`
-    - 新闻数据保存在 `data/stock_news/` 目录
-    - 日志文件按类型存储在 `logs/` 目录
-    - API 调用记录实时写入日志
-
-7.  **监控和反馈**
-    - 所有 API 调用都有详细的日志记录
-    - 每个 Agent 的分析过程可追踪
-    - 系统决策过程（包括辩论环节）透明可查
-    - 回测结果提供性能评估
-
-### 代理协作机制
-
-1.  **信息共享**
-
-    - 所有代理共享同一个状态对象 (AgentState) 或通过明确定义的数据结构传递信息。
-    - 通过消息传递机制或顺序调用进行通信。
-    - 每个代理都可以访问必要的历史数据和前序分析结果。
-
-2.  **决策权重与融合**
-    Portfolio Manager 在做决策时考虑不同信号的权重，并结合辩论室的混合置信度：
-
-    - 估值分析：(示例权重) 35%
-    - 基本面分析：(示例权重) 30%
-    - 技术分析：(示例权重) 25%
-    - 情绪分析：(示例权重) 10%
-    - 辩论室结论：可能作为最终决策的重要调整因子或独立置信度来源。
-
-3.  **风险控制**
-    - 强制性风险限制
-    - 最大持仓限制
-    - 交易规模限制
-    - 止损和止盈设置
-
-### 系统特点
-
-1.  **多 LLM 支持**
-
-    - 支持 Google Gemini API
-    - 支持任何兼容 OpenAI API 格式的 LLM 服务（如华为云方舟、OpenRouter 等）
-    - 智能切换功能：自动选择可用的 LLM 服务
-
-2.  **模块化设计**
-
-    - 每个代理都是独立的模块
-    - 易于维护和升级
-    - 可以单独测试和优化
-
-3.  **可扩展性**
-
-    - 可以轻松添加新的分析师或研究员角色
-    - 支持添加新的数据源
-    - 可以扩展决策策略和辩论机制
-
-4.  **风险管理**
-
-    - 多层次的风险控制
-    - 实时风险评估
-    - 自动止损机制 (规划中或部分实现)
-
-5.  **智能决策与解释性**
-    - 基于多维度分析和多方观点博弈
-    - 考虑多个市场因素
-    - 动态调整策略
-    - 通过 `--show-reasoning` 和辩论室机制增强决策过程的透明度和可解释性
-
-### 未来展望
-
-1.  **数据源扩展**
-
-    - 添加更多 A 股数据源 (如财报、公告的结构化数据)
-    - 接入更多财经数据平台
-    - 增加社交媒体情绪数据、行业研报等另类数据
-    - 扩展到港股、美股市场
-
-2.  **功能增强**
-
-    - 添加更多复杂技术指标和量化策略因子
-    - 实现更完善和自动化的回测系统，支持参数优化
-    - 支持多股票组合管理和动态调仓
-    - 增强 LLM 在策略生成、代码解释、市场总结等方面的应用
-
-3.  **性能优化**
-    - 提高数据处理效率，优化 Agent 间通信
-    - 优化决策算法和 LLM 调用效率
-    - 增加并行处理能力，支持更大规模的分析任务
-
-### 情感分析功能 (Sentiment Agent)
-
-情感分析代理（Sentiment Agent）是系统中的关键组件之一，负责分析市场新闻和舆论对股票的潜在影响。
-
-#### 功能特点
-
-1.  **新闻数据采集**
-
-    - 自动抓取最新的股票相关新闻
-    - 支持多个新闻源 (当前主要为新浪财经)
-    - 实时更新新闻数据 (根据调用频率)
-
-2.  **情感分析处理**
-
-    - 使用先进的 AI 模型 (LLM) 分析新闻情感
-    - 情感分数范围：-1（极其消极）到 1（极其积极）
-    - 考虑新闻的重要性和时效性 (隐式或显式)
-
-3.  **交易信号生成**
-    - 基于情感分析结果生成交易信号
-    - 包含信号类型（看涨/看跌/中性）
-    - 提供置信度评估
-    - 附带详细的分析理由 (可能由 LLM 生成摘要)
-
-#### 情感分数说明
-
-- **1.0**: 极其积极（重大利好消息、超预期业绩、行业政策支持）
-- **0.5 到 0.9**: 积极（业绩增长、新项目落地、获得订单）
-- **0.1 到 0.4**: 轻微积极（小额合同签订、日常经营正常）
-- **0.0**: 中性（日常公告、人事变动、无重大影响的新闻）
-- **-0.1 到 -0.4**: 轻微消极（小额诉讼、非核心业务亏损）
-- **-0.5 到 -0.9**: 消极（业绩下滑、重要客户流失、行业政策收紧）
-- **-1.0**: 极其消极（重大违规、核心业务严重亏损、被监管处罚）
+# 获取LLM客户端
+from src.utils.llm_clients import LLMClientFactory
+client = LLMClientFactory.create_client()
+```
+
+## 🔄 版本历史
+
+### v0.2.0 (当前版本)
+- ✨ 重构情绪分析师，使用LLM进行情绪分析
+- 🗑️ 移除所有模拟数据，仅使用真实数据
+- 🚀 优化LLM客户端，支持多种模型提供商
+- 🐛 修复新闻数据获取bug
+- 📝 完善文档和错误处理
+
+### v0.1.0
+- 🎉 初始版本发布
+- 🤖 实现基础多智能体架构
+- 📊 集成akshare数据源
+- 🧠 添加LLM支持
+- 📈 实现基础分析功能
+
+## 🤝 贡献指南
+
+我们欢迎社区贡献！请遵循以下步骤：
+
+1. **Fork项目** - 从主仓库创建分支
+2. **创建功能分支** - `git checkout -b feature/amazing-feature`
+3. **提交更改** - `git commit -m 'Add amazing feature'`
+4. **推送分支** - `git push origin feature/amazing-feature`
+5. **创建Pull Request** - 详细描述你的更改
+
+### 开发规范
+
+- 遵循PEP 8代码风格
+- 添加适当的注释和文档字符串
+- 编写单元测试
+- 确保所有测试通过
+- 更新相关文档
+
+### 测试
+
+```bash
+# 运行所有测试
+poetry run pytest
+
+# 运行特定测试
+poetry run pytest tests/test_agents.py
+
+# 代码覆盖率
+poetry run pytest --cov=src
+```
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件。
+
+## ⚠️ 免责声明
+
+**重要提示**: 本系统仅供教育和研究目的，不构成实际投资建议。
+
+- 投资有风险，决策需谨慎
+- 过往表现不代表未来收益
+- 系统分析结果仅供参考
+- 用户应自行承担投资风险
+- 建议结合专业投资顾问意见
+
+## 📞 联系我们
+
+- 📧 Email: [your-email@example.com](mailto:your-email@example.com)
+- 🐛 Issues: [GitHub Issues](https://github.com/your-repo/issues)
+- 📖 文档: [完整文档](https://your-docs-url.com)
+- 💬 讨论: [GitHub Discussions](https://github.com/your-repo/discussions)
+
+---
 
 <div align="center">
-<img src="[https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)" width="100%">
-</div>
 
-## 📊 结果展示 (Example Image)
+**CrewAI A-Share Investment Analysis System**
 
-![image](src/data/img/image.png)
+*让AI为您的投资决策提供智能支持*
 
-<div align="center">
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%">
-</div>
+[⭐ Star](https://github.com/your-repo) | [🐛 报告问题](https://github.com/your-repo/issues) | [💡 功能建议](https://github.com/your-repo/discussions)
 
-## 🙏 致谢 (Acknowledgements)
-
-本项目修改自 [ai-hedge-fund](https://github.com/virattt/ai-hedge-fund.git)。我们衷心感谢原作者的出色工作和启发。原项目为我们针对 A 股市场的适配和改进提供了坚实的基础。
-
-<div align="center">
-<img src="[https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)" width="100%">
-</div>
-
-## 📜 许可证 (License)
-
-本项目使用双重许可证：
-
-This project is dual-licensed:
-
-### 原始代码 - MIT 许可证 / Original Code - MIT License
-
-- 原始代码（来自 [ai-hedge-fund](https://github.com/virattt/ai-hedge-fund)）采用 MIT 许可证。
-- 允许商业和非商业使用、修改和分发。
-
-### 修改和新增代码 - GNU GPL v3 with Non-Commercial Clause
-
-- 由 `24mlight` 创建的所有修改和新增代码采用 GNU General Public License v3 (GPL v3)，并附加非商业条款。
-- 允许非商业使用、修改和分发，需提供源代码。
-- **严格禁止任何商业用途**（如商业产品、服务、销售或获取商业利益）。
-- 必须保留原始版权声明和许可证声明。
-- 衍生作品必须以相同许可证（GPL v3 with Non-Commercial Clause）分发。
-
-详细信息请参阅 `LICENSE` 文件。
-
-<div align="center">
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=12,15,20,24&section=footer&height=100&animation=fadeIn" />
 </div>
