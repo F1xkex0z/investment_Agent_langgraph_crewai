@@ -121,6 +121,8 @@
 langgraph版本：
  poetry run python src/main.py --ticker 301155 --show-reasoning
 
+ langgraph版本是基于： https://github.com/24mlight/A_Share_investment_Agent ， 进行少量改造，这里只是作为对比参考，主要是crewAI版本
+
 crewAI版本：
 E:\investment_Agent_langgraph_crewai-main>  python -m crewai_system.src.main --ticker 002594  --show-reasoning
 
