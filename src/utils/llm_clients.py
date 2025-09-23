@@ -175,9 +175,9 @@ class OpenAICompatibleClient(LLMClient):
             raise ValueError(
                 "OPENAI_COMPATIBLE_MODEL not found in environment variables")
 
-        # 初始化 OpenAI 客户端
+        # 初始化 OpenAI 客户端 - 确保base_url是字符串
         self.client = OpenAI(
-            base_url=self.base_url,
+            base_url=str(self.base_url),
             api_key=self.api_key
         )
         logger.info(f"{SUCCESS_ICON} OpenAI Compatible 客户端初始化成功")

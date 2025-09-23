@@ -3,6 +3,13 @@ import os
 import logging
 from typing import Optional
 
+# 尝试导入统一日志系统，如果失败则使用备用配置
+try:
+    from .unified_logging import get_unified_logger, unified_logger
+    USE_UNIFIED_LOGGING = True
+except ImportError:
+    USE_UNIFIED_LOGGING = False
+
 
 SUCCESS_ICON = "✅"
 ERROR_ICON = "❌"
@@ -20,6 +27,37 @@ def setup_logger(name: str, log_dir: Optional[str] = None, log_file: Optional[st
     Returns:
         配置好的logger实例
     """
+    # 优先使用统一日志系统
+    if USE_UNIFIED_LOGGING:
+        # 根据名称映射到合适的日志类别
+        category_map = {
+            'api': 'api',
+            'market_data_agent': 'agents',
+            'technical_analyst_agent': 'agents',
+            'fundamentals_agent': 'agents',
+            'valuation_agent': 'agents',
+            'portfolio_management_agent': 'agents',
+            'sentiment_agent': 'agents',
+            'macro_analyst_agent': 'agents',
+            'macro_news_agent': 'agents',
+            'news_crawler': 'data',
+            'llm_clients': 'api',
+            'main_workflow': 'main',
+            'agent_state': 'debug',
+            'structured_terminal': 'main',
+            'data_source_adapter': 'data'
+        }
+
+        category = category_map.get(name, 'main')
+        return get_unified_logger(category)
+
+    # 备用：使用原有的日志配置
+    return _setup_legacy_logger(name, log_dir, log_file)
+
+
+def _setup_legacy_logger(name: str, log_dir: Optional[str] = None, log_file: Optional[str] = None) -> logging.Logger:
+    """备用日志配置（当统一日志系统不可用时使用）"""
+
     # 设置 root logger 的级别为 DEBUG
     logging.getLogger().setLevel(logging.DEBUG)
 

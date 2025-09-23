@@ -7,6 +7,20 @@ import json
 import numpy as np
 from src.utils.logging_config import setup_logger
 
+# 更健壮的导入方式，支持从CrewAI系统调用
+try:
+    from src.utils.unified_logging import log_api_call, log_data_operation, log_error, log_debug
+except ImportError:
+    # 如果无法导入，使用空函数避免错误
+    def log_api_call(*args, **kwargs):
+        pass
+    def log_data_operation(*args, **kwargs):
+        pass
+    def log_error(*args, **kwargs):
+        pass
+    def log_debug(*args, **kwargs):
+        pass
+
 # 设置日志记录
 logger = setup_logger('api')
 
@@ -341,41 +355,13 @@ def get_market_data(symbol: str) -> Dict[str, Any]:
     try:
         logger.info(f"开始获取股票 {symbol} 的市场数据")
         
-        # 获取实时行情 - 添加重试机制
-        max_retries = 3
-        retry_count = 0
-        realtime_data = None
-        
-        while retry_count < max_retries:
-            try:
-                logger.debug(f"调用ak.stock_zh_a_spot_em()获取A股实时行情数据 (尝试 {retry_count + 1}/{max_retries})")
-                # 设置超时参数为10秒
-                import requests
-                old_timeout = requests.get.__defaults__[1] if requests.get.__defaults__ else None
-                requests.get.__defaults__ = (None, 10)  # 设置全局超时为10秒
-                
-                try:
-                    realtime_data = ak.stock_zh_a_spot_em()
-                    break  # 成功获取数据后跳出循环
-                finally:
-                    # 恢复原来的超时设置
-                    if old_timeout is not None:
-                        requests.get.__defaults__ = (None, old_timeout)
-                    else:
-                        requests.get.__defaults__ = (None, )
-                        
-            except requests.exceptions.ConnectionError as conn_err:
-                retry_count += 1
-                logger.warning(f"连接错误: {conn_err}, 将在1秒后重试 ({retry_count}/{max_retries})")
-                if retry_count >= max_retries:
-                    logger.error(f"达到最大重试次数，无法获取市场数据")
-                    raise
-                # 等待1秒后重试
-                import time
-                time.sleep(1)
-            except Exception as e:
-                logger.error(f"获取市场数据时发生其他错误: {e}")
-                raise
+        # 获取实时行情
+        try:
+            logger.debug("调用ak.stock_zh_a_spot_em()获取A股实时行情数据")
+            realtime_data = ak.stock_zh_a_spot_em()
+        except Exception as e:
+            logger.error(f"获取市场数据时发生错误: {e}")
+            return {}
                 
         if realtime_data is None:
             logger.error("重试后仍未获取到市场数据")

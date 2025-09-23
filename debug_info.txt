@@ -1,0 +1,3233 @@
+(base) PS E:\A_Share_investment_Agent-main>  python -m crewai_system.src.main --ticker 301155  --show-reasoning
+2025-09-22 17:15:12 - data_source_adapter - INFO - _import_real_data_sources:45 - 成功导入akshare
+2025-09-22 17:15:12 - data_source_adapter - WARNING - _import_real_data_sources:67 - 无法导入原系统API模块: No module named 'src.tools.api'
+2025-09-22 17:15:12 - data_source_adapter - WARNING - _import_real_data_sources:80 - 无法导入新闻爬虫模块: No module named 'src.tools.news_crawler'
+2025-09-22 17:15:12 - crewai_main - INFO - initialize_system:57 - 正在初始化CrewAI投资分析系统...
+2025-09-22 17:15:12 - crewai_main - INFO - initialize_system:78 - 系统初始化完成
+2025-09-22 17:15:12 - crewai_main - INFO - create_run_context:126 - 创建运行上下文: e85a6ab2-9a61-47b9-9d65-386ee34917e2
+2025-09-22 17:15:12 - crewai_main - INFO - run_analysis:164 - 开始投资分析 - 股票: 301155, 运行ID: e85a6ab2-9a61-47b9-9d65-386ee34917e2
+2025-09-22 17:15:12 - crewai_main - INFO - setup_crew:139 - 正在设置Crew团队...
+2025-09-22 17:15:12 - crewai_main - INFO - setup_crew:143 - CrewAI系统基础架构已完成，具体智能体将在后续阶段实现
+2025-09-22 17:15:12 - analysis_crew - INFO - execute_analysis:165 - 开始执行301155的综合分析，运行ID: e85a6ab2-9a61-47b9-9d65-386ee34917e2
+2025-09-22 17:15:12 - analysis_crew - INFO - setup_crew:77 - 正在设置分析团队...
+2025-09-22 17:15:12 - analysis_crew - INFO - setup_crew:145 - 分析团队设置完成
+2025-09-22 17:15:12 - analysis_crew - INFO - _execute_custom_analysis:225 - 步骤1: 收集市场数据
+2025-09-22 17:15:12 - crewai_task.DataCollectionTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 DataCollectionTask_1758532512 开始执行 - 上下文: {'run_id': 'e85a6ab2-9a61-47b9-9d65-386ee34917e2', 'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'show_reasoning': True, 'num_of_news': 10, 'portfolio': {'cash': 100000.0, 'stock': 0}, 'created_at': '2025-09-22T17:15:12.759637'}
+2025-09-22 17:15:12 - crewai_task.DataCollectionTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 DataCollectionTask_1758532512 开始执行 - 上下文: 开始收集301155的数据
+2025-09-22 17:15:12 - crewai_agent.MarketDataAgent - INFO - log_execution_start:124 - 🔄 MarketDataAgent 开始执行任务: 收集301155的市场数据
+2025-09-22 17:15:12 - crewai_agent.MarketDataAgent - INFO - _collect_market_data:121 - 开始收集301155的市场数据，时间范围: 2024-09-21 至 2025-09-21
+2025-09-22 17:15:12 - crewai_agent.MarketDataAgent - INFO - log_reasoning:155 - ==================== MarketDataAgent 市场数据收集推理过程 ====================
+2025-09-22 17:15:12 - crewai_agent.MarketDataAgent - INFO - log_reasoning:156 - {
+  "ticker": "301155",
+  "period": "2024-09-21 至 2025-09-21",
+  "data_collection_status": "completed",
+  "data_sources": [
+    "akshare",
+    "market_data_api"
+  ],
+  "data_quality": "excellent",
+  "price_data": {
+    "record_count": 260,
+    "date_range": "2024-09-21 至 2025-09-21",
+    "data_completeness": "good"
+  },
+  "financial_data": {
+    "metrics_count": 16,
+    "available_metrics": [
+      "roe",
+      "roa",
+      "debt_ratio",
+      "current_ratio",
+      "pe_ratio"
+    ],
+    "data_completeness": "good"
+  },
+  "market_info": {
+    "market_cap": 772733542.492257,
+    "market_cap_formatted": "772.73M",
+    "data_status": "available"
+  }
+}
+2025-09-22 17:15:12 - crewai_agent.MarketDataAgent - INFO - log_execution_complete:132 - ✅ MarketDataAgent 执行完成，耗时: 0.04秒 - 成功收集301155的市场数据
+2025-09-22 17:15:12 - crewai_task.DataCollectionTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 DataCollectionTask_1758532512 执行完成，耗时: 0.05秒 - 完成301155的数据收集
+2025-09-22 17:15:12 - crewai_task.DataCollectionTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 DataCollectionTask_1758532512 执行完成，耗时: 0.05秒 - 任务执行成功
+2025-09-22 17:15:12 - analysis_crew - INFO - _execute_custom_analysis:230 - ✓ 市场数据收集成功
+2025-09-22 17:15:12 - analysis_crew - INFO - _execute_custom_analysis:236 - 步骤2: 收集新闻数据
+2025-09-22 17:15:12 - crewai_task.NewsCollectionTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 NewsCollectionTask_1758532512 开始执行 - 上下文: {'run_id': 'e85a6ab2-9a61-47b9-9d65-386ee34917e2', 'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'show_reasoning': True, 'num_of_news': 10, 'portfolio': {'cash': 100000.0, 'stock': 0}, 'created_at': '2025-09-22T17:15:12.759637'}
+2025-09-22 17:15:12 - crewai_task.NewsCollectionTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 NewsCollectionTask_1758532512 开始执行 - 上下文: 开始收集301155的新闻数据
+2025-09-22 17:15:12 - crewai_task.NewsCollectionTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 NewsCollectionTask_1758532512 执行完成，耗时: 0.00秒 - 完成301155的新闻收集
+2025-09-22 17:15:12 - crewai_task.NewsCollectionTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 NewsCollectionTask_1758532512 执行完成，耗时: 0.00秒 - 任务执行成功
+2025-09-22 17:15:12 - analysis_crew - INFO - _execute_custom_analysis:242 - 步骤3: 执行技术分析
+2025-09-22 17:15:12 - crewai_task.TechnicalAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 TechnicalAnalysisTask_1758532512 开始执行 - 上下文: {'run_id': 'e85a6ab2-9a61-47b9-9d65-386ee34917e2', 'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'show_reasoning': True, 'num_of_news': 10, 'portfolio': {'cash': 100000.0, 'stock': 0}, 'created_at': '2025-09-22T17:15:12.759637'}
+2025-09-22 17:15:12 - crewai_task.TechnicalAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 TechnicalAnalysisTask_1758532512 开始执行 - 上下文: 开始301155的技术分析
+2025-09-22 17:15:12 - crewai_agent.TechnicalAnalyst - INFO - log_execution_start:124 - 🔄 TechnicalAnalyst 开始执行任务: 执行技术分析
+2025-09-22 17:15:12 - crewai_agent.TechnicalAnalyst - INFO - process_task:62 - 从数据流管理器获取价格数据: <class 'dict'>
+2025-09-22 17:15:12 - crewai_agent.TechnicalAnalyst - INFO - process_task:101 - 价格数据样本: {'content': {'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'collection_time': '2025-09-22T17:15:12.785856', 'prices': [{'date': '2024-09-23', 'open': 106.23338743071312, 'high': 106.23338743071312, 'low': 101.52080125420818, 'close': 105.76204219749586, 'volume': 4908077....
+2025-09-22 17:15:12 - crewai_agent.TechnicalAnalyst - ERROR - log_execution_error:142 - ❌ TechnicalAnalyst 执行失败，耗时: 0.01秒 - 技术分析执行失败
+2025-09-22 17:15:12 - crewai_agent.TechnicalAnalyst - ERROR - log_execution_error:145 - 错误详情: 价格数据格式不正确，期望列表，实际: <class 'dict'>
+2025-09-22 17:15:12 - crewai_task.TechnicalAnalysisTask_1758532512 - ERROR - log_task_error:182 - ❌ 任务 TechnicalAnalysisTask_1758532512 执行失败，耗时: 0.01秒 - 技术分析任务失败
+2025-09-22 17:15:12 - crewai_task.TechnicalAnalysisTask_1758532512 - ERROR - log_task_error:185 - 错误详情: 价格数据格式不正确，期望列表，实际: <class 'dict'>
+2025-09-22 17:15:12 - crewai_task.TechnicalAnalysisTask_1758532512 - WARNING - log_task_retry:189 - 🔄 任务 TechnicalAnalysisTask_1758532512 重试 (1/<property object at 0x0000020391596CF0>): 价格数据格式不正确，期望列表，实际: <class 'dict'>
+2025-09-22 17:15:13 - crewai_task.TechnicalAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 TechnicalAnalysisTask_1758532512 开始执行 - 上下文: {'run_id': 'e85a6ab2-9a61-47b9-9d65-386ee34917e2', 'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'show_reasoning': True, 'num_of_news': 10, 'portfolio': {'cash': 100000.0, 'stock': 0}, 'created_at': '2025-09-22T17:15:12.759637'}
+2025-09-22 17:15:13 - crewai_task.TechnicalAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 TechnicalAnalysisTask_1758532512 开始执行 - 上下文: 开始301155的技术分析
+2025-09-22 17:15:13 - crewai_agent.TechnicalAnalyst - INFO - log_execution_start:124 - 🔄 TechnicalAnalyst 开始执行任务: 执行技术分析
+2025-09-22 17:15:13 - crewai_agent.TechnicalAnalyst - INFO - process_task:62 - 从数据流管理器获取价格数据: <class 'dict'>
+2025-09-22 17:15:13 - crewai_agent.TechnicalAnalyst - INFO - process_task:101 - 价格数据样本: {'content': {'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'collection_time': '2025-09-22T17:15:12.785856', 'prices': [{'date': '2024-09-23', 'open': 106.23338743071312, 'high': 106.23338743071312, 'low': 101.52080125420818, 'close': 105.76204219749586, 'volume': 4908077....
+2025-09-22 17:15:13 - crewai_agent.TechnicalAnalyst - ERROR - log_execution_error:142 - ❌ TechnicalAnalyst 执行失败，耗时: 0.01秒 - 技术分析执行失败
+2025-09-22 17:15:13 - crewai_agent.TechnicalAnalyst - ERROR - log_execution_error:145 - 错误详情: 价格数据格式不正确，期望列表，实际: <class 'dict'>
+2025-09-22 17:15:13 - crewai_task.TechnicalAnalysisTask_1758532512 - ERROR - log_task_error:182 - ❌ 任务 TechnicalAnalysisTask_1758532512 执行失败，耗时: 0.01秒 - 技术分析任务失败
+2025-09-22 17:15:13 - crewai_task.TechnicalAnalysisTask_1758532512 - ERROR - log_task_error:185 - 错误详情: 价格数据格式不正确，期望列表，实际: <class 'dict'>
+2025-09-22 17:15:13 - crewai_task.TechnicalAnalysisTask_1758532512 - WARNING - log_task_retry:189 - 🔄 任务 TechnicalAnalysisTask_1758532512 重试 (2/<property object at 0x0000020391596CF0>): 价格数据格式不正确，期望列表，实际: <class 'dict'>
+2025-09-22 17:15:15 - crewai_task.TechnicalAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 TechnicalAnalysisTask_1758532512 开始执行 - 上下文: {'run_id': 'e85a6ab2-9a61-47b9-9d65-386ee34917e2', 'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'show_reasoning': True, 'num_of_news': 10, 'portfolio': {'cash': 100000.0, 'stock': 0}, 'created_at': '2025-09-22T17:15:12.759637'}
+2025-09-22 17:15:15 - crewai_task.TechnicalAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 TechnicalAnalysisTask_1758532512 开始执行 - 上下文: 开始301155的技术分析
+2025-09-22 17:15:15 - crewai_agent.TechnicalAnalyst - INFO - log_execution_start:124 - 🔄 TechnicalAnalyst 开始执行任务: 执行技术分析
+2025-09-22 17:15:15 - crewai_agent.TechnicalAnalyst - INFO - process_task:62 - 从数据流管理器获取价格数据: <class 'dict'>
+2025-09-22 17:15:15 - crewai_agent.TechnicalAnalyst - INFO - process_task:101 - 价格数据样本: {'content': {'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'collection_time': '2025-09-22T17:15:12.785856', 'prices': [{'date': '2024-09-23', 'open': 106.23338743071312, 'high': 106.23338743071312, 'low': 101.52080125420818, 'close': 105.76204219749586, 'volume': 4908077....
+2025-09-22 17:15:15 - crewai_agent.TechnicalAnalyst - ERROR - log_execution_error:142 - ❌ TechnicalAnalyst 执行失败，耗时: 0.00秒 - 技术分析执行失败
+2025-09-22 17:15:15 - crewai_agent.TechnicalAnalyst - ERROR - log_execution_error:145 - 错误详情: 价格数据格式不正确，期望列表，实际: <class 'dict'>
+2025-09-22 17:15:15 - crewai_task.TechnicalAnalysisTask_1758532512 - ERROR - log_task_error:182 - ❌ 任务 TechnicalAnalysisTask_1758532512 执行失败，耗时: 0.01秒 - 技术分析任务失败
+2025-09-22 17:15:15 - crewai_task.TechnicalAnalysisTask_1758532512 - ERROR - log_task_error:185 - 错误详情: 价格数据格式不正确，期望列表，实际: <class 'dict'>
+2025-09-22 17:15:15 - crewai_task.TechnicalAnalysisTask_1758532512 - ERROR - log_task_error:182 - ❌ 任务 TechnicalAnalysisTask_1758532512 执行失败，耗时: 0.01秒 - 达到最大重试次数
+2025-09-22 17:15:15 - crewai_task.TechnicalAnalysisTask_1758532512 - ERROR - log_task_error:185 - 错误详情: 价格数据格式不正确，期望列表，实际: <class 'dict'>
+2025-09-22 17:15:15 - analysis_crew - INFO - _execute_custom_analysis:248 - 步骤4: 执行基本面分析
+2025-09-22 17:15:15 - crewai_task.FundamentalsAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 FundamentalsAnalysisTask_1758532512 开始执行 - 上下文: {'run_id': 'e85a6ab2-9a61-47b9-9d65-386ee34917e2', 'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'show_reasoning': True, 'num_of_news': 10, 'portfolio': {'cash': 100000.0, 'stock': 0}, 'created_at': '2025-09-22T17:15:12.759637'}
+2025-09-22 17:15:15 - crewai_task.FundamentalsAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 FundamentalsAnalysisTask_1758532512 开始执行 - 上下文: 开始301155的基本面分析
+2025-09-22 17:15:15 - crewai_agent.FundamentalsAnalyst - INFO - log_execution_start:124 - 🔄 FundamentalsAnalyst 开始执行任务: 执行基本面分析
+2025-09-22 17:15:15 - crewai_agent.FundamentalsAnalyst - INFO - _perform_fundamentals_analysis:114 - 开始对301155进行基本面分析
+2025-09-22 17:15:15 - crewai_agent.FundamentalsAnalyst - INFO - log_reasoning:155 - ==================== FundamentalsAnalyst 基本面分析推理过程 ====================
+2025-09-22 17:15:15 - crewai_agent.FundamentalsAnalyst - INFO - log_reasoning:156 - 综合质量评分: 11.2/100
+盈利能力: poor (评分: 25)
+财务健康: poor (评分: 5)
+运营效率: poor (评分: 0)
+成长性: poor (评分: 20)
+估值水平: expensive (评分: 0)
+风险因素: 盈利能力较弱, 财务状况较差, 估值过高
+投资建议: bearish
+建议置信度: 79.9%
+主要理由: 基本面很差，投资风险较高
+2025-09-22 17:15:15 - crewai_agent.FundamentalsAnalyst - INFO - log_execution_complete:132 - ✅ FundamentalsAnalyst 执行完成，耗时: 0.00秒 - 完成301155的基本面分析
+2025-09-22 17:15:15 - crewai_task.FundamentalsAnalysisTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 FundamentalsAnalysisTask_1758532512 执行完成，耗时: 0.01秒 - 完成301155的基本面分析
+2025-09-22 17:15:15 - crewai_task.FundamentalsAnalysisTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 FundamentalsAnalysisTask_1758532512 执行完成，耗时: 0.01秒 - 任务执行成功
+2025-09-22 17:15:15 - analysis_crew - INFO - _execute_custom_analysis:254 - 步骤5: 执行情绪分析
+2025-09-22 17:15:15 - crewai_task.SentimentAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 SentimentAnalysisTask_1758532512 开始执行 - 上下文: {'run_id': 'e85a6ab2-9a61-47b9-9d65-386ee34917e2', 'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'show_reasoning': True, 'num_of_news': 10, 'portfolio': {'cash': 100000.0, 'stock': 0}, 'created_at': '2025-09-22T17:15:12.759637'}
+2025-09-22 17:15:15 - crewai_task.SentimentAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 SentimentAnalysisTask_1758532512 开始执行 - 上下文: 开始301155的情绪分析
+2025-09-22 17:15:15 - crewai_agent.SentimentAnalyst - INFO - log_execution_start:124 - 🔄 SentimentAnalyst 开始执行任务: 执行情绪分析
+2025-09-22 17:15:15 - crewai_agent.SentimentAnalyst - INFO - _perform_sentiment_analysis:179 - 开始对301155进行情绪分析，新闻数量: 10
+2025-09-22 17:15:15 - crewai_agent.SentimentAnalyst - INFO - log_reasoning:155 - ==================== SentimentAnalyst 情绪分析推理过程 ====================
+2025-09-22 17:15:15 - crewai_agent.SentimentAnalyst - INFO - log_reasoning:156 - 新闻情绪: neutral (评分: 0.06)
+分析新闻数量: 10
+情绪分布: 看涨0.0%, 看跌0.0%, 中性100.0%
+市场情绪: bearish (评分: -0.55)
+综合情绪评分: -0.16
+最终情绪信号: neutral
+信号置信度: 50.0%
+主要理由: 市场情绪相对中性
+2025-09-22 17:15:15 - crewai_agent.SentimentAnalyst - INFO - log_execution_complete:132 - ✅ SentimentAnalyst 执行完成，耗时: 0.02秒 - 完成301155的情绪分析
+2025-09-22 17:15:15 - crewai_task.SentimentAnalysisTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 SentimentAnalysisTask_1758532512 执行完成，耗时: 0.03秒 - 完成301155的情绪分析
+2025-09-22 17:15:15 - crewai_task.SentimentAnalysisTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 SentimentAnalysisTask_1758532512 执行完成，耗时: 0.03秒 - 任务执行成功
+2025-09-22 17:15:15 - analysis_crew - INFO - _execute_custom_analysis:260 - 步骤6: 执行估值分析
+2025-09-22 17:15:15 - crewai_task.ValuationAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 ValuationAnalysisTask_1758532512 开始执行 - 上下文: {'run_id': 'e85a6ab2-9a61-47b9-9d65-386ee34917e2', 'ticker': '301155', 'start_date': '2024-09-21', 'end_date': '2025-09-21', 'show_reasoning': True, 'num_of_news': 10, 'portfolio': {'cash': 100000.0, 'stock': 0}, 'created_at': '2025-09-22T17:15:12.759637'}
+2025-09-22 17:15:15 - crewai_task.ValuationAnalysisTask_1758532512 - INFO - log_task_start:164 - 🚀 任务 ValuationAnalysisTask_1758532512 开始执行 - 上下文: 开始301155的估值分析
+2025-09-22 17:15:15 - crewai_agent.ValuationAnalyst - INFO - log_execution_start:124 - 🔄 ValuationAnalyst 开始执行任务: 执行估值分析
+2025-09-22 17:15:15 - crewai_agent.ValuationAnalyst - INFO - _perform_valuation_analysis:115 - 开始对301155进行估值分析
+C:\Users\49707\miniconda3\Lib\site-packages\numpy\_core\fromnumeric.py:3860: RuntimeWarning: Mean of empty slice.
+  return _methods._mean(a, axis=axis, dtype=dtype,
+C:\Users\49707\miniconda3\Lib\site-packages\numpy\_core\_methods.py:145: RuntimeWarning: invalid value encountered in scalar divide
+  ret = ret.dtype.type(ret / rcount)
+2025-09-22 17:15:15 - crewai_agent.ValuationAnalyst - INFO - log_reasoning:155 - ==================== ValuationAnalyst 估值分析推理过程 ====================
+2025-09-22 17:15:15 - crewai_agent.ValuationAnalyst - INFO - log_reasoning:156 - 综合估值结果: 1.01元
+估值区间: 0.46 - 1.56元
+公允价值: 1.01元
+上涨潜力: -86.9%
+下跌风险: 94.0%
+风险收益比: -0.92
+估值评级: hold
+估值方法权重: DCF(0%) 相对估值(0%) 资产估值(0%)
+投资建议: strong_sell
+建议置信度: 78.2%
+安全边际: -86.9%
+主要理由: 显著高估，建议卖出
+2025-09-22 17:15:15 - crewai_agent.ValuationAnalyst - INFO - log_execution_complete:132 - ✅ ValuationAnalyst 执行完成，耗时: 0.01秒 - 完成301155的估值分析
+2025-09-22 17:15:15 - crewai_task.ValuationAnalysisTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 ValuationAnalysisTask_1758532512 执行完成，耗时: 0.01秒 - 完成301155的估值分析
+2025-09-22 17:15:15 - crewai_task.ValuationAnalysisTask_1758532512 - INFO - log_task_complete:172 - ✅ 任务 ValuationAnalysisTask_1758532512 执行完成，耗时: 0.02秒 - 任务执行成功
+2025-09-22 17:15:15 - analysis_crew - INFO - _execute_custom_analysis:266 - 步骤7: 生成综合分析结果
+2025-09-22 17:15:15 - analysis_crew - INFO - execute_analysis:198 - 完成301155的综合分析，耗时: 3.16秒
+2025-09-22 17:15:15 - crewai_main - INFO - run_analysis:209 - 投资分析完成，耗时: 3.18秒
+
+============================================================
+CrewAI投资分析结果
+============================================================
+{
+  "run_id": "e85a6ab2-9a61-47b9-9d65-386ee34917e2",
+  "ticker": "301155",
+  "analysis_timestamp": "2025-09-22T17:15:15.936996",
+  "analysis_results": {
+    "market_data": {
+      "agent_name": "MarketDataAgent",
+      "timestamp": 1758532512.82631,
+      "content": {
+        "ticker": "301155",
+        "start_date": "2024-09-21",
+        "end_date": "2025-09-21",
+        "collection_time": "2025-09-22T17:15:12.785856",
+        "prices": [
+          {
+            "date": "2024-09-23",
+            "open": 106.23338743071312,
+            "high": 106.23338743071312,
+            "low": 101.52080125420818,
+            "close": 105.76204219749586,
+            "volume": 4908077.0
+          },
+          {
+            "date": "2024-09-24",
+            "open": 107.16486313189839,
+            "high": 107.85656331027144,
+            "low": 102.92809897212776,
+            "close": 106.90719261537159,
+            "volume": 17238532.0
+          },
+          {
+            "date": "2024-09-25",
+            "open": 102.93930751115438,
+            "high": 108.00119804075732,
+            "low": 102.0490472025287,
+            "close": 103.83834629420873,
+            "volume": 17218147.0
+          },
+          {
+            "date": "2024-09-26",
+            "open": 103.82355034354495,
+            "high": 105.62480113617278,
+            "low": 102.8535870383944,
+            "close": 103.6102862752085,
+            "volume": 4692434.0
+          },
+          {
+            "date": "2024-09-27",
+            "open": 104.11118669321027,
+            "high": 104.36087573480188,
+            "low": 99.6561066714325,
+            "close": 103.04874618128017,
+            "volume": 402843.0
+          },
+          {
+            "date": "2024-09-30",
+            "open": 99.67188395289041,
+            "high": 100.70998694820011,
+            "low": 97.90499768324803,
+            "close": 98.7543211153822,
+            "volume": 2776269.0
+          },
+          {
+            "date": "2024-10-01",
+            "open": 96.1393357633621,
+            "high": 96.58846653323243,
+            "low": 94.26910199453323,
+            "close": 96.41918938111904,
+            "volume": 2041695.0
+          },
+          {
+            "date": "2024-10-02",
+            "open": 95.41920037440065,
+            "high": 99.16696460593657,
+            "low": 93.7791097741787,
+            "close": 95.32831583625853,
+            "volume": 829799.0
+          },
+          {
+            "date": "2024-10-03",
+            "open": 99.28392674367976,
+            "high": 100.17204948398009,
+            "low": 95.43221710885308,
+            "close": 98.29066684559562,
+            "volume": 369830.0
+          },
+          {
+            "date": "2024-10-04",
+            "open": 98.01663122237593,
+            "high": 98.46785732138608,
+            "low": 96.54224088527253,
+            "close": 97.65685102655394,
+            "volume": 1117683.0
+          },
+          {
+            "date": "2024-10-07",
+            "open": 96.46351690454269,
+            "high": 98.95420721519069,
+            "low": 95.12272466481018,
+            "close": 96.84341264920751,
+            "volume": 4538175.0
+          },
+          {
+            "date": "2024-10-08",
+            "open": 100.64847714909772,
+            "high": 105.7197688219455,
+            "low": 97.39557965047001,
+            "close": 100.10839162851238,
+            "volume": 10305782.0
+          },
+          {
+            "date": "2024-10-09",
+            "open": 99.56160652861045,
+            "high": 100.7269965935303,
+            "low": 98.16124969692981,
+            "close": 100.09745597176993,
+            "volume": 427108.0
+          },
+          {
+            "date": "2024-10-10",
+            "open": 97.75618093065235,
+            "high": 100.80258736928299,
+            "low": 96.28080443740983,
+            "close": 99.1475571265767,
+            "volume": 1532063.0
+          },
+          {
+            "date": "2024-10-11",
+            "open": 104.02283830549622,
+            "high": 104.02283830549622,
+            "low": 101.90840796416916,
+            "close": 101.98155655006832,
+            "volume": 1292973.0
+          },
+          {
+            "date": "2024-10-14",
+            "open": 102.71184071840754,
+            "high": 105.39839461148107,
+            "low": 101.96399766488811,
+            "close": 103.44668621312239,
+            "volume": 4215442.0
+          },
+          {
+            "date": "2024-10-15",
+            "open": 104.83645595171284,
+            "high": 105.90881211280235,
+            "low": 101.96851124291729,
+            "close": 102.91687247814214,
+            "volume": 1458415.0
+          },
+          {
+            "date": "2024-10-16",
+            "open": 102.54220108333786,
+            "high": 103.85630949820774,
+            "low": 102.529420377849,
+            "close": 103.16387085831542,
+            "volume": 1715985.0
+          },
+          {
+            "date": "2024-10-17",
+            "open": 100.11037800601133,
+            "high": 105.42795322981166,
+            "low": 99.92858685098241,
+            "close": 100.97418066838213,
+            "volume": 2419182.0
+          },
+          {
+            "date": "2024-10-18",
+            "open": 96.00119961805137,
+            "high": 101.21147911917957,
+            "low": 95.70690670752053,
+            "close": 98.0652273171712,
+            "volume": 202970.0
+          },
+          {
+            "date": "2024-10-21",
+            "open": 98.03985111583141,
+            "high": 99.37391061243771,
+            "low": 96.69744856217535,
+            "close": 97.77541094307196,
+            "volume": 2743739.0
+          },
+          {
+            "date": "2024-10-22",
+            "open": 98.53390825171604,
+            "high": 98.92375230704405,
+            "low": 98.4536877102204,
+            "close": 98.64518284232282,
+            "volume": 1934872.0
+          },
+          {
+            "date": "2024-10-23",
+            "open": 99.87582153206341,
+            "high": 101.6729007032633,
+            "low": 97.92908182857761,
+            "close": 100.11272666652386,
+            "volume": 85541.0
+          },
+          {
+            "date": "2024-10-24",
+            "open": 99.53788214958499,
+            "high": 102.76308710264635,
+            "low": 97.2972334937349,
+            "close": 98.10944383374165,
+            "volume": 5148408.0
+          },
+          {
+            "date": "2024-10-25",
+            "open": 98.79811597149025,
+            "high": 100.41135501665646,
+            "low": 98.74918281632183,
+            "close": 100.145843532265,
+            "volume": 1604137.0
+          },
+          {
+            "date": "2024-10-28",
+            "open": 103.5477652512212,
+            "high": 105.03876011746495,
+            "low": 102.16171735041938,
+            "close": 104.21767117173847,
+            "volume": 8098592.0
+          },
+          {
+            "date": "2024-10-29",
+            "open": 104.29894135904962,
+            "high": 105.21834500477195,
+            "low": 101.54447961912953,
+            "close": 103.08675003068787,
+            "volume": 2511440.0
+          },
+          {
+            "date": "2024-10-30",
+            "open": 104.36902435436096,
+            "high": 105.2506887906631,
+            "low": 103.5091469849957,
+            "close": 104.34468062540181,
+            "volume": 4922760.0
+          },
+          {
+            "date": "2024-10-31",
+            "open": 105.03652601054165,
+            "high": 107.5981317409251,
+            "low": 104.55986930804042,
+            "close": 106.10618320027676,
+            "volume": 1309061.0
+          },
+          {
+            "date": "2024-11-01",
+            "open": 107.79525140844432,
+            "high": 109.2206290201091,
+            "low": 104.27908019746874,
+            "close": 106.60613632033002,
+            "volume": 1385286.0
+          },
+          {
+            "date": "2024-11-04",
+            "open": 107.91851447634346,
+            "high": 108.44214987345002,
+            "low": 106.85208544710495,
+            "close": 107.39301970355964,
+            "volume": 2879992.0
+          },
+          {
+            "date": "2024-11-05",
+            "open": 107.12716127089423,
+            "high": 112.41600145243402,
+            "low": 103.28211910386052,
+            "close": 106.2239193038575,
+            "volume": 1522578.0
+          },
+          {
+            "date": "2024-11-06",
+            "open": 106.03978213598211,
+            "high": 108.49463109052726,
+            "low": 105.33337681459994,
+            "close": 106.61226060646615,
+            "volume": 1105702.0
+          },
+          {
+            "date": "2024-11-07",
+            "open": 106.03247136926302,
+            "high": 109.8097434950193,
+            "low": 104.58223531506219,
+            "close": 106.7853065839193,
+            "volume": 8065914.0
+          },
+          {
+            "date": "2024-11-08",
+            "open": 107.33263489355055,
+            "high": 110.92530676087705,
+            "low": 104.22098412272913,
+            "close": 108.59018854720179,
+            "volume": 1424669.0
+          },
+          {
+            "date": "2024-11-11",
+            "open": 111.74398099491053,
+            "high": 112.93431259985688,
+            "low": 108.98679276969176,
+            "close": 110.01614196834576,
+            "volume": 5144983.0
+          },
+          {
+            "date": "2024-11-12",
+            "open": 108.97797207771437,
+            "high": 111.31595365327433,
+            "low": 107.3791627828589,
+            "close": 109.0154302156212,
+            "volume": 2943641.0
+          },
+          {
+            "date": "2024-11-13",
+            "open": 109.47303381893944,
+            "high": 111.58795627952307,
+            "low": 109.13276548151964,
+            "close": 109.56960372177876,
+            "volume": 2830427.0
+          },
+          {
+            "date": "2024-11-14",
+            "open": 108.14305546773316,
+            "high": 110.53020095101822,
+            "low": 104.11765086927419,
+            "close": 107.21297963288426,
+            "volume": 503208.0
+          },
+          {
+            "date": "2024-11-15",
+            "open": 108.09156904895552,
+            "high": 109.10575902333842,
+            "low": 106.93574806755734,
+            "close": 108.10064255289191,
+            "volume": 615198.0
+          },
+          {
+            "date": "2024-11-18",
+            "open": 107.27126629947236,
+            "high": 108.0411509842712,
+            "low": 107.218891721115,
+            "close": 107.32251754517702,
+            "volume": 5010538.0
+          },
+          {
+            "date": "2024-11-19",
+            "open": 114.99677572402082,
+            "high": 116.82953323871418,
+            "low": 114.46504134042762,
+            "close": 114.59786044076888,
+            "volume": 5576798.0
+          },
+          {
+            "date": "2024-11-20",
+            "open": 115.12480385004707,
+            "high": 115.12480385004707,
+            "low": 113.57397037901637,
+            "close": 114.68787451105507,
+            "volume": 3596104.0
+          },
+          {
+            "date": "2024-11-21",
+            "open": 114.78055041614664,
+            "high": 115.23717213661331,
+            "low": 113.06132372803881,
+            "close": 114.83627451897152,
+            "volume": 1839848.0
+          },
+          {
+            "date": "2024-11-22",
+            "open": 114.12133251267244,
+            "high": 117.04544513089309,
+            "low": 112.93983852787909,
+            "close": 114.61602256639071,
+            "volume": 2087022.0
+          },
+          {
+            "date": "2024-11-25",
+            "open": 112.60849749321316,
+            "high": 113.24768295078849,
+            "low": 112.18181177535224,
+            "close": 112.32749688467577,
+            "volume": 4042466.0
+          },
+          {
+            "date": "2024-11-26",
+            "open": 111.02740997746659,
+            "high": 116.02738728555448,
+            "low": 110.77573346857552,
+            "close": 111.82519449630638,
+            "volume": 6237286.0
+          },
+          {
+            "date": "2024-11-27",
+            "open": 112.58312454472912,
+            "high": 115.64909784963139,
+            "low": 109.57506184448114,
+            "close": 112.63387760207026,
+            "volume": 16249399.0
+          },
+          {
+            "date": "2024-11-28",
+            "open": 117.35888941378016,
+            "high": 117.35888941378016,
+            "low": 115.77898711048664,
+            "close": 115.93127215571931,
+            "volume": 7138388.0
+          },
+          {
+            "date": "2024-11-29",
+            "open": 115.05070834479356,
+            "high": 119.32490529260915,
+            "low": 114.71339413277593,
+            "close": 115.81506197727795,
+            "volume": 9819134.0
+          },
+          {
+            "date": "2024-12-02",
+            "open": 111.6570480627961,
+            "high": 115.55724793484798,
+            "low": 110.39236294051312,
+            "close": 113.08965406975699,
+            "volume": 2421559.0
+          },
+          {
+            "date": "2024-12-03",
+            "open": 120.32056001727774,
+            "high": 122.82459146729826,
+            "low": 118.59435052608939,
+            "close": 119.80605311837358,
+            "volume": 5334550.0
+          },
+          {
+            "date": "2024-12-04",
+            "open": 117.08939228052613,
+            "high": 123.21329475763427,
+            "low": 116.94664894938359,
+            "close": 119.20302341108554,
+            "volume": 1205136.0
+          },
+          {
+            "date": "2024-12-05",
+            "open": 121.45285477368746,
+            "high": 122.29333539948858,
+            "low": 116.8246964286638,
+            "close": 120.6134470921649,
+            "volume": 9202470.0
+          },
+          {
+            "date": "2024-12-06",
+            "open": 119.88124781588465,
+            "high": 122.13187253006171,
+            "low": 119.18169491462112,
+            "close": 120.85710388256248,
+            "volume": 770675.0
+          },
+          {
+            "date": "2024-12-09",
+            "open": 118.17452188130486,
+            "high": 119.36518104775297,
+            "low": 115.50701944057437,
+            "close": 118.66998406550825,
+            "volume": 916055.0
+          },
+          {
+            "date": "2024-12-10",
+            "open": 119.08764431342861,
+            "high": 121.81097073212287,
+            "low": 112.97474025166464,
+            "close": 117.7143610773566,
+            "volume": 778520.0
+          },
+          {
+            "date": "2024-12-11",
+            "open": 120.90949160305736,
+            "high": 121.35473206404185,
+            "low": 119.03134194062076,
+            "close": 120.7609460373362,
+            "volume": 19191405.0
+          },
+          {
+            "date": "2024-12-12",
+            "open": 121.70382911321917,
+            "high": 123.59669050276852,
+            "low": 121.30687580353235,
+            "close": 122.35141881896897,
+            "volume": 20119861.0
+          },
+          {
+            "date": "2024-12-13",
+            "open": 124.29904898518778,
+            "high": 124.29904898518778,
+            "low": 121.3969268090536,
+            "close": 123.67463792663094,
+            "volume": 975934.0
+          },
+          {
+            "date": "2024-12-16",
+            "open": 124.34548062300053,
+            "high": 124.97261254892612,
+            "low": 122.16274252738518,
+            "close": 124.82979073638111,
+            "volume": 1462925.0
+          },
+          {
+            "date": "2024-12-17",
+            "open": 121.70291419576552,
+            "high": 126.17963815262675,
+            "low": 120.85516308987279,
+            "close": 121.6942909770489,
+            "volume": 10424788.0
+          },
+          {
+            "date": "2024-12-18",
+            "open": 123.06990014283588,
+            "high": 124.38304385628959,
+            "low": 117.57535009394233,
+            "close": 122.0416656591669,
+            "volume": 1557016.0
+          },
+          {
+            "date": "2024-12-19",
+            "open": 120.93784911380259,
+            "high": 123.22212316959406,
+            "low": 118.32063704751569,
+            "close": 119.9755529810932,
+            "volume": 7502914.0
+          },
+          {
+            "date": "2024-12-20",
+            "open": 120.40819830028157,
+            "high": 121.13630492432377,
+            "low": 118.64741085033225,
+            "close": 119.79940306315207,
+            "volume": 21777140.0
+          },
+          {
+            "date": "2024-12-23",
+            "open": 121.40202850957192,
+            "high": 121.40202850957192,
+            "low": 116.63312184753363,
+            "close": 118.79090979443849,
+            "volume": 1327946.0
+          },
+          {
+            "date": "2024-12-24",
+            "open": 117.56009470705241,
+            "high": 118.97914021432574,
+            "low": 116.58174101621387,
+            "close": 117.45683190210933,
+            "volume": 8481013.0
+          },
+          {
+            "date": "2024-12-25",
+            "open": 115.60820422909507,
+            "high": 117.80994480594262,
+            "low": 114.27112167749898,
+            "close": 116.27385887588537,
+            "volume": 19853715.0
+          },
+          {
+            "date": "2024-12-26",
+            "open": 115.58214479533285,
+            "high": 115.9140325823606,
+            "low": 115.38318278088265,
+            "close": 115.55079779666418,
+            "volume": 4565494.0
+          },
+          {
+            "date": "2024-12-27",
+            "open": 118.52195244456571,
+            "high": 122.07665813423569,
+            "low": 116.23340476071242,
+            "close": 118.19946584978385,
+            "volume": 3870300.0
+          },
+          {
+            "date": "2024-12-30",
+            "open": 115.84438921602563,
+            "high": 117.65058910694192,
+            "low": 115.56488113554225,
+            "close": 117.06689494874983,
+            "volume": 6824739.0
+          },
+          {
+            "date": "2024-12-31",
+            "open": 115.1252467259366,
+            "high": 116.16739494720203,
+            "low": 113.1534447261853,
+            "close": 114.72194329729267,
+            "volume": 4092292.0
+          },
+          {
+            "date": "2025-01-01",
+            "open": 113.91262449972447,
+            "high": 114.55510919990792,
+            "low": 111.28738720540629,
+            "close": 111.67937579485732,
+            "volume": 5786779.0
+          },
+          {
+            "date": "2025-01-02",
+            "open": 111.0374869038937,
+            "high": 112.92821392536734,
+            "low": 107.66851524080467,
+            "close": 111.27931468759934,
+            "volume": 1884473.0
+          },
+          {
+            "date": "2025-01-03",
+            "open": 113.16196050637564,
+            "high": 114.72019205584095,
+            "low": 110.52300562607111,
+            "close": 112.21773004180376,
+            "volume": 1390331.0
+          },
+          {
+            "date": "2025-01-06",
+            "open": 109.2183562352374,
+            "high": 109.2183562352374,
+            "low": 107.20818055698831,
+            "close": 108.29253766934693,
+            "volume": 16543764.0
+          },
+          {
+            "date": "2025-01-07",
+            "open": 108.45332727361502,
+            "high": 108.69072680116435,
+            "low": 106.46192191223918,
+            "close": 107.95249452296356,
+            "volume": 1276559.0
+          },
+          {
+            "date": "2025-01-08",
+            "open": 108.80592777540069,
+            "high": 111.22806487029219,
+            "low": 108.78150672958223,
+            "close": 110.17433261613145,
+            "volume": 2584746.0
+          },
+          {
+            "date": "2025-01-09",
+            "open": 113.33438214586381,
+            "high": 115.78554659672065,
+            "low": 111.84061244795086,
+            "close": 113.6612427293591,
+            "volume": 1766312.0
+          },
+          {
+            "date": "2025-01-10",
+            "open": 114.17355350912936,
+            "high": 119.22202828363761,
+            "low": 111.29170114644201,
+            "close": 114.13648501533753,
+            "volume": 5588846.0
+          },
+          {
+            "date": "2025-01-13",
+            "open": 114.15476781543968,
+            "high": 114.32138951278654,
+            "low": 110.09667887387461,
+            "close": 113.12635120588787,
+            "volume": 2785864.0
+          },
+          {
+            "date": "2025-01-14",
+            "open": 114.36937119900867,
+            "high": 119.89661562541235,
+            "low": 111.78555168093965,
+            "close": 114.55938642615617,
+            "volume": 1186069.0
+          },
+          {
+            "date": "2025-01-15",
+            "open": 113.03020195055544,
+            "high": 114.07724160510885,
+            "low": 109.47906397681871,
+            "close": 113.20838674633727,
+            "volume": 1911925.0
+          },
+          {
+            "date": "2025-01-16",
+            "open": 117.61874999115606,
+            "high": 119.67898995574092,
+            "low": 112.71728591154736,
+            "close": 116.97973114266834,
+            "volume": 1287972.0
+          },
+          {
+            "date": "2025-01-17",
+            "open": 116.14980364056342,
+            "high": 119.0181437204012,
+            "low": 111.88763977147313,
+            "close": 116.34537035551321,
+            "volume": 6322739.0
+          },
+          {
+            "date": "2025-01-20",
+            "open": 113.99687306873925,
+            "high": 114.6400819712425,
+            "low": 113.06581183212252,
+            "close": 113.45490304908694,
+            "volume": 974451.0
+          },
+          {
+            "date": "2025-01-21",
+            "open": 115.60604881079355,
+            "high": 115.61917181002143,
+            "low": 112.90009770550013,
+            "close": 113.63237474674223,
+            "volume": 4305286.0
+          },
+          {
+            "date": "2025-01-22",
+            "open": 115.62031313077989,
+            "high": 116.99250857425517,
+            "low": 108.96783125496451,
+            "close": 113.7732213704032,
+            "volume": 3710815.0
+          },
+          {
+            "date": "2025-01-23",
+            "open": 112.1118206483901,
+            "high": 113.9643303013815,
+            "low": 108.63601696837156,
+            "close": 112.15466479586874,
+            "volume": 4285114.0
+          },
+          {
+            "date": "2025-01-24",
+            "open": 112.3608576103765,
+            "high": 114.63534135064602,
+            "low": 106.08577878281582,
+            "close": 112.3419193894481,
+            "volume": 1987620.0
+          },
+          {
+            "date": "2025-01-27",
+            "open": 116.37636322066079,
+            "high": 117.56693050423776,
+            "low": 111.49229419735062,
+            "close": 115.26185655298346,
+            "volume": 3810115.0
+          },
+          {
+            "date": "2025-01-28",
+            "open": 110.50268869324158,
+            "high": 112.93993056734435,
+            "low": 106.67947217694436,
+            "close": 110.99334794870674,
+            "volume": 5091132.0
+          },
+          {
+            "date": "2025-01-29",
+            "open": 112.58987438731181,
+            "high": 112.59904791296769,
+            "low": 109.44534532502988,
+            "close": 112.14974153733809,
+            "volume": 4275448.0
+          },
+          {
+            "date": "2025-01-30",
+            "open": 112.97819987331833,
+            "high": 113.24607890635063,
+            "low": 112.20998593636884,
+            "close": 112.99863709388828,
+            "volume": 3667635.0
+          },
+          {
+            "date": "2025-01-31",
+            "open": 114.49114502993405,
+            "high": 119.1464353881942,
+            "low": 113.85876562340636,
+            "close": 114.8908184253467,
+            "volume": 1887331.0
+          },
+          {
+            "date": "2025-02-03",
+            "open": 111.0583583980444,
+            "high": 111.53765738095588,
+            "low": 107.40417438375236,
+            "close": 111.18713693644905,
+            "volume": 4577241.0
+          },
+          {
+            "date": "2025-02-04",
+            "open": 110.75332214016105,
+            "high": 110.75332214016105,
+            "low": 110.2196546818258,
+            "close": 110.33725213949779,
+            "volume": 1216507.0
+          },
+          {
+            "date": "2025-02-05",
+            "open": 108.63828732286858,
+            "high": 109.90382220087167,
+            "low": 103.1959664497657,
+            "close": 109.12713302616889,
+            "volume": 2879303.0
+          },
+          {
+            "date": "2025-02-06",
+            "open": 107.83595179739888,
+            "high": 109.38536385301258,
+            "low": 103.94172492613168,
+            "close": 106.67079046498408,
+            "volume": 9236295.0
+          },
+          {
+            "date": "2025-02-07",
+            "open": 108.65730385067586,
+            "high": 109.32159291946084,
+            "low": 106.01870418907255,
+            "close": 107.78594757764697,
+            "volume": 1009400.0
+          },
+          {
+            "date": "2025-02-10",
+            "open": 108.15394885613686,
+            "high": 110.79535449504962,
+            "low": 107.89305598522417,
+            "close": 108.73997825445538,
+            "volume": 9434383.0
+          },
+          {
+            "date": "2025-02-11",
+            "open": 111.2160218684924,
+            "high": 113.11482424297456,
+            "low": 108.18718970492613,
+            "close": 110.90282306145423,
+            "volume": 6379307.0
+          },
+          {
+            "date": "2025-02-12",
+            "open": 110.68369755702562,
+            "high": 113.70436738291201,
+            "low": 108.01238775140666,
+            "close": 111.65172695230056,
+            "volume": 2415858.0
+          },
+          {
+            "date": "2025-02-13",
+            "open": 110.41030787791031,
+            "high": 112.73503973357695,
+            "low": 108.94345438138738,
+            "close": 110.16376900642895,
+            "volume": 2521734.0
+          },
+          {
+            "date": "2025-02-14",
+            "open": 110.48382130996235,
+            "high": 113.27700256125047,
+            "low": 109.68385824307089,
+            "close": 112.0902596527221,
+            "volume": 5555041.0
+          },
+          {
+            "date": "2025-02-17",
+            "open": 111.93697074515626,
+            "high": 114.35562238707232,
+            "low": 111.88762785658267,
+            "close": 112.28870807349978,
+            "volume": 3626164.0
+          },
+          {
+            "date": "2025-02-18",
+            "open": 112.61596518072155,
+            "high": 112.77260717900127,
+            "low": 112.14208781601413,
+            "close": 112.73368742835305,
+            "volume": 10348024.0
+          },
+          {
+            "date": "2025-02-19",
+            "open": 108.02122586846932,
+            "high": 110.25453533618102,
+            "low": 107.5022204895734,
+            "close": 107.52963999803819,
+            "volume": 3687585.0
+          },
+          {
+            "date": "2025-02-20",
+            "open": 105.72111482379188,
+            "high": 105.87849069005597,
+            "low": 101.62210646568317,
+            "close": 105.69656856593626,
+            "volume": 4401105.0
+          },
+          {
+            "date": "2025-02-21",
+            "open": 109.73260913274399,
+            "high": 110.83991188336485,
+            "low": 107.63311349589836,
+            "close": 108.67498702184155,
+            "volume": 8745207.0
+          },
+          {
+            "date": "2025-02-24",
+            "open": 105.86081991586849,
+            "high": 107.52333113071187,
+            "low": 104.5742076804011,
+            "close": 106.3597097099302,
+            "volume": 6596543.0
+          },
+          {
+            "date": "2025-02-25",
+            "open": 105.81393230047452,
+            "high": 110.43443940013464,
+            "low": 105.55390020084299,
+            "close": 106.19014240914888,
+            "volume": 653397.0
+          },
+          {
+            "date": "2025-02-26",
+            "open": 113.09244145692139,
+            "high": 113.09244145692139,
+            "low": 108.44846064997859,
+            "close": 109.57457423758663,
+            "volume": 5254013.0
+          },
+          {
+            "date": "2025-02-27",
+            "open": 109.02269061603634,
+            "high": 114.38880960205549,
+            "low": 108.13244748309226,
+            "close": 109.11514591104171,
+            "volume": 3180033.0
+          },
+          {
+            "date": "2025-02-28",
+            "open": 108.69232656616087,
+            "high": 110.14634829291901,
+            "low": 106.73863189798223,
+            "close": 107.5944055262364,
+            "volume": 3459486.0
+          },
+          {
+            "date": "2025-03-03",
+            "open": 103.99777734745808,
+            "high": 106.69298161087205,
+            "low": 103.29541788302575,
+            "close": 104.45513342379282,
+            "volume": 4840071.0
+          },
+          {
+            "date": "2025-03-04",
+            "open": 102.94722710026421,
+            "high": 103.67395959743675,
+            "low": 101.08315817041158,
+            "close": 102.444155484189,
+            "volume": 2153943.0
+          },
+          {
+            "date": "2025-03-05",
+            "open": 101.2117498114948,
+            "high": 103.61960074787154,
+            "low": 100.6585969861862,
+            "close": 102.44628594207663,
+            "volume": 2060669.0
+          },
+          {
+            "date": "2025-03-06",
+            "open": 102.02048971553995,
+            "high": 102.25594926859748,
+            "low": 100.54936267810297,
+            "close": 101.61306402200023,
+            "volume": 256807.0
+          },
+          {
+            "date": "2025-03-07",
+            "open": 102.37357234783089,
+            "high": 102.37357234783089,
+            "low": 100.17170280803236,
+            "close": 101.76676811819394,
+            "volume": 1100842.0
+          },
+          {
+            "date": "2025-03-10",
+            "open": 103.21544903592242,
+            "high": 105.35402550338911,
+            "low": 100.97392644200376,
+            "close": 104.48630195096335,
+            "volume": 5040045.0
+          },
+          {
+            "date": "2025-03-11",
+            "open": 104.54313651490568,
+            "high": 105.30323780450054,
+            "low": 100.97740395131177,
+            "close": 104.1987383484703,
+            "volume": 1169784.0
+          },
+          {
+            "date": "2025-03-12",
+            "open": 108.20096846389482,
+            "high": 109.23768851321768,
+            "low": 104.77366331246645,
+            "close": 105.75669301548548,
+            "volume": 2338837.0
+          },
+          {
+            "date": "2025-03-13",
+            "open": 105.05270968312102,
+            "high": 106.8695169779319,
+            "low": 102.28247839757628,
+            "close": 104.72650834622718,
+            "volume": 634470.0
+          },
+          {
+            "date": "2025-03-14",
+            "open": 106.2379711243842,
+            "high": 107.39716519811581,
+            "low": 105.59907554274838,
+            "close": 106.65024187826438,
+            "volume": 1755381.0
+          },
+          {
+            "date": "2025-03-17",
+            "open": 105.10454522579714,
+            "high": 106.69059725669553,
+            "low": 104.58550762877559,
+            "close": 105.18821879581414,
+            "volume": 6558965.0
+          },
+          {
+            "date": "2025-03-18",
+            "open": 107.2649046715858,
+            "high": 108.8833070488547,
+            "low": 104.35112794478445,
+            "close": 106.29129322929903,
+            "volume": 3887536.0
+          },
+          {
+            "date": "2025-03-19",
+            "open": 109.50112539012412,
+            "high": 114.54600238636735,
+            "low": 105.5548449216856,
+            "close": 108.67289357822321,
+            "volume": 10664423.0
+          },
+          {
+            "date": "2025-03-20",
+            "open": 113.8740572834263,
+            "high": 113.8740572834263,
+            "low": 108.74748245557004,
+            "close": 111.42529623455076,
+            "volume": 1013209.0
+          },
+          {
+            "date": "2025-03-21",
+            "open": 111.69043209539251,
+            "high": 117.50671200359821,
+            "low": 106.19605241731244,
+            "close": 112.14477042987279,
+            "volume": 2372938.0
+          },
+          {
+            "date": "2025-03-24",
+            "open": 106.19916576867304,
+            "high": 107.53415799117798,
+            "low": 106.15949261957428,
+            "close": 107.19808362479039,
+            "volume": 993929.0
+          },
+          {
+            "date": "2025-03-25",
+            "open": 107.63576908327776,
+            "high": 111.69538630890295,
+            "low": 106.28700488718992,
+            "close": 109.01704361469783,
+            "volume": 6487482.0
+          },
+          {
+            "date": "2025-03-26",
+            "open": 107.02108944896197,
+            "high": 107.66708673264993,
+            "low": 106.75125257517327,
+            "close": 107.52129649815019,
+            "volume": 9418395.0
+          },
+          {
+            "date": "2025-03-27",
+            "open": 107.8748783157245,
+            "high": 107.8748783157245,
+            "low": 105.08423054189817,
+            "close": 105.71882091068262,
+            "volume": 4470374.0
+          },
+          {
+            "date": "2025-03-28",
+            "open": 110.45335093044197,
+            "high": 110.94927997312212,
+            "low": 107.85105163934976,
+            "close": 110.14754508851922,
+            "volume": 1263023.0
+          },
+          {
+            "date": "2025-03-31",
+            "open": 113.66679219186211,
+            "high": 113.72432598612858,
+            "low": 112.03281113601531,
+            "close": 113.68939166583147,
+            "volume": 490298.0
+          },
+          {
+            "date": "2025-04-01",
+            "open": 114.24533948029661,
+            "high": 116.23926986150929,
+            "low": 113.83833790828706,
+            "close": 115.01809005593853,
+            "volume": 3378387.0
+          },
+          {
+            "date": "2025-04-02",
+            "open": 116.02675313637162,
+            "high": 117.9500503308985,
+            "low": 113.5268673842952,
+            "close": 116.09235143457485,
+            "volume": 17197449.0
+          },
+          {
+            "date": "2025-04-03",
+            "open": 116.78442565366868,
+            "high": 116.99053361768227,
+            "low": 116.34580214678321,
+            "close": 116.46727365426452,
+            "volume": 8120547.0
+          },
+          {
+            "date": "2025-04-04",
+            "open": 115.46930955819967,
+            "high": 115.68715542328447,
+            "low": 113.21126721046687,
+            "close": 115.32810296659227,
+            "volume": 1507895.0
+          },
+          {
+            "date": "2025-04-07",
+            "open": 116.92419275047276,
+            "high": 119.52461597644287,
+            "low": 115.3243406721438,
+            "close": 116.93362042244075,
+            "volume": 2606817.0
+          },
+          {
+            "date": "2025-04-08",
+            "open": 110.40507699663702,
+            "high": 111.79788955857413,
+            "low": 109.75859969328494,
+            "close": 110.59753350092987,
+            "volume": 8582739.0
+          },
+          {
+            "date": "2025-04-09",
+            "open": 111.64959241989963,
+            "high": 111.64959241989963,
+            "low": 110.89843601083197,
+            "close": 111.0138906256587,
+            "volume": 797266.0
+          },
+          {
+            "date": "2025-04-10",
+            "open": 110.19752705104443,
+            "high": 110.7735568126669,
+            "low": 108.25977510928725,
+            "close": 110.06214314940763,
+            "volume": 5997500.0
+          },
+          {
+            "date": "2025-04-11",
+            "open": 110.21731334762326,
+            "high": 111.25705569819098,
+            "low": 109.26946179765979,
+            "close": 109.7709141383663,
+            "volume": 2718204.0
+          },
+          {
+            "date": "2025-04-14",
+            "open": 111.88622783009343,
+            "high": 112.58495559021186,
+            "low": 110.20222447671544,
+            "close": 111.3280576579438,
+            "volume": 6395965.0
+          },
+          {
+            "date": "2025-04-15",
+            "open": 109.57949279657613,
+            "high": 110.61126114653914,
+            "low": 109.00568949076425,
+            "close": 109.3865985077675,
+            "volume": 6525520.0
+          },
+          {
+            "date": "2025-04-16",
+            "open": 111.76673152307488,
+            "high": 114.02493254805925,
+            "low": 109.53376736061101,
+            "close": 111.20540600565873,
+            "volume": 6608636.0
+          },
+          {
+            "date": "2025-04-17",
+            "open": 116.53713382241651,
+            "high": 117.2926835346474,
+            "low": 110.78811236779191,
+            "close": 114.79053998500086,
+            "volume": 948526.0
+          },
+          {
+            "date": "2025-04-18",
+            "open": 116.90036160714868,
+            "high": 117.71888381553408,
+            "low": 116.39652856767789,
+            "close": 117.34365411275223,
+            "volume": 6136888.0
+          },
+          {
+            "date": "2025-04-21",
+            "open": 115.4370903388598,
+            "high": 115.7197831539632,
+            "low": 113.1321017624088,
+            "close": 115.14297336466565,
+            "volume": 637430.0
+          },
+          {
+            "date": "2025-04-22",
+            "open": 115.62497751903226,
+            "high": 119.38658278864251,
+            "low": 114.20386898099322,
+            "close": 116.87129451015583,
+            "volume": 1374790.0
+          },
+          {
+            "date": "2025-04-23",
+            "open": 117.57363908186512,
+            "high": 123.46354256651247,
+            "low": 117.34507260210215,
+            "close": 119.15044583496245,
+            "volume": 3915489.0
+          },
+          {
+            "date": "2025-04-24",
+            "open": 116.61323591213967,
+            "high": 118.11211748712198,
+            "low": 112.66178159567293,
+            "close": 115.74602356513475,
+            "volume": 10754842.0
+          },
+          {
+            "date": "2025-04-25",
+            "open": 116.42260953846214,
+            "high": 116.42260953846214,
+            "low": 111.53866501276141,
+            "close": 114.56411259220862,
+            "volume": 9898646.0
+          },
+          {
+            "date": "2025-04-28",
+            "open": 114.61485783118366,
+            "high": 117.87725812589004,
+            "low": 114.01684642791349,
+            "close": 114.63850549548869,
+            "volume": 1123946.0
+          },
+          {
+            "date": "2025-04-29",
+            "open": 112.52660563513042,
+            "high": 118.52592967317462,
+            "low": 112.3957026575158,
+            "close": 114.03432509644293,
+            "volume": 1256954.0
+          },
+          {
+            "date": "2025-04-30",
+            "open": 108.80382477535599,
+            "high": 110.00074336398754,
+            "low": 106.47334518545333,
+            "close": 109.77037651186177,
+            "volume": 955597.0
+          },
+          {
+            "date": "2025-05-01",
+            "open": 110.3311508370564,
+            "high": 112.99179178311806,
+            "low": 106.91332862152251,
+            "close": 109.50718340260049,
+            "volume": 844509.0
+          },
+          {
+            "date": "2025-05-02",
+            "open": 109.55022376954142,
+            "high": 112.42037743972446,
+            "low": 109.34717906917892,
+            "close": 110.41693875913165,
+            "volume": 11416605.0
+          },
+          {
+            "date": "2025-05-05",
+            "open": 108.99849857648654,
+            "high": 110.19983462785491,
+            "low": 107.60568696529874,
+            "close": 108.94672435970196,
+            "volume": 3475624.0
+          },
+          {
+            "date": "2025-05-06",
+            "open": 107.82516191926808,
+            "high": 107.82516191926808,
+            "low": 107.09174078256733,
+            "close": 107.37891431382951,
+            "volume": 16777526.0
+          },
+          {
+            "date": "2025-05-07",
+            "open": 107.36180867847523,
+            "high": 110.90066859053633,
+            "low": 105.90551065317497,
+            "close": 107.24701779541547,
+            "volume": 5639495.0
+          },
+          {
+            "date": "2025-05-08",
+            "open": 106.39101706240443,
+            "high": 107.17758054455985,
+            "low": 104.88670998642677,
+            "close": 106.40538524760089,
+            "volume": 187669.0
+          },
+          {
+            "date": "2025-05-09",
+            "open": 109.35691127331744,
+            "high": 109.35691127331744,
+            "low": 107.21816631909023,
+            "close": 107.34487925465646,
+            "volume": 5306000.0
+          },
+          {
+            "date": "2025-05-12",
+            "open": 107.22769981220327,
+            "high": 108.36577017422583,
+            "low": 105.79521079499106,
+            "close": 107.55127653414236,
+            "volume": 1107661.0
+          },
+          {
+            "date": "2025-05-13",
+            "open": 105.03140263234084,
+            "high": 106.91107414008687,
+            "low": 104.54725995039456,
+            "close": 105.38054296306062,
+            "volume": 1085821.0
+          },
+          {
+            "date": "2025-05-14",
+            "open": 103.36777789680215,
+            "high": 103.36777789680215,
+            "low": 101.3023393879663,
+            "close": 102.74767835237067,
+            "volume": 6319954.0
+          },
+          {
+            "date": "2025-05-15",
+            "open": 102.14794300968283,
+            "high": 103.43132236882762,
+            "low": 99.90124789673453,
+            "close": 102.49073389231964,
+            "volume": 10896054.0
+          },
+          {
+            "date": "2025-05-16",
+            "open": 103.40440085330835,
+            "high": 104.96433085462832,
+            "low": 100.96967844846625,
+            "close": 103.37017069598673,
+            "volume": 10886413.0
+          },
+          {
+            "date": "2025-05-19",
+            "open": 101.20044637954827,
+            "high": 103.55285679997596,
+            "low": 99.96660346079464,
+            "close": 103.48977864120089,
+            "volume": 3148565.0
+          },
+          {
+            "date": "2025-05-20",
+            "open": 104.48054911428636,
+            "high": 104.83505015548499,
+            "low": 103.46926290419448,
+            "close": 104.30830333872214,
+            "volume": 3277798.0
+          },
+          {
+            "date": "2025-05-21",
+            "open": 104.9540690170258,
+            "high": 104.9540690170258,
+            "low": 103.23579147102315,
+            "close": 103.90294905326233,
+            "volume": 445055.0
+          },
+          {
+            "date": "2025-05-22",
+            "open": 101.68046560951584,
+            "high": 101.68046560951584,
+            "low": 99.8503854316722,
+            "close": 100.12227270058618,
+            "volume": 1815026.0
+          },
+          {
+            "date": "2025-05-23",
+            "open": 102.51798193265674,
+            "high": 104.21911911316242,
+            "low": 101.89817888687125,
+            "close": 101.91630834346248,
+            "volume": 6971723.0
+          },
+          {
+            "date": "2025-05-26",
+            "open": 102.46196045305322,
+            "high": 104.42460159255386,
+            "low": 99.74799101698572,
+            "close": 102.55277721815214,
+            "volume": 600037.0
+          },
+          {
+            "date": "2025-05-27",
+            "open": 102.11157510683422,
+            "high": 105.82270816453035,
+            "low": 100.25012313177128,
+            "close": 103.65154368913136,
+            "volume": 1432458.0
+          },
+          {
+            "date": "2025-05-28",
+            "open": 100.34684984874802,
+            "high": 104.24060675514696,
+            "low": 98.35661847010154,
+            "close": 101.16330579895637,
+            "volume": 10744457.0
+          },
+          {
+            "date": "2025-05-29",
+            "open": 96.8720366958924,
+            "high": 98.39509664639114,
+            "low": 96.25476374901608,
+            "close": 97.18801054314787,
+            "volume": 2768417.0
+          },
+          {
+            "date": "2025-05-30",
+            "open": 95.66082063821312,
+            "high": 96.23070604425874,
+            "low": 94.88656400604646,
+            "close": 95.07632719863261,
+            "volume": 2676789.0
+          },
+          {
+            "date": "2025-06-02",
+            "open": 94.08858220860849,
+            "high": 98.67454438457065,
+            "low": 93.44722717178028,
+            "close": 95.39632463836578,
+            "volume": 2514223.0
+          },
+          {
+            "date": "2025-06-03",
+            "open": 97.45348301623959,
+            "high": 97.45348301623959,
+            "low": 97.16448910074138,
+            "close": 97.2098473940181,
+            "volume": 3585316.0
+          },
+          {
+            "date": "2025-06-04",
+            "open": 97.09531050133212,
+            "high": 97.30977975234151,
+            "low": 96.77295749175963,
+            "close": 97.13134063076734,
+            "volume": 17294161.0
+          },
+          {
+            "date": "2025-06-05",
+            "open": 95.9870911499801,
+            "high": 97.32702733645023,
+            "low": 90.76921742143313,
+            "close": 95.4572658987277,
+            "volume": 1961500.0
+          },
+          {
+            "date": "2025-06-06",
+            "open": 95.7010716895554,
+            "high": 95.86043691846268,
+            "low": 92.73911815222009,
+            "close": 94.42436303382452,
+            "volume": 4928624.0
+          },
+          {
+            "date": "2025-06-09",
+            "open": 93.78494285373031,
+            "high": 94.91700783456172,
+            "low": 92.86530904222391,
+            "close": 93.24998134992086,
+            "volume": 1424850.0
+          },
+          {
+            "date": "2025-06-10",
+            "open": 94.05330474814485,
+            "high": 96.47638108918116,
+            "low": 92.52684442831361,
+            "close": 93.41204843419122,
+            "volume": 4153630.0
+          },
+          {
+            "date": "2025-06-11",
+            "open": 94.65952264068704,
+            "high": 98.28071250678995,
+            "low": 92.12929729716,
+            "close": 95.3431851051929,
+            "volume": 4794592.0
+          },
+          {
+            "date": "2025-06-12",
+            "open": 94.16929120535487,
+            "high": 96.1446215497365,
+            "low": 90.93054811295879,
+            "close": 95.06045191048287,
+            "volume": 1123163.0
+          },
+          {
+            "date": "2025-06-13",
+            "open": 92.40010386681432,
+            "high": 94.87276312022104,
+            "low": 91.19422748506526,
+            "close": 92.48095077861758,
+            "volume": 14876032.0
+          },
+          {
+            "date": "2025-06-16",
+            "open": 91.28486180174389,
+            "high": 93.20010088719037,
+            "low": 90.68878798897612,
+            "close": 91.85409738582788,
+            "volume": 1954059.0
+          },
+          {
+            "date": "2025-06-17",
+            "open": 95.80899140336432,
+            "high": 97.29007269237245,
+            "low": 94.2647996388716,
+            "close": 95.57861877913446,
+            "volume": 1170847.0
+          },
+          {
+            "date": "2025-06-18",
+            "open": 95.17851142318749,
+            "high": 95.83172024011124,
+            "low": 94.21275877924744,
+            "close": 94.66487658529816,
+            "volume": 2226755.0
+          },
+          {
+            "date": "2025-06-19",
+            "open": 94.45513409033668,
+            "high": 96.26562326736695,
+            "low": 93.98817886526592,
+            "close": 94.54692449022204,
+            "volume": 12723835.0
+          },
+          {
+            "date": "2025-06-20",
+            "open": 97.52659924419055,
+            "high": 98.12872556568354,
+            "low": 95.75187593917732,
+            "close": 97.27161216326965,
+            "volume": 6118090.0
+          },
+          {
+            "date": "2025-06-23",
+            "open": 100.06635408873666,
+            "high": 103.3463262932929,
+            "low": 96.76615416808242,
+            "close": 100.38027921619553,
+            "volume": 2144378.0
+          },
+          {
+            "date": "2025-06-24",
+            "open": 96.88069048122048,
+            "high": 99.0058998757882,
+            "low": 95.5177702180866,
+            "close": 98.7642739186367,
+            "volume": 673734.0
+          },
+          {
+            "date": "2025-06-25",
+            "open": 104.61050015485009,
+            "high": 104.61050015485009,
+            "low": 103.20473184097001,
+            "close": 104.0960157462812,
+            "volume": 15929786.0
+          },
+          {
+            "date": "2025-06-26",
+            "open": 102.95760870928285,
+            "high": 104.03044877462958,
+            "low": 101.74548638456555,
+            "close": 103.05596720620152,
+            "volume": 363741.0
+          },
+          {
+            "date": "2025-06-27",
+            "open": 103.88413391617294,
+            "high": 105.31823367095801,
+            "low": 102.46551609684201,
+            "close": 104.0955626743694,
+            "volume": 6516683.0
+          },
+          {
+            "date": "2025-06-30",
+            "open": 106.12957725738923,
+            "high": 106.9264541686125,
+            "low": 105.48033600597128,
+            "close": 106.54931693544529,
+            "volume": 1294830.0
+          },
+          {
+            "date": "2025-07-01",
+            "open": 106.21713714893559,
+            "high": 108.21822427667334,
+            "low": 102.44656869728925,
+            "close": 106.50662776684491,
+            "volume": 4345314.0
+          },
+          {
+            "date": "2025-07-02",
+            "open": 109.63672440216982,
+            "high": 110.43932556355519,
+            "low": 107.2662876565289,
+            "close": 109.25485218021002,
+            "volume": 5935584.0
+          },
+          {
+            "date": "2025-07-03",
+            "open": 102.91848072778033,
+            "high": 105.17730011161353,
+            "low": 102.88255247999142,
+            "close": 105.06339088082159,
+            "volume": 8693662.0
+          },
+          {
+            "date": "2025-07-04",
+            "open": 106.6786084189363,
+            "high": 107.20577425940812,
+            "low": 104.29864469992089,
+            "close": 105.58519576682427,
+            "volume": 5089784.0
+          },
+          {
+            "date": "2025-07-07",
+            "open": 105.0489135163795,
+            "high": 106.87099695711275,
+            "low": 101.6912327234524,
+            "close": 106.04418426949262,
+            "volume": 16839144.0
+          },
+          {
+            "date": "2025-07-08",
+            "open": 108.82256777353258,
+            "high": 110.37066848874188,
+            "low": 106.47561135235509,
+            "close": 108.09261405129726,
+            "volume": 3433470.0
+          },
+          {
+            "date": "2025-07-09",
+            "open": 105.7912572919485,
+            "high": 106.33425959041207,
+            "low": 105.7320297303029,
+            "close": 106.13622328825339,
+            "volume": 2501863.0
+          },
+          {
+            "date": "2025-07-10",
+            "open": 107.7150617404315,
+            "high": 109.37626077625474,
+            "low": 107.00369824533648,
+            "close": 108.34475660769301,
+            "volume": 1980200.0
+          },
+          {
+            "date": "2025-07-11",
+            "open": 110.90054984744056,
+            "high": 112.360990447447,
+            "low": 109.24607433061014,
+            "close": 110.81506944037561,
+            "volume": 950792.0
+          },
+          {
+            "date": "2025-07-14",
+            "open": 110.30946638201915,
+            "high": 112.1858080760545,
+            "low": 110.07283736093906,
+            "close": 111.78164474913943,
+            "volume": 20847560.0
+          },
+          {
+            "date": "2025-07-15",
+            "open": 112.29675465738131,
+            "high": 113.81985164248019,
+            "low": 110.87811792451684,
+            "close": 111.05102067345352,
+            "volume": 1796720.0
+          },
+          {
+            "date": "2025-07-16",
+            "open": 111.16054933132482,
+            "high": 112.58486993977485,
+            "low": 108.02291064285892,
+            "close": 110.92962634472258,
+            "volume": 2276085.0
+          },
+          {
+            "date": "2025-07-17",
+            "open": 108.12038235565154,
+            "high": 108.12038235565154,
+            "low": 107.68623967595802,
+            "close": 107.78484986058693,
+            "volume": 3880390.0
+          },
+          {
+            "date": "2025-07-18",
+            "open": 109.56043235974421,
+            "high": 110.91458546334546,
+            "low": 106.18090056858115,
+            "close": 108.94982280978195,
+            "volume": 2588908.0
+          },
+          {
+            "date": "2025-07-21",
+            "open": 108.29120063672976,
+            "high": 108.29120063672976,
+            "low": 104.80044867418844,
+            "close": 106.25857533387936,
+            "volume": 4606451.0
+          },
+          {
+            "date": "2025-07-22",
+            "open": 107.89856896541524,
+            "high": 107.89856896541524,
+            "low": 102.91888549351354,
+            "close": 107.14802100724772,
+            "volume": 1436069.0
+          },
+          {
+            "date": "2025-07-23",
+            "open": 107.11030485704714,
+            "high": 108.16599077981485,
+            "low": 105.01237195309908,
+            "close": 106.66162421409749,
+            "volume": 2079667.0
+          },
+          {
+            "date": "2025-07-24",
+            "open": 108.052359944666,
+            "high": 109.51848144015986,
+            "low": 105.34660694805804,
+            "close": 107.16846232391924,
+            "volume": 4715630.0
+          },
+          {
+            "date": "2025-07-25",
+            "open": 105.42558856299274,
+            "high": 105.79695730614264,
+            "low": 103.94045171029862,
+            "close": 105.446091133459,
+            "volume": 674045.0
+          },
+          {
+            "date": "2025-07-28",
+            "open": 106.07787054099356,
+            "high": 106.90694273390343,
+            "low": 105.74638813881018,
+            "close": 106.66468915239763,
+            "volume": 873036.0
+          },
+          {
+            "date": "2025-07-29",
+            "open": 112.3073737432115,
+            "high": 114.24210452419248,
+            "low": 112.27390461850462,
+            "close": 113.86490117514631,
+            "volume": 1706831.0
+          },
+          {
+            "date": "2025-07-30",
+            "open": 115.64473056723628,
+            "high": 116.72298619148523,
+            "low": 114.58762872426851,
+            "close": 115.8634853278286,
+            "volume": 2791561.0
+          },
+          {
+            "date": "2025-07-31",
+            "open": 119.92653076786138,
+            "high": 124.20493070898276,
+            "low": 119.8160073751806,
+            "close": 121.27605521461933,
+            "volume": 8709300.0
+          },
+          {
+            "date": "2025-08-01",
+            "open": 120.43549997748417,
+            "high": 124.27107023345033,
+            "low": 120.09195508716269,
+            "close": 120.93245741273067,
+            "volume": 4874818.0
+          },
+          {
+            "date": "2025-08-04",
+            "open": 120.64327985330705,
+            "high": 122.7163524188504,
+            "low": 118.0851765485718,
+            "close": 118.51969192113367,
+            "volume": 12259319.0
+          },
+          {
+            "date": "2025-08-05",
+            "open": 121.18870914509405,
+            "high": 123.51293939521254,
+            "low": 118.87836216134905,
+            "close": 120.10793654252568,
+            "volume": 3164457.0
+          },
+          {
+            "date": "2025-08-06",
+            "open": 118.27955649473581,
+            "high": 118.32553297158482,
+            "low": 117.65128656493076,
+            "close": 117.84762955218152,
+            "volume": 4115140.0
+          },
+          {
+            "date": "2025-08-07",
+            "open": 115.31109695012172,
+            "high": 116.9866647131184,
+            "low": 115.0676719511408,
+            "close": 115.79389322944304,
+            "volume": 1986751.0
+          },
+          {
+            "date": "2025-08-08",
+            "open": 118.17246306099223,
+            "high": 119.695162471689,
+            "low": 116.88014004142758,
+            "close": 118.14405598424428,
+            "volume": 474513.0
+          },
+          {
+            "date": "2025-08-11",
+            "open": 114.95565594634978,
+            "high": 116.88487752278006,
+            "low": 113.29511335987493,
+            "close": 115.20592175333138,
+            "volume": 719341.0
+          },
+          {
+            "date": "2025-08-12",
+            "open": 114.27873539079702,
+            "high": 116.91254968860541,
+            "low": 112.93497207474994,
+            "close": 114.25087747609948,
+            "volume": 2359141.0
+          },
+          {
+            "date": "2025-08-13",
+            "open": 115.82739260749696,
+            "high": 116.61952223656108,
+            "low": 112.86313637762855,
+            "close": 115.71210263194399,
+            "volume": 2121883.0
+          },
+          {
+            "date": "2025-08-14",
+            "open": 114.43056113746927,
+            "high": 119.21279601344402,
+            "low": 111.8991006848012,
+            "close": 115.28160104978294,
+            "volume": 8017783.0
+          },
+          {
+            "date": "2025-08-15",
+            "open": 114.15482977595376,
+            "high": 115.44045537773884,
+            "low": 111.84613515390208,
+            "close": 114.2246889035357,
+            "volume": 1950390.0
+          },
+          {
+            "date": "2025-08-18",
+            "open": 116.15304095199234,
+            "high": 120.39475141337067,
+            "low": 114.88939393581438,
+            "close": 115.2463008400279,
+            "volume": 501277.0
+          },
+          {
+            "date": "2025-08-19",
+            "open": 116.36821234933618,
+            "high": 120.8534822198804,
+            "low": 114.92792851887121,
+            "close": 117.29142404804894,
+            "volume": 9910621.0
+          },
+          {
+            "date": "2025-08-20",
+            "open": 120.2648267118509,
+            "high": 121.95342494443005,
+            "low": 116.77658516491935,
+            "close": 118.95965404979292,
+            "volume": 1056333.0
+          },
+          {
+            "date": "2025-08-21",
+            "open": 117.84359089114554,
+            "high": 119.52194072963603,
+            "low": 116.94175868274398,
+            "close": 117.0767953629222,
+            "volume": 2027252.0
+          },
+          {
+            "date": "2025-08-22",
+            "open": 116.9465222832414,
+            "high": 118.91564131612913,
+            "low": 114.84813992185848,
+            "close": 116.70372996450547,
+            "volume": 8177581.0
+          },
+          {
+            "date": "2025-08-25",
+            "open": 115.10945477014872,
+            "high": 115.10945477014872,
+            "low": 112.18420297771812,
+            "close": 113.55549278275569,
+            "volume": 1096939.0
+          },
+          {
+            "date": "2025-08-26",
+            "open": 111.60841943411427,
+            "high": 112.27528892331108,
+            "low": 108.99531964617248,
+            "close": 112.07061653233599,
+            "volume": 3126681.0
+          },
+          {
+            "date": "2025-08-27",
+            "open": 109.53068792399856,
+            "high": 110.13632263613314,
+            "low": 106.3051252969293,
+            "close": 109.44636200329134,
+            "volume": 407000.0
+          },
+          {
+            "date": "2025-08-28",
+            "open": 107.57788775399518,
+            "high": 110.4277482567853,
+            "low": 105.89704272952235,
+            "close": 107.3880918187251,
+            "volume": 470267.0
+          },
+          {
+            "date": "2025-08-29",
+            "open": 104.95730386914934,
+            "high": 108.95016545143375,
+            "low": 104.46893060463513,
+            "close": 105.34532113135549,
+            "volume": 5990567.0
+          },
+          {
+            "date": "2025-09-01",
+            "open": 105.67638223206173,
+            "high": 107.44311156257862,
+            "low": 105.23915370382197,
+            "close": 105.71836483364183,
+            "volume": 1056306.0
+          },
+          {
+            "date": "2025-09-02",
+            "open": 110.67436949754305,
+            "high": 112.11116966694851,
+            "low": 106.60116857139067,
+            "close": 109.17375387764586,
+            "volume": 7444656.0
+          },
+          {
+            "date": "2025-09-03",
+            "open": 105.98738777420539,
+            "high": 108.71514915272246,
+            "low": 102.6487009413939,
+            "close": 106.35946110629811,
+            "volume": 11721196.0
+          },
+          {
+            "date": "2025-09-04",
+            "open": 107.10488755024362,
+            "high": 108.0851244940777,
+            "low": 105.44708399278254,
+            "close": 106.87426906588261,
+            "volume": 7815266.0
+          },
+          {
+            "date": "2025-09-05",
+            "open": 108.94411167071226,
+            "high": 116.00148192153586,
+            "low": 106.36076334569509,
+            "close": 108.6539812130535,
+            "volume": 2172905.0
+          },
+          {
+            "date": "2025-09-08",
+            "open": 106.94547103787683,
+            "high": 109.59162285547751,
+            "low": 106.24393440769633,
+            "close": 107.73023406828305,
+            "volume": 3733727.0
+          },
+          {
+            "date": "2025-09-09",
+            "open": 108.32264249674283,
+            "high": 110.45087304825908,
+            "low": 107.86828159453644,
+            "close": 108.58811050302043,
+            "volume": 26669774.0
+          },
+          {
+            "date": "2025-09-10",
+            "open": 109.97337066077036,
+            "high": 111.4258244406557,
+            "low": 109.09112423645438,
+            "close": 109.53863883083818,
+            "volume": 1240620.0
+          },
+          {
+            "date": "2025-09-11",
+            "open": 105.81351680705866,
+            "high": 108.32326533095826,
+            "low": 104.14377433371581,
+            "close": 105.04496337099228,
+            "volume": 3674360.0
+          },
+          {
+            "date": "2025-09-12",
+            "open": 107.66706711023656,
+            "high": 109.58527768058669,
+            "low": 105.68478383835952,
+            "close": 107.52808648118834,
+            "volume": 1990273.0
+          },
+          {
+            "date": "2025-09-15",
+            "open": 109.3857759228036,
+            "high": 114.35156167735708,
+            "low": 109.23968592218795,
+            "close": 109.90914954328586,
+            "volume": 4019597.0
+          },
+          {
+            "date": "2025-09-16",
+            "open": 113.05443113979543,
+            "high": 114.71026138624688,
+            "low": 110.5722625755744,
+            "close": 111.35964224680686,
+            "volume": 4068143.0
+          },
+          {
+            "date": "2025-09-17",
+            "open": 111.1419244425548,
+            "high": 112.22308575454568,
+            "low": 109.14121035104287,
+            "close": 110.6967054194641,
+            "volume": 7712005.0
+          },
+          {
+            "date": "2025-09-18",
+            "open": 108.9344848334831,
+            "high": 109.71967880173042,
+            "low": 107.68735898729285,
+            "close": 108.37297926682182,
+            "volume": 12704673.0
+          },
+          {
+            "date": "2025-09-19",
+            "open": 104.48309969102435,
+            "high": 111.13054519542443,
+            "low": 103.78019044847073,
+            "close": 104.91254272520735,
+            "volume": 16920018.0
+          }
+        ],
+        "financial_metrics": {
+          "roe": {
+            "value": 0.08500231829303376,
+            "unit": "ratio",
+            "formatted": "0.09"
+          },
+          "roa": {
+            "value": 0.050438192054424055,
+            "unit": "ratio",
+            "formatted": "0.05"
+          },
+          "debt_ratio": {
+            "value": 0.37643776896685155,
+            "unit": "ratio",
+            "formatted": "0.38"
+          },
+          "current_ratio": 1.473685576566119,
+          "pe_ratio": {
+            "value": 18.401105715105277,
+            "unit": "ratio",
+            "formatted": "18.40"
+          },
+          "pb_ratio": {
+            "value": 1.7636593587862373,
+            "unit": "ratio",
+            "formatted": "1.76"
+          },
+          "ps_ratio": 7.08056206648007,
+          "ev_ebitda": 18.141268743441827,
+          "revenue_growth": 0.21741482340781712,
+          "net_income_growth": -0.15436849200676742,
+          "gross_margin": 0.2630175798162462,
+          "net_margin": 0.1257961902736332,
+          "free_cash_flow": 23286872.751486674,
+          "total_assets": 19943903.3340633,
+          "total_liabilities": 229292953.34194842,
+          "market_cap": {
+            "value": 405402779.9004318,
+            "unit": "CNY",
+            "formatted": "405.40M"
+          }
+        },
+        "market_info": {
+          "market_cap": 772733542.492257,
+          "current_price": 7.72733542492257,
+          "price_change_percent": -8.74748124850705,
+          "volume_ratio": 1.6300513139437072,
+          "volatility": 0.4927800443371151,
+          "rsi": 29.542123618602155
+        },
+        "statistics": {
+          "price_stats": {
+            "min": 91.85409738582788,
+            "max": 124.82979073638111,
+            "mean": 108.73730463078714,
+            "latest": 104.91254272520735,
+            "change": -0.8032177278708292
+          },
+          "volume_stats": {
+            "min": 85541.0,
+            "max": 26669774.0,
+            "mean": 4687448.123076923,
+            "latest": 16920018.0
+          }
+        },
+        "price_count": 260
+      },
+      "signal": "data_collected",
+      "confidence": 0.95,
+      "reasoning": "成功收集301155从2024-09-21到2025-09-21的市场数据",
+      "metadata": {
+        "ticker": "301155",
+        "start_date": "2024-09-21",
+        "end_date": "2025-09-21",
+        "data_quality": "excellent"
+      }
+    },
+    "news_data": {
+      "content": [
+        {
+          "title": "301155公司发布年度财报，业绩表现超出市场预期",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T17:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "high",
+          "sentiment_score": 0.5
+        },
+        {
+          "title": "分析师上调301155目标价格，看好未来发展前景",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T16:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "high",
+          "sentiment_score": 0.5
+        },
+        {
+          "title": "301155宣布重要战略合作，股价受市场关注",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T15:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "high",
+          "sentiment_score": 0.5
+        },
+        {
+          "title": "行业政策调整对301155相关业务产生积极影响",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T14:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "medium",
+          "sentiment_score": 0.5
+        },
+        {
+          "title": "301155获得重大订单，预计将显著提升营收",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T13:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "medium",
+          "sentiment_score": 0.5
+        },
+        {
+          "title": "市场分析：301155在行业中竞争优势明显",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T12:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "medium",
+          "sentiment_score": 0.3
+        },
+        {
+          "title": "301155技术研发取得突破，新产品即将上市",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T11:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "medium",
+          "sentiment_score": 0.3
+        },
+        {
+          "title": "机构投资者增持301155股票，显示市场信心",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T10:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "medium",
+          "sentiment_score": 0.3
+        },
+        {
+          "title": "301155扩产计划推进，产能将大幅提升",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T09:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "medium",
+          "sentiment_score": 0.3
+        },
+        {
+          "title": "宏观经济环境改善，利好301155业务发展",
+          "content": "这是关于301155的详细新闻报道内容...",
+          "publish_time": "2025-09-22T08:15:12.833297",
+          "source": "模拟新闻源",
+          "importance": "medium",
+          "sentiment_score": 0.3
+        }
+      ],
+      "signal": "data_collected",
+      "confidence": 0.8,
+      "reasoning": "成功收集10条新闻",
+      "metadata": {
+        "ticker": "301155",
+        "news_count": 10,
+        "collection_time": "2025-09-22T17:15:12.833297"
+      }
+    },
+    "technical_analysis": {
+      "task_id": "TechnicalAnalysisTask_1758532512",
+      "agent_name": "None",
+      "status": "error",
+      "content": {
+        "error": "价格数据格式不正确，期望列表，实际: <class 'dict'>"
+      },
+      "timestamp": 1758532515.873932,
+      "execution_time": 0.007256746292114258,
+      "metadata": {
+        "retry_count": 3
+      }
+    },
+    "fundamentals_analysis": {
+      "agent_name": "FundamentalsAnalyst",
+      "timestamp": 1758532515.895057,
+      "content": {
+        "analysis_result": {
+          "ticker": "301155",
+          "analysis_timestamp": "2025-09-22T17:15:15.893533",
+          "profitability": {
+            "metrics": {
+              "roe": null,
+              "roa": null,
+              "gross_margin": 0.2630175798162462,
+              "net_margin": 0.1257961902736332,
+              "ebitda_margin": null,
+              "operating_margin": null,
+              "return_on_capital": null,
+              "return_on_invested_capital": null,
+              "free_cash_flow_margin": null,
+              "asset_turnover": null,
+              "equity_multiplier": null
+            },
+            "trend_analysis": {},
+            "quality_assessment": {
+              "quality_score": 10,
+              "quality_grade": "poor",
+              "quality_factors": [
+                "毛利率处于合理水平"
+              ]
+            },
+            "assessment": "poor",
+            "score": 25,
+            "stability_score": 13,
+            "details": [
+              "良好毛利率",
+              "优秀净利率"
+            ]
+          },
+          "financial_health": {
+            "metrics": {
+              "debt_ratio": null,
+              "current_ratio": 1.473685576566119,
+              "quick_ratio": null,
+              "interest_coverage": null,
+              "cash_ratio": null
+            },
+            "assessment": "poor",
+            "score": 5,
+            "details": [
+              "一般流动比率"
+            ]
+          },
+          "efficiency": {
+            "metrics": {
+              "asset_turnover": null,
+              "inventory_turnover": null,
+              "receivables_turnover": null,
+              "working_capital_turnover": null
+            },
+            "assessment": "poor",
+            "score": 0,
+            "details": []
+          },
+          "growth": {
+            "metrics": {
+              "revenue_growth": 0.21741482340781712,
+              "net_income_growth": -0.15436849200676742,
+              "eps_growth": null,
+              "asset_growth": null,
+              "equity_growth": null
+            },
+            "assessment": "poor",
+            "score": 20,
+            "details": [
+              "良好营收增长率",
+              "净利润负增长"
+            ]
+          },
+          "valuation": {
+            "metrics": {
+              "pe_ratio": null,
+              "pb_ratio": null,
+              "ps_ratio": 7.08056206648007,
+              "ev_ebitda": 18.141268743441827,
+              "peg_ratio": null
+            },
+            "assessment": "expensive",
+            "score": 0,
+            "details": []
+          },
+          "quality_score": 11.25,
+          "risk_factors": [
+            "盈利能力较弱",
+            "财务状况较差",
+            "估值过高"
+          ]
+        },
+        "investment_recommendation": {
+          "direction": "bearish",
+          "confidence": 79.875,
+          "reasoning": "基本面很差，投资风险较高",
+          "quality_score": 11.25,
+          "risk_factors": [
+            "盈利能力较弱",
+            "财务状况较差",
+            "估值过高"
+          ],
+          "risk_count": 3
+        }
+      },
+      "signal": "bearish",
+      "confidence": 1.0,
+      "reasoning": "基本面很差，投资风险较高",
+      "metadata": {
+        "ticker": "301155",
+        "analysis_date": "2025-09-22T17:15:15.895056",
+        "data_quality": "poor"
+      }
+    },
+    "sentiment_analysis": {
+      "agent_name": "SentimentAnalyst",
+      "timestamp": 1758532515.9159184,
+      "content": {
+        "analysis_result": {
+          "ticker": "301155",
+          "analysis_timestamp": "2025-09-22T17:15:15.895056",
+          "news_sentiment": {
+            "sentiment_score": 0.05740000000000001,
+            "sentiment_label": "neutral",
+            "confidence": 1.0,
+            "news_count": 10,
+            "bullish_news": 0,
+            "bearish_news": 0,
+            "neutral_news": 10,
+            "key_topics": [
+              "盈利",
+              "市场",
+              "技术",
+              "政策",
+              "增长"
+            ],
+            "sentiment_distribution": {
+              "bullish_ratio": 0.0,
+              "bearish_ratio": 0.0,
+              "neutral_ratio": 1.0
+            }
+          },
+          "market_sentiment": {
+            "sentiment_score": -0.55,
+            "sentiment_label": "bearish",
+            "price_change_sentiment": "very_bearish",
+            "volume_sentiment": "moderate_volume_bullish",
+            "volatility_sentiment": "high_volatility_bearish",
+            "technical_sentiment": "oversold_bullish"
+          },
+          "social_sentiment": {
+            "sentiment_score": 0.009852151832093398,
+            "sentiment_label": "neutral",
+            "confidence": 0.4000000000000001,
+            "social_media_mentions": 2206,
+            "discussion_intensity": "high",
+            "engagement_metrics": {
+              "total_mentions": 2206,
+              "total_engagement": 2538,
+              "average_engagement_per_mention": 1.1504986400725294
+            },
+            "platform_sentiments": {
+              "weibo": {
+                "sentiment_score": 0.0013977695167286248,
+                "sentiment_label": "neutral",
+                "confidence": 0.4,
+                "post_count": 20,
+                "engagement_weight": 2690
+              },
+              "wechat": {
+                "sentiment_score": 0.023420952380952386,
+                "sentiment_label": "neutral",
+                "confidence": 0.4,
+                "post_count": 20,
+                "engagement_weight": 2625
+              },
+              "snowball": {
+                "sentiment_score": 0.03445951500205508,
+                "sentiment_label": "neutral",
+                "confidence": 0.4,
+                "post_count": 20,
+                "engagement_weight": 2433
+              },
+              "eastmoney": {
+                "sentiment_score": -0.005644428416877028,
+                "sentiment_label": "neutral",
+                "confidence": 0.4,
+                "post_count": 20,
+                "engagement_weight": 2773
+              },
+              "xueqiu": {
+                "sentiment_score": -0.009346676197283773,
+                "sentiment_label": "neutral",
+                "confidence": 0.4,
+                "post_count": 20,
+                "engagement_weight": 2798
+              }
+            },
+            "sentiment_propagation": {
+              "propagation_type": "fast_spread",
+              "propagation_speed": 1.725766807489281,
+              "propagation_width": 0.36729294516922967,
+              "spread_potential": 0.633861973398037
+            },
+            "retail_sentiment": {
+              "sentiment_score": 0.012000000000000004,
+              "sentiment_label": "neutral",
+              "post_count": 64
+            },
+            "institutional_sentiment": {
+              "sentiment_score": 0.005333333333333336,
+              "sentiment_label": "neutral",
+              "post_count": 24
+            },
+            "sentiment_divergence": {
+              "score": 0.006666666666666668,
+              "level": "low",
+              "interpretation": "投资者情绪相对一致"
+            },
+            "viral_trends": [
+              {
+                "platform": "xueqiu",
+                "mention_count": 692,
+                "trend_strength": 0.692
+              },
+              {
+                "platform": "wechat",
+                "mention_count": 518,
+                "trend_strength": 0.518
+              }
+            ],
+            "influencer_impact": {
+              "impact_level": "low",
+              "influencer_ratio": 0.03127833182230281,
+              "total_influencer_posts": 69
+            }
+          },
+          "sentiment_trend": {
+            "trend_direction": "stable",
+            "trend_strength": 0.23773924083953304,
+            "trend_stability": 0.0049533278540791,
+            "sentiment_momentum": 0.17076810122139563,
+            "momentum_direction": "neutral",
+            "sentiment_volatility": 0.27580790210588074,
+            "volatility_trend": "stable",
+            "trend_prediction": "stable",
+            "prediction_confidence": 0.5,
+            "time_horizon": "short_term",
+            "analysis_period": "short_term"
+          },
+          "extreme_sentiment": {
+            "is_extreme": false,
+            "extreme_type": null,
+            "extreme_level": 0,
+            "warning_signals": []
+          },
+          "contrarian_signal": {
+            "has_contrarian_signal": false,
+            "signal_strength": 0,
+            "signal_direction": null,
+            "rationale": []
+          },
+          "overall_sentiment": -0.15804137154564746
+        },
+        "sentiment_signal": {
+          "direction": "neutral",
+          "confidence": 50,
+          "reasoning": "市场情绪相对中性",
+          "overall_sentiment": -0.15804137154564746,
+          "has_contrarian_signal": false,
+          "is_extreme_sentiment": false
+        }
+      },
+      "signal": "neutral",
+      "confidence": 1.0,
+      "reasoning": "市场情绪相对中性",
+      "metadata": {
+        "ticker": "301155",
+        "analysis_date": "2025-09-22T17:15:15.915918",
+        "news_count": 10,
+        "sentiment_sources": [
+          "news",
+          "market_data"
+        ]
+      }
+    },
+    "valuation_analysis": {
+      "agent_name": "ValuationAnalyst",
+      "timestamp": 1758532515.931602,
+      "content": {
+        "analysis_result": {
+          "ticker": "301155",
+          "analysis_timestamp": "2025-09-22T17:15:15.926357",
+          "dcf_valuation": {
+            "intrinsic_value": 684242415.320404,
+            "per_share_value": 6.842424153204041,
+            "two_stage_dcf": {
+              "intrinsic_value": 728426465.3225663,
+              "per_share_value": 7.284264653225662,
+              "stage1_value": 159468926.4780616,
+              "terminal_value": 568957538.8445047,
+              "fcf_projections": [
+                28349784.078471456,
+                34513447.37754207,
+                42017182.444325365,
+                51152340.7455524,
+                62273617.87564316
+              ]
+            },
+            "three_stage_dcf": {
+              "intrinsic_value": 832946748.4507303,
+              "per_share_value": 8.329467484507303,
+              "stage1_value": 159468926.4780616,
+              "stage2_value": 116577974.5507563,
+              "terminal_value": 556899847.4219124,
+              "fcf_projections": [
+                28349784.078471456,
+                34513447.37754207,
+                42017182.444325365,
+                51152340.7455524,
+                62273617.87564316,
+                69977325.96047722,
+                76448241.80176957,
+                81129611.34534211
+              ]
+            },
+            "gordon_growth_model": {
+              "intrinsic_value": 342649699.0575896,
+              "per_share_value": 3.4264969905758957,
+              "sustainable_growth_rate": 0.09,
+              "used_growth_rate": 0.03
+            },
+            "assumptions": {
+              "high_growth_rate": 0.21741482340781712,
+              "high_growth_years": 5,
+              "transition_growth_rate": 0.12370741170390856,
+              "transition_years": 3,
+              "terminal_growth_rate": 0.03,
+              "discount_rate": 0.1,
+              "margin_of_safety": 0.2,
+              "tax_rate": 0.25
+            },
+            "calculation_details": {
+              "base_fcf": 23286872.751486674,
+              "fcf_yield": 0,
+              "growth_profile": {
+                "high_growth": "21.7% for 5 years",
+                "transition": "12.4% for 3 years",
+                "terminal": "3.0% perpetual"
+              }
+            },
+            "sensitivity_analysis": {
+              "growth_sensitivity": [
+                {
+                  "growth_rate": 0.18741482340781712,
+                  "value_change": -13.798507171577407
+                },
+                {
+                  "growth_rate": 0.20241482340781713,
+                  "value_change": -6.899253585788704
+                },
+                {
+                  "growth_rate": 0.21741482340781712,
+                  "value_change": 0.0
+                },
+                {
+                  "growth_rate": 0.2324148234078171,
+                  "value_change": 6.899253585788704
+                },
+                {
+                  "growth_rate": 0.24741482340781712,
+                  "value_change": 13.798507171577407
+                }
+              ],
+              "discount_sensitivity": [
+                {
+                  "discount_rate": 0.08,
+                  "value_change": 20.0
+                },
+                {
+                  "discount_rate": 0.09000000000000001,
+                  "value_change": 10.0
+                },
+                {
+                  "discount_rate": 0.1,
+                  "value_change": 0.0
+                },
+                {
+                  "discount_rate": 0.11,
+                  "value_change": -10.0
+                },
+                {
+                  "discount_rate": 0.12000000000000001,
+                  "value_change": -20.0
+                }
+              ],
+              "terminal_sensitivity": [
+                {
+                  "terminal_growth_rate": 0.019999999999999997,
+                  "value_change": -33.333333333333336
+                },
+                {
+                  "terminal_growth_rate": 0.024999999999999998,
+                  "value_change": -16.666666666666668
+                },
+                {
+                  "terminal_growth_rate": 0.03,
+                  "value_change": 0.0
+                },
+                {
+                  "terminal_growth_rate": 0.034999999999999996,
+                  "value_change": 16.666666666666668
+                },
+                {
+                  "terminal_growth_rate": 0.04,
+                  "value_change": 33.333333333333336
+                }
+              ]
+            },
+            "scenario_analysis": {
+              "optimistic": {
+                "value": 1159618349.3762205,
+                "upside": 39.21878577869413
+              },
+              "base": {
+                "value": 832946748.4507303
+              },
+              "pessimistic": {
+                "value": 539598526.0732279,
+                "downside": 35.218124438702255
+              }
+            },
+            "confidence": 0.3313559322033898
+          },
+          "relative_valuation": {
+            "peer_comparison": {
+              "current_pe": null,
+              "industry_pe": 20.0,
+              "pe_discount": 0,
+              "current_pb": null,
+              "industry_pb": 2.5,
+              "pb_discount": 0
+            },
+            "multiples_valuation": [
+              [
+                "PS相对估值",
+                3.2740347527653384
+              ]
+            ],
+            "industry_average": {
+              "pe_ratio": 20.0,
+              "pb_ratio": 2.5,
+              "ps_ratio": 3.0,
+              "ev_ebitda": 12.0
+            },
+            "relative_value": 3.2740347527653384,
+            "industry_multiples": {
+              "pe_ratio": 27.46973782445617,
+              "pb_ratio": 3.4337172280570214,
+              "ps_ratio": 4.1204606736684255,
+              "ev_ebitda": 16.481842694673702
+            },
+            "peer_analysis": {
+              "current_pe": 0,
+              "current_pb": 0,
+              "current_ps": 7.08056206648007,
+              "peer_avg_pe": 22.0,
+              "peer_avg_pb": 2.8,
+              "peer_avg_ps": 3.2,
+              "peer_median_pe": 20.5,
+              "peer_median_pb": 2.6,
+              "peer_median_ps": 3.0,
+              "valuation_discount": {
+                "ps_discount": 121.26756457750216
+              }
+            },
+            "adjusted_relative_value": 4.496843814331101
+          },
+          "asset_valuation": {
+            "net_asset_value": -209349050.00788513,
+            "liquidation_value": -146544335.00551957,
+            "replacement_value": -251218860.00946215,
+            "asset_based_value": NaN,
+            "intangible_assets_value": 0.0,
+            "brand_value": 0.0,
+            "customer_value": 0.0,
+            "technology_value": 0.0,
+            "enhanced_asset_value": NaN
+          },
+          "dividend_valuation": {
+            "intrinsic_value": 25.85352380518632,
+            "per_share_value": 25.85352380518632,
+            "gordon_ddm": {
+              "intrinsic_value": 38.28571428571427,
+              "per_share_value": 38.28571428571427
+            },
+            "multi_stage_ddm": {
+              "intrinsic_value": 17.565396818167685,
+              "per_share_value": 17.565396818167685,
+              "dividend_projections": [
+                1.072,
+                1.1491840000000002,
+                1.2319252480000003,
+                1.3206238658560003,
+                1.4157087841976324
+              ]
+            },
+            "assumptions": {
+              "current_dividend": 1.0,
+              "payout_ratio": 0.4,
+              "retention_rate": 0.6,
+              "roe": 0.12,
+              "sustainable_growth_rate": 0.072,
+              "discount_rate": 0.1,
+              "high_growth_years": 5,
+              "terminal_growth_rate": 0.03
+            },
+            "confidence": 0.0
+          },
+          "residual_income_valuation": {
+            "intrinsic_value": 10.863973061782417,
+            "per_share_value": 10.863973061782417,
+            "book_value_contribution": 10.0,
+            "residual_income_contribution": 0.8639730617824162,
+            "assumptions": {
+              "book_value_per_share": 10.0,
+              "roe": 0.12,
+              "cost_of_equity": 0.1,
+              "forecast_years": 5,
+              "terminal_roe": 0.1,
+              "terminal_growth_rate": 0.03
+            },
+            "confidence": 0.0
+          },
+          "real_options_valuation": {
+            "option_value": 619462851.3626083,
+            "per_share_option_value": 6.194628513626083,
+            "growth_options": {
+              "option_value": 0
+            },
+            "expansion_options": {
+              "option_value": 133038065.50757362
+            },
+            "abandonment_options": {
+              "option_value": 486424785.8550347
+            },
+            "confidence": 0.6
+          },
+          "sotp_valuation": {
+            "total_value": 1590750000.0,
+            "per_share_value": 15.9075,
+            "business_segments": {
+              "core_business": {
+                "revenue": 600000000.0,
+                "ebitda": 90000000.0,
+                "value": 1080000000.0,
+                "valuation_multiple": 12.0
+              },
+              "emerging_business": {
+                "revenue": 250000000.0,
+                "ebitda": 25000000.0,
+                "value": 375000000.0,
+                "valuation_multiple": 15.0
+              },
+              "other_business": {
+                "revenue": 150000000.0,
+                "ebitda": 7500000.0,
+                "value": 60000000.0,
+                "valuation_multiple": 8.0
+              }
+            },
+            "consolidation_adjustment": 75750000.0,
+            "confidence": 0.7,
+            "enterprise_value_adjustment": 0
+          },
+          "eva_valuation": {
+            "intrinsic_value": -17948497.39020019,
+            "per_share_value": -0.1794849739020019,
+            "current_eva": -1994390.33340633,
+            "eva_projections": [
+              {
+                "year": 1,
+                "nopat": 0.0,
+                "capital": 19943903.3340633,
+                "eva": -1994390.33340633,
+                "pv": -1813082.1212784818
+              },
+              {
+                "year": 2,
+                "nopat": 0.0,
+                "capital": 22337171.734150898,
+                "eva": -2233717.17341509,
+                "pv": -1846047.2507562723
+              },
+              {
+                "year": 3,
+                "nopat": 0.0,
+                "capital": 25017632.342249006,
+                "eva": -2501763.2342249006,
+                "pv": -1879611.7462245678
+              },
+              {
+                "year": 4,
+                "nopat": 0.0,
+                "capital": 28019748.22331889,
+                "eva": -2801974.822331889,
+                "pv": -1913786.505246833
+              },
+              {
+                "year": 5,
+                "nopat": 0.0,
+                "capital": 31382118.010117162,
+                "eva": -3138211.8010117165,
+                "pv": -1948582.6235240486
+              }
+            ],
+            "eva_pv": -9401110.247030204,
+            "assumptions": {
+              "nopat": 0.0,
+              "total_capital": 19943903.3340633,
+              "wacc": 0.1,
+              "roic": 0.12,
+              "forecast_years": 5,
+              "terminal_roic": 0.1,
+              "terminal_growth_rate": 0.03
+            },
+            "confidence": 0.0,
+            "terminal_eva_pv": -28491290.477233283
+          },
+          "comprehensive_valuation": {
+            "weighted_value": 1.0124191535699316,
+            "valuation_method_weights": {
+              "dcf": 0.037124952525636155,
+              "relative": 0.05377895936194455,
+              "real_options": 0.013444739840486138,
+              "sotp": 0.031371059627800985
+            },
+            "method_contributions": {
+              "dcf": 0.2540246718479662,
+              "relative": 0.1760741819185613,
+              "real_options": 0.08328516877416002,
+              "sotp": 0.4990351310292442
+            },
+            "confidence_score": 0.5578389830508474,
+            "valuation_diversity": {
+              "coefficient_of_variation": 0.5871044717298725,
+              "diversity_level": "high"
+            },
+            "model_consensus": {
+              "median_value": 6.518526333415062,
+              "above_median_count": 2,
+              "below_median_count": 2,
+              "consensus_level": "strong"
+            }
+          },
+          "valuation_range": {
+            "lower_bound": 0.462116459014509,
+            "upper_bound": 1.5627218481253542,
+            "fair_value": 1.0124191535699316,
+            "safety_margin": -86.89821137691747,
+            "confidence_interval": {
+              "lower_90": 0.29815656932101514,
+              "upper_90": 1.726681737818848,
+              "lower_50": 0.6156066067649779,
+              "upper_50": 1.4092317003748853
+            },
+            "valuation_scenarios": {
+              "optimistic_scenarios": {
+                "upper_bound": 11.596183493762204,
+                "probability": 0.2
+              },
+              "pessimistic_scenarios": {
+                "lower_bound": 5.395985260732279,
+                "probability": 0.2
+              },
+              "base_case": {
+                "value": 8.329467484507303,
+                "probability": 0.6
+              }
+            },
+            "current_price": 7.72733542492257
+          },
+          "investment_metrics": {
+            "upside_potential": -86.89821137691747,
+            "downside_risk": 94.01971787682376,
+            "risk_reward_ratio": -0.9242551811393834,
+            "valuation_grade": "hold",
+            "enhanced_metrics": {
+              "adjusted_upside": -48.47520986343722,
+              "valuation_certainty": 0,
+              "risk_adjusted_return": -0.0,
+              "confidence_score": 0.5578389830508474
+            },
+            "risk_assessment": {
+              "high_potential_return": false,
+              "low_valuation_risk": false,
+              "high_confidence": false,
+              "good_risk_reward": false
+            }
+          }
+        },
+        "investment_recommendation": {
+          "direction": "strong_sell",
+          "confidence": 78.20839023922572,
+          "reasoning": "显著高估，建议卖出",
+          "valuation_grade": "hold",
+          "upside_potential": -86.89821137691747,
+          "risk_reward_ratio": -0.9242551811393834,
+          "fair_value": 1.0124191535699316,
+          "safety_margin": -86.89821137691747
+        }
+      },
+      "signal": "strong_sell",
+      "confidence": 1.0,
+      "reasoning": "显著高估，建议卖出",
+      "metadata": {
+        "ticker": "301155",
+        "analysis_date": "2025-09-22T17:15:15.931601",
+        "valuation_methods": [
+          "dcf",
+          "relative",
+          "asset"
+        ],
+        "data_quality": "poor"
+      }
+    }
+  },
+  "comprehensive_analysis": {
+    "ticker": "301155",
+    "overall_signal": "bearish",
+    "overall_confidence": 13.25,
+    "comprehensive_reasoning": "技术面: 未知趋势; 基本面: 质量评分11.2/100; 情绪面: 综合情绪-0.16; 估值面: hold; 综合判断: bearish",
+    "individual_signals": {
+      "technical": null,
+      "fundamentals": "bearish",
+      "sentiment": "neutral",
+      "valuation": "strong_sell"
+    },
+    "risk_assessment": {
+      "risk_level": "high",
+      "risk_factors": [
+        "盈利能力较弱",
+        "财务状况较差",
+        "估值过高"
+      ],
+      "risk_count": 3
+    },
+    "investment_recommendation": {
+      "recommendation": "strong_sell",
+      "confidence": 13.25,
+      "reasoning": "综合偏空且风险较高，建议谨慎",
+      "risk_level": "high",
+      "time_horizon": "medium_term"
+    },
+    "analysis_completeness": {
+      "completeness_ratio": 1.0,
+      "completed_analyses": [
+        "market_data",
+        "news_data",
+        "technical_analysis",
+        "fundamentals_analysis",
+        "sentiment_analysis",
+        "valuation_analysis"
+      ],
+      "missing_analyses": [],
+      "overall_completeness": "complete"
+    }
+  },
+  "execution_summary": [
+    "市场数据收集完成",
+    "新闻数据收集完成",
+    "技术分析完成",
+    "基本面分析完成",
+    "情绪分析完成",
+    "估值分析完成",
+    "综合分析完成"
+  ],
+  "total_execution_time": 0,
+  "metadata": {
+    "analysis_type": "comprehensive",
+    "agents_used": [
+      "market_data",
+      "technical",
+      "fundamentals",
+      "sentiment",
+      "valuation"
+    ],
+    "tasks_completed": 7,
+    "data_quality": "fair"
+  }
+}
+
+系统状态: 总运行次数=1, 成功=1, 失败=0
