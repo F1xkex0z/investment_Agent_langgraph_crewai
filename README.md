@@ -9,6 +9,7 @@
 本系统是一个先进的AI驱动的投资分析平台，通过12个专业智能体的协作，为A股投资提供全方位的分析支持。系统结合了最新的LLM技术、多智能体协作机制和深度学习算法，为投资者提供专业、客观、及时的投资建议。
 
 介绍参考文章： https://linux.do/t/topic/978220
+本项目的langgraph部分 fork来自：https://github.com/24mlight/A_Share_investment_Agent
 
 ### 🎯 核心特性
 
