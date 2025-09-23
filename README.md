@@ -174,14 +174,11 @@ cp .env.example .env
 
 ```env
 # ==================== LLM配置 ====================
-# Google Gemini API配置 (推荐)
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-1.5-flash
-
-# OpenAI兼容API配置 (可选)
+ 
+# OpenAI兼容API配置 
 OPENAI_COMPATIBLE_API_KEY=your_openai_api_key_here
 OPENAI_COMPATIBLE_BASE_URL=https://api.openai.com/v1
-OPENAI_COMPATIBLE_MODEL=gpt-4-turbo-preview
+OPENAI_COMPATIBLE_MODEL=gpt-4o
 
 # ==================== 系统配置 ====================
 LOG_LEVEL=INFO
